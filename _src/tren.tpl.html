@@ -29,13 +29,13 @@
 
   <h2>Эта неделя</h2>
   <a class="day" href="#"><div class="n">1</div><div class="t"><b>Грудь / Бицепс / Средняя дельта</b><span>6 упражнений · выполнена в четверг</span></div><div class="done">{{check}}</div></a>
-  <a class="day today" href="tren-den.html"><div class="n">2</div><div class="t"><b>Спина / Задняя дельта / Трицепс</b><span>6 упражнений · сегодня</span></div><span class="btn" style="padding:10px 14px;font-size:14px">{{player-play-filled}} Начать</span></a>
+  <a class="day today" id="day2" href="tren-den.html"><div class="n">2</div><div class="t"><b>Спина / Задняя дельта / Трицепс</b><span id="day2sub">6 упражнений · сегодня</span></div><span class="btn" id="day2btn" style="padding:10px 14px;font-size:14px">{{player-play-filled}} Начать</span></a>
   <a class="day" href="#"><div class="n">3</div><div class="t"><b>Низ</b><span>6 упражнений · суббота</span></div><div class="todo"></div></a>
 
   <h2>Ещё</h2>
-  <a class="more" href="#"><div class="ico">{{history}}</div><b>История упражнений</b><span class="chev">{{chevron-right}}</span></a>
   <a class="more" href="#"><div class="ico">{{calendar-check}}</div><b>Все фазы: 12</b><span class="chev">{{chevron-right}}</span></a>
   <div class="note">Макет вкладки «Тренировки», данные из Фазы 12 таблицы</div>
+<script>try{var st=JSON.parse(localStorage.getItem("trenDen")||"{}");if(st.finished){document.getElementById("day2sub").textContent="6 упражнений · выполнена сегодня · "+(st.rating?("оценка "+st.rating+"/10"):"");var b=document.getElementById("day2btn");b.outerHTML='<div class="done">{{check}}</div>';}}catch(e){}</script>
 </div>
 {{nav:tren}}
 </div>

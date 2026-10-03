@@ -1,79 +1,238 @@
 <!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="app.css"><title>День 2</title></head><body>
 <style>
-.hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-.hdr a{color:var(--text)}
+.hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.hdr a,.hdr button{color:var(--text);background:none;border:0;padding:4px;cursor:pointer}
 .timer{display:flex;align-items:center;gap:8px;font-weight:800;font-size:20px;font-variant-numeric:tabular-nums}
 .timer svg{color:var(--acc);width:20px;height:20px}
 .dayt{font-size:12px;color:var(--acc2);font-weight:700}
 .dayh{font-size:21px;font-weight:800;margin:2px 0 4px}
-.hint{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:12px;margin:10px 0 14px}
+.hint{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:12px;margin:8px 0 14px}
 .hint svg{width:14px;height:14px}
 .ex{background:var(--card);border-radius:20px;padding:14px;margin-bottom:12px;border:1px solid rgba(255,255,255,.03)}
 .ex.open{border-color:rgba(242,101,42,.35)}
-.exh{display:flex;gap:12px;align-items:flex-start}
-.thumb{width:64px;height:64px;border-radius:14px;background:linear-gradient(160deg,#2B2C3A,#15161F);display:grid;place-items:center;color:var(--acc2);flex:none;position:relative}
-.thumb svg{width:22px;height:22px}
+.ex.done{opacity:.85}
+.exh{display:flex;gap:12px;align-items:flex-start;cursor:pointer}
+.thumb{width:56px;height:56px;border-radius:14px;background:linear-gradient(160deg,#2B2C3A,#15161F);display:grid;place-items:center;color:var(--acc2);flex:none}
+.thumb svg{width:20px;height:20px}
 .exh .t{flex:1;min-width:0}
 .exh .t b{display:block;font-size:15px;font-weight:700;line-height:1.2}
 .exh .t .sub{font-size:12px;color:var(--muted);margin-top:4px}
-.acts{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
-.acts .chip{padding:5px 10px;font-size:12px}
-.meta{display:grid;grid-template-columns:1fr auto auto;gap:8px;margin-top:12px;font-size:12px;color:var(--muted);align-items:center}
+.badge{display:inline-block;font-size:10px;font-weight:800;color:#14110E;background:var(--grad);border-radius:6px;padding:2px 6px;margin-left:6px;vertical-align:middle}
+.acts{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.acts .chip{padding:6px 10px;font-size:12px;cursor:pointer;border:0}
+.meta{display:flex;justify-content:space-between;gap:8px;margin-top:12px;font-size:12px;color:var(--muted);align-items:center;flex-wrap:wrap}
 .meta b{color:var(--text);font-weight:700;font-variant-numeric:tabular-nums}
 .tempo{display:inline-flex;gap:3px;align-items:center}
-.tempo i{font-style:normal;background:var(--chip2);border-radius:6px;padding:2px 6px;color:var(--text);font-weight:700}
-.sets{display:grid;grid-template-columns:repeat(auto-fit,minmax(56px,1fr));gap:6px;margin-top:12px}
-.set{display:flex;flex-direction:column;align-items:center;border-radius:14px;padding:8px 4px;background:var(--chip2);font-variant-numeric:tabular-nums}
-.set b{font-size:14px;font-weight:800;white-space:nowrap}
-.set span{font-size:10px;color:var(--muted);margin-top:2px;display:flex;align-items:center;gap:3px}
-.set span svg{width:11px;height:11px}
-.set.ok{background:transparent;border:1.5px solid var(--line);color:var(--muted)}
-.set.ok b{color:var(--text)}
-.set.now{background:transparent;border:1.5px solid var(--acc);color:var(--acc2)}
-.set.now b{color:var(--acc2)}
+.tempo i{font-style:normal;background:var(--chip2);border-radius:6px;padding:2px 6px;color:var(--text);font-weight:700;font-size:12px}
+.sets{margin-top:12px;display:flex;flex-direction:column;gap:6px}
+.sh{display:grid;grid-template-columns:34px 1fr 64px 64px 34px;gap:6px;font-size:10px;color:var(--muted);padding:0 4px;text-transform:uppercase;letter-spacing:.03em}
+.set{display:grid;grid-template-columns:34px 1fr 64px 64px 34px;gap:6px;align-items:center;background:var(--chip2);border-radius:14px;padding:6px 4px 6px 8px}
+.set .n{font-weight:800;color:var(--muted)}
+.set .goal b{display:block;font-size:14px;font-weight:800;font-variant-numeric:tabular-nums}
+.set .goal span{font-size:11px;color:var(--muted);display:block;font-variant-numeric:tabular-nums}
+.set input{width:100%;height:36px;border-radius:10px;border:1.5px solid transparent;background:var(--card);color:var(--text);font:inherit;font-weight:800;font-size:15px;text-align:center;font-variant-numeric:tabular-nums}
+.set input::placeholder{color:#4A4B58;font-weight:600}
+.set input:focus{outline:none;border-color:var(--acc)}
+.set .ok{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--acc);background:transparent;color:var(--acc2);display:grid;place-items:center;cursor:pointer;padding:0}
+.set .ok svg{width:16px;height:16px}
+.set.done{background:transparent;border:1.5px solid var(--line)}
+.set.done .ok{background:var(--grad);border-color:transparent;color:#14110E}
+.set.done input{background:transparent;color:var(--muted);font-weight:700}
+.vid{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--acc2);font-weight:700;margin-top:8px;cursor:pointer}
+.vid svg{width:16px;height:16px}
+.vid.ok{color:var(--muted)}
 .vol{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:10px}
-.vol .bar{margin:6px 0 0;height:4px;flex:1}
-.rest{display:flex;align-items:center;gap:10px;background:var(--card);border-radius:16px;padding:12px 14px;margin:-4px 0 12px;border:1px solid rgba(255,255,255,.03)}
+.rest{display:flex;align-items:center;gap:10px;background:var(--card);border-radius:16px;padding:12px 14px;margin:-4px 0 12px;border:1px solid rgba(242,101,42,.35)}
 .rest .lbl{font-weight:700;font-size:13px}
-.rest .cnt{margin-left:auto;font-weight:800;font-variant-numeric:tabular-nums;font-size:18px}
-.sum{display:flex;align-items:center;gap:12px}
-.sum .t{flex:1;min-width:0}
-.sum .t b{display:block;font-size:14px;font-weight:700}
-.sum .t span{font-size:12px;color:var(--muted)}
-.sum .chev{color:var(--muted)}
-.finish{display:block;text-align:center;margin:6px 0 0}
+.rest .cnt{margin-left:auto;font-weight:800;font-variant-numeric:tabular-nums;font-size:20px;color:var(--acc2)}
+.rest .skip{background:none;border:0;color:var(--muted);padding:4px;cursor:pointer}
+.rest .skip svg{width:18px;height:18px}
+.restbar{height:3px;background:var(--chip2);border-radius:9px;margin:-8px 0 12px;overflow:hidden}
+.restbar i{display:block;height:100%;background:var(--grad)}
+.super{border:1px dashed rgba(246,179,67,.5)}
+.super .sup{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--acc2);font-weight:700;margin-bottom:10px}
+.super .sup span{color:var(--muted);font-weight:500}
+.super .ex{background:var(--chip);margin:0;border:0;padding:12px}
+.super .ex+.ex{margin-top:8px}
+.link{display:flex;align-items:center;gap:8px;justify-content:center;color:var(--muted);font-size:11px;margin:4px 0}
+.link i{display:block;width:2px;height:14px;background:var(--acc2);border-radius:2px}
+.finish{display:block;text-align:center;margin:6px 0 0;width:100%;cursor:pointer;background:transparent}
+.toast{position:fixed;left:50%;bottom:calc(92px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:#2A2B3A;color:#fff;border-radius:999px;padding:10px 16px;font-size:13px;font-weight:600;opacity:0;transition:opacity .2s;pointer-events:none;max-width:90%;text-align:center;z-index:30}
+.toast.show{opacity:1}
+.back{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:40;display:none}
+.back.show{display:block}
+.sheet{position:fixed;left:0;right:0;bottom:0;margin:0 auto;max-width:420px;background:#171826;border-radius:24px 24px 0 0;padding:14px 16px calc(20px + env(safe-area-inset-bottom,0px));z-index:50;transform:translateY(105%);transition:transform .25s;max-height:88%;overflow:auto}
+.sheet.show{transform:none}
+.sheet .grab{width:40px;height:4px;border-radius:9px;background:var(--line);margin:0 auto 12px}
+.sheet h3{margin:0 0 4px;font-size:18px;font-weight:800}
+.sheet p{margin:0 0 12px;color:var(--muted);font-size:13px}
+.opt{display:flex;align-items:center;gap:12px;background:var(--chip);border-radius:16px;padding:12px;margin-bottom:8px;cursor:pointer;border:1.5px solid transparent}
+.opt.sel{border-color:var(--acc)}
+.opt .t{flex:1}
+.opt .t b{display:block;font-size:14px}
+.opt .t span{font-size:12px;color:var(--muted)}
+.seg{display:flex;background:var(--chip);border-radius:999px;padding:4px;margin:10px 0}
+.seg button{flex:1;border:0;background:transparent;color:var(--muted);font:inherit;font-weight:700;font-size:13px;padding:8px;border-radius:999px;cursor:pointer}
+.seg button.on{background:var(--grad);color:#14110E}
+.stills{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0 12px}
+.still{aspect-ratio:3/4;border-radius:14px;background:linear-gradient(160deg,#2B2C3A,#15161F);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--muted);font-size:11px;text-align:center;padding:8px;position:relative;overflow:hidden}
+.still svg{width:22px;height:22px;color:var(--acc2)}
+.still .ang{position:absolute;left:14%;bottom:18%;width:60%;height:40%;border-left:2px solid var(--acc2);border-bottom:2px solid var(--acc2);opacity:.7;border-radius:0 0 0 4px}
+.still .ang::after{content:attr(data-a);position:absolute;left:8px;bottom:6px;color:var(--acc2);font-weight:800;font-size:12px}
+.pts{margin:0 0 12px;padding:0;list-style:none}
+.pts li{display:flex;gap:10px;padding:8px 0;border-top:1px solid var(--line);font-size:13px}
+.pts li b{color:var(--acc2);flex:none}
+textarea.note-in{width:100%;min-height:70px;border-radius:14px;border:1.5px solid var(--line);background:var(--chip);color:var(--text);font:inherit;font-size:14px;padding:10px;resize:vertical}
+textarea.note-in:focus{outline:none;border-color:var(--acc)}
+.row2{display:flex;gap:8px;margin-top:12px}
+.row2 .btn,.row2 .ghost{flex:1}
+.btn,.ghost{border:0;font:inherit;cursor:pointer}
+.ghost{border:1.5px solid var(--acc);background:transparent}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.stat{background:var(--chip);border-radius:14px;padding:12px 8px;text-align:center}
+.stat b{display:block;font-size:20px;font-weight:800;font-variant-numeric:tabular-nums}
+.stat span{font-size:11px;color:var(--muted)}
+.rate{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;margin:8px 0 12px}
+.rate button{aspect-ratio:1;border-radius:10px;border:1.5px solid var(--line);background:transparent;color:var(--text);font:inherit;font-weight:800;cursor:pointer;padding:0}
+.rate button.on{background:var(--grad);color:#14110E;border-color:transparent}
+.days{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 12px}
+.pb{display:flex;align-items:center;gap:8px;background:rgba(246,179,67,.1);border:1px solid rgba(246,179,67,.4);border-radius:12px;padding:8px 10px;font-size:13px;margin-bottom:6px}
+.pb svg{width:16px;height:16px;color:var(--acc2)}
 </style>
 <div class="phone"><div class="scroll">
-  <div class="hdr"><a href="tren.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l14 0" /><path d="M5 12l6 6" /><path d="M5 12l6 -6" /></svg></a><div class="timer"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 4h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h2a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2z" /><path d="M17 4h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h2a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2z" /></svg> 24:10</div><span class="muted"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z" /><path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /></svg></span></div>
-  <div class="dayt">Фаза 12 · неделя 3 · день 2</div>
+  <div class="hdr"><a href="tren.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l14 0" /><path d="M5 12l6 6" /><path d="M5 12l6 -6" /></svg></a><div class="timer"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 4h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h2a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2z" /><path d="M17 4h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h2a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2z" /></svg> <span id="clock">00:00</span></div><button id="menuBtn" aria-label="Меню"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M19 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg></button></div>
+  <div class="dayt">Фаза 12 · Интенсификация · неделя 3 из 4 · день 2</div>
   <div class="dayh">Спина / Задняя дельта / Трицепс</div>
-  <div class="hint"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16 3l4 4l-4 4" /><path d="M10 7l10 0" /><path d="M8 13l-4 4l4 4" /><path d="M4 17l9 0" /></svg> Свайп влево по упражнению: замена на похожее</div>
-
-  <div class="ex open">
-    <div class="exh"><div class="thumb"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 4v16a1 1 0 0 0 1.524 .852l13 -8a1 1 0 0 0 0 -1.704l-13 -8a1 1 0 0 0 -1.524 .852z" /></svg></div><div class="t"><b>A · Тяга верхнего блока, прямым хватом</b><div class="sub">5 подходов × 6 · RIR 2</div>
-      <div class="acts"><span class="chip"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16 3l4 4l-4 4" /><path d="M10 7l10 0" /><path d="M8 13l-4 4l4 4" /><path d="M4 17l9 0" /></svg> Замена</span><span class="chip"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 3m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z" /><path d="M9 7l6 0" /><path d="M9 11l6 0" /><path d="M9 15l4 0" /></svg> Заметки</span></div></div><div class="todo"></div></div>
-    <div class="meta"><span>Прошлый раз <b>83 · 93 · 97 · 100</b></span><span class="tempo"><i>3</i><i>0</i><i>1</i><i>0</i></span><span>RIR <b>2</b></span></div>
-    <div class="sets">
-      <div class="set ok"><b>6 × 80</b><span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg> сделано</span></div>
-      <div class="set ok"><b>6 × 85</b><span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg> сделано</span></div>
-      <div class="set now"><b>6 × 90</b><span>предложено</span></div>
-      <div class="set"><b>6 × 95</b><span>подход 4</span></div>
-      <div class="set"><b>6 × 100</b><span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 10l4.553 -2.276a1 1 0 0 1 1.447 .894v6.764a1 1 0 0 1 -1.447 .894l-4.553 -2.276v-4z" /><path d="M3 6m0 2a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2z" /></svg> видео</span></div>
-    </div>
-    <div class="vol"><span>Объём 990 кг</span><span>цель 2 700 кг</span></div>
-    <div class="bar" style="margin:6px 0 0;height:4px"><i style="width:37%"></i></div>
-  </div>
-  <div class="rest"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 13a7 7 0 1 0 14 0a7 7 0 0 0 -14 0z" /><path d="M14.5 10.5l-2.5 2.5" /><path d="M17 8l1 -1" /><path d="M14 3h-4" /></svg><span class="lbl">Отдых</span><span class="chip on" style="padding:5px 10px">120 с</span><span class="chip" style="padding:5px 10px">180 с</span><span class="cnt">01:32</span></div>
-
-  <div class="ex"><div class="sum"><div class="thumb" style="width:48px;height:48px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 4v16a1 1 0 0 0 1.524 .852l13 -8a1 1 0 0 0 0 -1.704l-13 -8a1 1 0 0 0 -1.524 .852z" /></svg></div><div class="t"><b>B · Тяга штанги к груди в наклоне</b><span>4 × 8 · 3010 · RIR 2 · прошлый раз 70 · 80 · 90 · 100</span></div><span class="chev"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></span></div></div>
-  <div class="ex"><div class="sum"><div class="thumb" style="width:48px;height:48px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 4v16a1 1 0 0 0 1.524 .852l13 -8a1 1 0 0 0 0 -1.704l-13 -8a1 1 0 0 0 -1.524 .852z" /></svg></div><div class="t"><b>C · Тяга горизонтального блока</b><span>3 × 10-12 · 3010 · RIR 1-2 · прошлый раз 66 · 73 · 79</span></div><span class="chev"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></span></div></div>
-  <div class="ex"><div class="sum"><div class="thumb" style="width:48px;height:48px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 4v16a1 1 0 0 0 1.524 .852l13 -8a1 1 0 0 0 0 -1.704l-13 -8a1 1 0 0 0 -1.524 .852z" /></svg></div><div class="t"><b>D · Обратные разведения в кроссовере</b><span>4 × 12-18 · 2011 · RIR 1-2 · прошлый раз 4 · 6 · 9</span></div><span class="chev"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></span></div></div>
-  <div class="ex"><div class="sum"><div class="thumb" style="width:48px;height:48px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 4v16a1 1 0 0 0 1.524 .852l13 -8a1 1 0 0 0 0 -1.704l-13 -8a1 1 0 0 0 -1.524 .852z" /></svg></div><div class="t"><b>F · Разгибания на трицепс с EZ-грифом из-за головы</b><span>3 × 10-12 · 3010 · RIR 2 · прошлый раз 26 · 28 · 30</span></div><span class="chev"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></span></div></div>
-  <div class="ex"><div class="sum"><div class="thumb" style="width:48px;height:48px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 4v16a1 1 0 0 0 1.524 .852l13 -8a1 1 0 0 0 0 -1.704l-13 -8a1 1 0 0 0 -1.524 .852z" /></svg></div><div class="t"><b>G · Разгибания на трицепс в кроссовере, V-рукоять</b><span>3 × 8-10 · 2010 · RIR 1-2 · первый раз</span></div><span class="chev"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></span></div></div>
-
-  <a class="ghost finish" href="tren.html">Завершить тренировку</a>
-  <div class="note">Макет экрана тренировки, День 2 Фазы 12. Веса из таблицы, предложенные по правилу лесенки</div>
+  <div class="hint"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16 3l4 4l-4 4" /><path d="M10 7l10 0" /><path d="M8 13l-4 4l4 4" /><path d="M4 17l9 0" /></svg> Нажми упражнение, чтобы раскрыть. «Замена» подберёт похожее</div>
+  <div id="list"></div>
+  <button class="ghost finish" id="finishBtn">Завершить тренировку</button>
+  <div class="note">Прототип экрана тренировки. Нажимается всё: подходы, отдых, замена, техника, видео, меню, завершение. Данные хранятся в этом телефоне</div>
 </div>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#F2652A"/><stop offset="1" stop-color="#F6B343"/></linearGradient></defs></svg><nav class="nav"><a href="dom.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l-2 0l9 -9l9 9l-2 0" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg>Дом</a><a class="on" href="tren.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M2 12h1" /><path d="M6 8h-2a1 1 0 0 0 -1 1v6a1 1 0 0 0 1 1h2" /><path d="M6 7v10a1 1 0 0 0 1 1h1a1 1 0 0 0 1 -1v-10a1 1 0 0 0 -1 -1h-1a1 1 0 0 0 -1 1z" /><path d="M9 12h6" /><path d="M15 7v10a1 1 0 0 0 1 1h1a1 1 0 0 0 1 -1v-10a1 1 0 0 0 -1 -1h-1a1 1 0 0 0 -1 1z" /><path d="M18 8h2a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-2" /><path d="M22 12h-1" /></svg>Тренировки</a><a class="soon" href="#"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19 3v12h-5c-.023 -3.681 .184 -7.406 5 -12zm0 12v6h-1v-3m-10 -14v17m-3 -17v3a3 3 0 1 0 6 0v-3" /></svg>Питание</a><a class="soon" href="#"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 19l16 0" /><path d="M4 15l4 -6l4 2l4 -5l4 4" /></svg>Прогресс</a><a class="soon" href="#"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /><path d="M9 14l2 2l4 -4" /></svg>Отчёт</a></nav>
+<div class="toast" id="toast"></div>
+<div class="back" id="back"></div>
+<div class="sheet" id="sheet"></div>
 </div>
+<script>
+const I={check:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg>`,play:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 4v16a1 1 0 0 0 1.524 .852l13 -8a1 1 0 0 0 0 -1.704l-13 -8a1 1 0 0 0 -1.524 .852z" /></svg>`,swap:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16 3l4 4l-4 4" /><path d="M10 7l10 0" /><path d="M8 13l-4 4l4 4" /><path d="M4 17l9 0" /></svg>`,notes:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 3m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z" /><path d="M9 7l6 0" /><path d="M9 11l6 0" /><path d="M9 15l4 0" /></svg>`,video:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 10l4.553 -2.276a1 1 0 0 1 1.447 .894v6.764a1 1 0 0 1 -1.447 .894l-4.553 -2.276v-4z" /><path d="M3 6m0 2a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2z" /></svg>`,skip:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 5v14l12 -7z" /><path d="M20 5l0 14" /></svg>`,stop:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 13a7 7 0 1 0 14 0a7 7 0 0 0 -14 0z" /><path d="M14.5 10.5l-2.5 2.5" /><path d="M17 8l1 -1" /><path d="M14 3h-4" /></svg>`,photo:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 8h.01" /><path d="M3 6a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v12a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3v-12z" /><path d="M3 16l5 -5c.928 -.893 2.072 -.893 3 0l5 5" /><path d="M14 14l1 -1c.928 -.893 2.072 -.893 3 0l3 3" /></svg>`,trophy:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 21l8 0" /><path d="M12 17l0 4" /><path d="M7 4l10 0" /><path d="M17 4v8a5 5 0 0 1 -10 0v-8" /><path d="M5 9m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M19 9m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /></svg>`,x:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>`,cal:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z" /><path d="M16 3v4" /><path d="M8 3v4" /><path d="M4 11h16" /><path d="M11 15h1" /><path d="M12 15v3" /></svg>`,cam:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 7h1a2 2 0 0 0 2 -2a1 1 0 0 1 1 -1h6a1 1 0 0 1 1 1a2 2 0 0 0 2 2h1a2 2 0 0 1 2 2v9a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-9a2 2 0 0 1 2 -2" /><path d="M9 13a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /></svg>`};
+const EX=[
+ {id:'A',name:'Тяга верхнего блока, прямым хватом',sets:5,reps:'6',tempo:'3010',rir:'2',last:[83,93,97,100],lastReps:7,rest:[120,180],alts:['Подтягивания, прямым широким хватом','Тяга в вертикальном хаммере, прямым хватом','Тяга верхнего блока, параллельным хватом']},
+ {id:'B',name:'Тяга штанги к груди в наклоне, прямым хватом',sets:4,reps:'8',tempo:'3010',rir:'2',last:[70,80,90,100],lastReps:10,rest:[120,180],alts:['Тяга Т-грифа','Тяга гантели в наклоне','Тяга в горизонтальном хаммере']},
+ {id:'C',name:'Тяга горизонтального блока, параллельным хватом',sets:3,reps:'10-12',tempo:'3010',rir:'1-2',last:[66,73,79],lastReps:11,rest:[90,120],alts:['Тяга в хаммере перед собой','Горизонтальная тяга к груди, широким хватом']},
+ {id:'D',name:'Обратные разведения в кроссовере',sets:4,reps:'12-18',tempo:'2011',rir:'1-2',last:[4,6,9],lastReps:15,rest:[60,90],alts:['Обратные разведения в пек-дек','Тяга каната к лицу']},
+ {id:'F',name:'Разгибания на трицепс с EZ-грифом из-за головы, сидя',sets:3,reps:'10-12',tempo:'3010',rir:'2',last:[26,28,30],lastReps:11,rest:[0,0],sup:'S',alts:['Французский жим с EZ-грифом','Разгибания из-за головы в кроссовере с канатом']},
+ {id:'G',name:'Разгибания на трицепс в кроссовере, V-рукоять',sets:3,reps:'8-10',tempo:'2010',rir:'1-2',last:[],lastReps:0,rest:[90,120],sup:'S',alts:['Разгибания на трицепс с канатом','Разгибания с прямой рукоятью']},
+];
+const KEY='trenDen';
+let S={};
+try{S=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){S={}}
+S.sets=S.sets||{};S.swap=S.swap||{};S.notes=S.notes||{};S.video=S.video||{};S.open=S.open||'A';S.start=S.start||Date.now();S.restSel=S.restSel||{};
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function setsOf(e){if(!S.sets[e.id])S.sets[e.id]=Array.from({length:e.sets},()=>({kg:'',reps:'',done:false}));return S.sets[e.id]}
+function nameOf(e){return S.swap[e.id]?S.swap[e.id].name:e.name}
+function fmt(s){s=Math.max(0,Math.floor(s));return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
+function toast(t){const el=document.getElementById('toast');el.textContent=t;el.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove('show'),2200)}
+function tempoHtml(t){return '<span class="tempo">'+t.split('').map(c=>'<i>'+c+'</i>').join('')+'</span>'}
+function exHtml(e){
+  const open=S.open===e.id,sets=setsOf(e),done=sets.every(s=>s.done);
+  const sub=`${e.sets} × ${e.reps} повт · RIR ${e.rir}`;
+  let h=`<div class="ex ${open?'open':''} ${done?'done':''}" id="ex-${e.id}">
+   <div class="exh" data-open="${e.id}"><div class="thumb" data-video="${e.id}">${I.play}</div><div class="t"><b>${e.id} · ${nameOf(e)}${S.swap[e.id]?'<span class="badge">замена</span>':''}</b><div class="sub">${sub}${open?'':' · '+sets.filter(s=>s.done).length+' из '+e.sets+' сделано'}</div></div>${done?'<div class="done">'+I.check+'</div>':'<div class="todo"></div>'}</div>`;
+  if(open){
+    h+=`<div class="acts"><button class="chip" data-swap="${e.id}">${I.swap} Замена</button><button class="chip" data-tech="${e.id}">${I.notes} Техника</button></div>
+    <div class="meta"><span>Прошлый раз <b>${e.last.length?e.last.join(' · ')+' кг × '+e.lastReps:'первый раз'}</b></span><span>Темп ${tempoHtml(e.tempo)}</span></div>
+    <div class="sets"><div class="sh"><span>№</span><span>Цель</span><span>кг</span><span>повт</span><span></span></div>`;
+    sets.forEach((s,i)=>{h+=`<div class="set ${s.done?'done':''}"><span class="n">${i+1}</span><span class="goal"><b>${e.reps}</b><span>${e.last[i]!=null?'было '+e.last[i]+' кг':'&nbsp;'}</span></span>
+     <input inputmode="decimal" placeholder="кг" value="${s.kg}" data-kg="${e.id}:${i}" ${s.done?'readonly':''}><input inputmode="numeric" placeholder="повт" value="${s.reps}" data-reps="${e.id}:${i}" ${s.done?'readonly':''}><button class="ok" data-ok="${e.id}:${i}" aria-label="Подход сделан">${I.check}</button></div>`});
+    h+=`</div>`;
+    const vol=sets.reduce((a,s)=>a+(+s.kg||0)*(+s.reps||0),0);
+    h+=`<div class="vol"><span>Объём сегодня <b style="color:#fff">${vol} кг</b></span><span>${e.last.length?'прошлый раз '+(e.last.reduce((a,b)=>a+b,0)*e.lastReps)+' кг':''}</span></div>`;
+    h+=`<label class="vid ${S.video[e.id]?'ok':''}">${S.video[e.id]?I.check+' Видео последнего подхода записано':I.video+' Снять видео последнего рабочего подхода'}<input type="file" accept="video/*" capture="environment" hidden data-vfile="${e.id}"></label>`;
+  }
+  h+=`</div>`;return h;
+}
+function render(){
+  const L=document.getElementById('list');let h='';let i=0;
+  while(i<EX.length){const e=EX[i];
+    if(e.sup){const pair=EX.filter(x=>x.sup===e.sup);
+      h+=`<div class="ex super"><div class="sup">Суперсет ${pair.map(p=>p.id).join(' + ')} <span>· без отдыха между, отдых после пары</span></div>${pair.map((p,k)=>exHtml(p)+(k<pair.length-1?'<div class="link"><i></i> сразу переходи к '+pair[k+1].id+'</div>':'')).join('')}<div class="note" style="margin-top:8px">В твоей таблице F и G идут отдельно, здесь пара показана как пример суперсета D1 / D2</div></div>`;
+      i+=pair.length;}else{h+=exHtml(e);i++;}
+  }
+  L.innerHTML=h;
+  if(S.rest&&S.rest.end>Date.now()){const e=EX.find(x=>x.id===S.rest.ex);const anchor=document.getElementById('ex-'+(e.sup?EX.filter(x=>x.sup===e.sup).slice(-1)[0].id:e.id));
+    const box=anchor.closest('.super')||anchor;const sel=S.restSel[e.id]||e.rest[0];
+    box.insertAdjacentHTML('afterend',`<div class="rest">${I.stop}<span class="lbl">Отдых</span>${e.rest.filter(r=>r).map(r=>`<button class="chip ${r===sel?'on':''}" data-rest="${e.id}:${r}" style="padding:5px 10px;border:${r===sel?'':'0'};cursor:pointer">${r} с</button>`).join('')}<span class="cnt" id="restCnt">${fmt((S.rest.end-Date.now())/1000)}</span><button class="skip" data-skiprest aria-label="Пропустить отдых">${I.skip}</button></div><div class="restbar"><i id="restBar" style="width:${100*(S.rest.end-Date.now())/1000/S.rest.total}%"></i></div>`);}
+}
+function startRest(e){const sel=S.restSel[e.id]||e.rest[0];if(!sel)return;S.rest={ex:e.id,end:Date.now()+sel*1000,total:sel};save();render()}
+document.getElementById('list').addEventListener('click',ev=>{
+  const t=ev.target.closest('[data-open],[data-swap],[data-tech],[data-ok],[data-rest],[data-skiprest],[data-video]');if(!t)return;
+  if(t.dataset.video){ev.stopPropagation();openSheet(`<div class="grab"></div><h3>Видео техники</h3><p>Здесь играет твоё видео упражнения</p><div class="still" style="aspect-ratio:16/9">${I.play}<span>видео из базы упражнений</span></div><div class="row2"><button class="ghost" data-close>Закрыть</button></div>`);return}
+  if(t.dataset.open){S.open=S.open===t.dataset.open?null:t.dataset.open;save();render();return}
+  if(t.dataset.swap){sheetSwap(EX.find(x=>x.id===t.dataset.swap));return}
+  if(t.dataset.tech){sheetTech(EX.find(x=>x.id===t.dataset.tech));return}
+  if(t.dataset.ok){const [id,i]=t.dataset.ok.split(':');const e=EX.find(x=>x.id===id);const s=setsOf(e)[+i];
+    if(s.done){s.done=false;save();render();return}
+    const kg=document.querySelector(`[data-kg="${id}:${i}"]`).value.trim().replace(',','.'),reps=document.querySelector(`[data-reps="${id}:${i}"]`).value.trim();
+    if(!kg||!reps){toast('Впиши кг и повторения');return}
+    s.kg=kg;s.reps=reps;s.done=true;save();
+    const pair=e.sup?EX.filter(x=>x.sup===e.sup):null;
+    if(pair&&pair[pair.length-1].id!==e.id){render();toast('Без отдыха: сразу '+pair[pair.indexOf(e)+1].id);return}
+    if(+i===e.sets-1){const next=EX[EX.indexOf(e)+1];if(next&&!next.sup)S.open=next.id;else if(next&&next.sup&&!e.sup)S.open=next.id;}
+    startRest(e);return}
+  if(t.dataset.rest){const [id,r]=t.dataset.rest.split(':');S.restSel[id]=+r;const e=EX.find(x=>x.id===id);S.rest={ex:id,end:Date.now()+r*1000,total:+r};save();render();return}
+  if(t.hasAttribute('data-skiprest')){S.rest=null;save();render();return}
+});
+document.getElementById('list').addEventListener('input',ev=>{const t=ev.target;const k=t.dataset.kg||t.dataset.reps;if(!k)return;const [id,i]=k.split(':');const s=setsOf(EX.find(x=>x.id===id))[+i];if(t.dataset.kg)s.kg=t.value;else s.reps=t.value;save()});
+document.getElementById('list').addEventListener('change',ev=>{const t=ev.target;if(t.dataset.vfile){S.video[t.dataset.vfile]=true;save();render();toast('Видео сохранено, тренер увидит его в отчёте')}});
+const back=document.getElementById('back'),sheet=document.getElementById('sheet');
+function openSheet(html){sheet.innerHTML=html;back.classList.add('show');requestAnimationFrame(()=>sheet.classList.add('show'))}
+function closeSheet(){sheet.classList.remove('show');back.classList.remove('show')}
+back.addEventListener('click',closeSheet);
+sheet.addEventListener('click',ev=>{if(ev.target.closest('[data-close]'))closeSheet()});
+function sheetSwap(e){let sel=null,scope='today';
+  const draw=()=>{sheet.innerHTML=`<div class="grab"></div><h3>Замена: ${e.id}</h3><p>Похожие упражнения на ту же мышцу, из твоей базы</p>${e.alts.map((a,i)=>`<div class="opt ${sel===i?'sel':''}" data-alt="${i}"><div class="thumb" style="width:44px;height:44px">${I.play}</div><div class="t"><b>${a}</b><span>${i===0?'история: есть прошлые веса':'история: первый раз'}</span></div></div>`).join('')}
+   <div class="seg"><button class="${scope==='today'?'on':''}" data-scope="today">Только сегодня</button><button class="${scope==='phase'?'on':''}" data-scope="phase">До конца фазы</button></div>
+   <div class="row2"><button class="ghost" data-close>Отмена</button><button class="btn" data-apply>Заменить</button></div>`};
+  draw();openSheet(sheet.innerHTML);
+  sheet.onclick=ev=>{const a=ev.target.closest('[data-alt]');const sc=ev.target.closest('[data-scope]');const ap=ev.target.closest('[data-apply]');
+    if(a){sel=+a.dataset.alt;draw()}if(sc){scope=sc.dataset.scope;draw()}
+    if(ap){if(sel==null){toast('Выбери упражнение');return}S.swap[e.id]={name:e.alts[sel],scope};save();closeSheet();render();toast(scope==='today'?'Заменено на сегодня. Тренер увидит в сводке':'Заменено до конца фазы. Тренер увидит в сводке');sheet.onclick=null}
+    if(ev.target.closest('[data-close]')){closeSheet();sheet.onclick=null}}}
+function sheetTech(e){
+  openSheet(`<div class="grab"></div><h3>Техника: ${nameOf(e)}</h3><p>Твои кадры с углами и моменты, на что смотреть</p>
+  <div class="stills"><div class="still">${I.photo}<span>твой скрин: старт</span><div class="ang" data-a="угол"></div></div><div class="still">${I.photo}<span>твой скрин: нижняя точка</span><div class="ang" data-a="угол"></div></div></div>
+  <ul class="pts"><li><b>1</b><span>Момент техники, твой текст</span></li><li><b>2</b><span>Момент техники, твой текст</span></li><li><b>3</b><span>Момент техники, твой текст</span></li></ul>
+  <h3 style="font-size:15px">Моя заметка</h3><p>Клиент пишет своё: высота сиденья, номер рукояти, что мешало</p>
+  <textarea class="note-in" id="noteIn" placeholder="Например: сиденье 5, хват на ширину меток">${S.notes[e.id]||''}</textarea>
+  <div class="row2"><button class="ghost" data-close>Закрыть</button><button class="btn" id="noteSave">Сохранить</button></div>`);
+  document.getElementById('noteSave').onclick=()=>{S.notes[e.id]=document.getElementById('noteIn').value;save();closeSheet();toast('Заметка сохранена')}}
+document.getElementById('menuBtn').onclick=()=>{
+  openSheet(`<div class="grab"></div><h3>Тренировка</h3><p>Если сегодня не получается</p>
+  <div class="opt" id="mMove"><div class="ico">${I.cal}</div><div class="t"><b>Перенести на другой день</b><span>программа сдвинется, тренер увидит</span></div></div>
+  <div class="opt" id="mSkip"><div class="ico">${I.x}</div><div class="t"><b>Пропустить тренировку</b><span>одной строкой: почему</span></div></div>
+  <div class="opt" id="mReset"><div class="ico">${I.skip}</div><div class="t"><b>Сбросить прототип</b><span>очистить всё, что нажато</span></div></div>
+  <div class="row2"><button class="ghost" data-close>Закрыть</button></div>`);
+  document.getElementById('mMove').onclick=()=>{openSheet(`<div class="grab"></div><h3>Перенести на</h3><p>День 2 переедет, остальные сдвинутся</p><div class="days">${['Вс','Пн','Вт','Ср'].map(d=>`<button class="chip" data-day="${d}" style="border:0;cursor:pointer">${d}</button>`).join('')}</div><div class="row2"><button class="ghost" data-close>Отмена</button></div>`);sheet.onclick=ev=>{const d=ev.target.closest('[data-day]');if(d){closeSheet();toast('Перенесено на '+d.dataset.day+'. Тренер увидит в сводке');sheet.onclick=null}if(ev.target.closest('[data-close]')){closeSheet();sheet.onclick=null}}};
+  document.getElementById('mSkip').onclick=()=>{openSheet(`<div class="grab"></div><h3>Пропустить</h3><p>Причина одной строкой, тренеру в сводку</p><textarea class="note-in" id="skipWhy" placeholder="Например: заболел, командировка"></textarea><div class="row2"><button class="ghost" data-close>Отмена</button><button class="btn" id="skipGo">Пропустить</button></div>`);document.getElementById('skipGo').onclick=()=>{closeSheet();toast('Пропуск записан, тренер увидит причину');setTimeout(()=>location.href='tren.html',900)}};
+  document.getElementById('mReset').onclick=()=>{try{localStorage.removeItem(KEY)}catch(e){}location.reload()};
+};
+document.getElementById('finishBtn').onclick=()=>{
+  const all=EX.flatMap(e=>setsOf(e).map(s=>({e,s})));const done=all.filter(x=>x.s.done);
+  const ton=done.reduce((a,x)=>a+(+x.s.kg||0)*(+x.s.reps||0),0);
+  const pbs=EX.filter(e=>e.last.length&&Math.max(...setsOf(e).filter(s=>s.done).map(s=>+s.kg||0),0)>Math.max(...e.last));
+  let rating=S.rating||null;
+  const draw=()=>{sheet.innerHTML=`<div class="grab"></div><h3>Тренировка завершена</h3><p>День 2 · Спина / Задняя дельта / Трицепс</p>
+   <div class="stats"><div class="stat"><b>${fmt((Date.now()-S.start)/1000)}</b><span>время</span></div><div class="stat"><b>${ton}</b><span>кг тоннаж</span></div><div class="stat"><b>${done.length}/${all.length}</b><span>подходов</span></div></div>
+   ${pbs.map(e=>`<div class="pb">${I.trophy} Рекорд веса: ${e.id} · ${nameOf(e)}</div>`).join('')}
+   <h3 style="font-size:15px;margin-top:6px">Как прошла тренировка?</h3><p>из 10, это пойдёт в недельный отчёт само</p>
+   <div class="rate">${Array.from({length:10},(_,i)=>`<button class="${rating===i+1?'on':''}" data-r="${i+1}">${i+1}</button>`).join('')}</div>
+   <div class="row2"><button class="ghost" data-close>Назад</button><button class="btn" id="fin">Сохранить</button></div>`;
+   document.getElementById('fin').onclick=()=>{if(!rating){toast('Поставь оценку из 10');return}S.rating=rating;S.finished=true;save();closeSheet();toast('Сохранено. Тренер получит тренировку в сводке');setTimeout(()=>location.href='tren.html',900)}};
+  draw();openSheet(sheet.innerHTML);draw();
+  sheet.onclick=ev=>{const r=ev.target.closest('[data-r]');if(r){rating=+r.dataset.r;draw()}if(ev.target.closest('[data-close]')){closeSheet();sheet.onclick=null}}};
+setInterval(()=>{document.getElementById('clock').textContent=fmt((Date.now()-S.start)/1000);
+  if(S.rest){const left=(S.rest.end-Date.now())/1000;const c=document.getElementById('restCnt'),b=document.getElementById('restBar');
+    if(left<=0){S.rest=null;save();render();toast('Отдых закончился, следующий подход')}else{if(c)c.textContent=fmt(left);if(b)b.style.width=(100*left/S.rest.total)+'%'}}},1000);
+render();
+</script>
 </body></html>
