@@ -1,0 +1,121 @@
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Дом клиента</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap">
+<style>
+:root{color-scheme:dark;--bg:#0E0F1A;--card:#1A1A26;--chip:#262633;--line:#2E2F3C;--text:#FFFFFF;--muted:#7A7C83;--acc:#F2652A;--acc2:#F6B343;--grad:linear-gradient(90deg,#F2652A,#F6B343)}
+:root:not([data-theme="light"]),:root[data-theme="dark"],:root[data-theme="light"]{color-scheme:dark}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:#06070D;color:var(--text);font-family:Manrope,"Helvetica Neue",Arial,sans-serif;font-size:15px;line-height:1.35;-webkit-font-smoothing:antialiased}
+.phone{max-width:420px;margin:0 auto;min-height:100%;background:var(--bg);display:flex;flex-direction:column;position:relative}
+.scroll{padding:18px 16px 110px}
+.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.avatar{width:44px;height:44px;border-radius:50%;background:var(--chip);display:grid;place-items:center;font-weight:700;color:var(--acc2);border:1px solid var(--line)}
+.hello{flex:1;margin-left:12px}
+.hello b{display:block;font-size:19px;font-weight:700}
+.hello span{color:var(--muted);font-size:13px}
+.bell{width:40px;height:40px;border-radius:50%;background:var(--chip);display:grid;place-items:center;color:var(--muted)}
+.bell svg,.icon svg{width:22px;height:22px}
+h2{font-size:14px;font-weight:600;color:var(--muted);margin:0 0 10px;letter-spacing:.02em;text-transform:uppercase}
+.card{background:var(--card);border-radius:20px;padding:16px;margin-bottom:14px;border:1px solid rgba(255,255,255,.03)}
+.card.hero{padding:18px 16px 16px;background:radial-gradient(120% 90% at 100% 0%,rgba(242,101,42,.22),transparent 55%),var(--card)}
+.eyebrow{font-size:12px;color:var(--acc2);font-weight:600;margin-bottom:6px}
+.hero h3{margin:0;font-size:22px;font-weight:800;line-height:1.15}
+.hero p{margin:6px 0 14px;color:var(--muted);font-size:13px}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--grad);color:#14110E;font-weight:800;border-radius:999px;padding:12px 18px;font-size:15px}
+.btn svg{width:18px;height:18px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.big{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums}
+.big small{font-size:14px;color:var(--muted);font-weight:500}
+.bar{height:8px;border-radius:999px;background:var(--chip);overflow:hidden;margin:12px 0}
+.bar i{display:block;height:100%;background:var(--grad);border-radius:999px}
+.macros{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.m{background:var(--chip);border-radius:14px;padding:10px 10px 8px;text-align:center}
+.m b{display:block;font-size:16px;font-variant-numeric:tabular-nums}
+.m span{font-size:11px;color:var(--muted)}
+.m .mb{height:4px;border-radius:99px;background:#33344a;margin-top:8px;overflow:hidden}
+.m .mb i{display:block;height:100%;background:var(--grad)}
+.ghost{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--acc);color:var(--acc2);border-radius:999px;padding:8px 14px;font-weight:700;font-size:13px}
+.ghost svg{width:16px;height:16px}
+.list{display:flex;flex-direction:column;gap:10px}
+.item{display:flex;align-items:center;gap:12px;background:var(--chip);border-radius:16px;padding:12px}
+.item .icon{width:38px;height:38px;border-radius:12px;background:#30313F;display:grid;place-items:center;color:var(--acc2);flex:none}
+.item .t{flex:1;min-width:0}
+.item .t b{display:block;font-size:15px;font-weight:700}
+.item .t span{font-size:12px;color:var(--muted)}
+.item .v{font-weight:800;font-variant-numeric:tabular-nums;font-size:15px}
+.done{width:28px;height:28px;border-radius:50%;background:var(--grad);display:grid;place-items:center;color:#14110E;flex:none}
+.done svg{width:16px;height:16px}
+.todo{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--acc);flex:none}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:7px 12px;font-size:13px;font-weight:600;background:#30313F;color:var(--text)}
+.chip.on{background:transparent;border:1.5px solid var(--acc);color:var(--acc2)}
+.chip svg{width:14px;height:14px}
+.minibar{height:5px;border-radius:99px;background:#33344a;margin-top:8px;overflow:hidden}
+.minibar i{display:block;height:100%;background:var(--grad)}
+.report{display:flex;align-items:center;gap:12px}
+.report .t{flex:1}
+.report .t b{display:block}
+.report .t span{color:var(--muted);font-size:13px}
+.report .chev{color:var(--muted)}
+.nav{position:fixed;left:0;right:0;bottom:0;margin:0 auto;max-width:420px;background:#12131E;border-top:1px solid var(--line);padding:10px 8px calc(10px + env(safe-area-inset-bottom,0px));display:grid;grid-template-columns:repeat(5,1fr)}
+.nav a{display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--muted);text-decoration:none;font-size:11px;font-weight:600}
+.nav a svg{width:26px;height:26px}
+.nav a.on{color:var(--acc2)}
+.nav a.on svg{stroke:url(#g)}
+.note{font-size:11px;color:var(--muted);text-align:center;margin-top:6px}
+@media (prefers-reduced-motion:no-preference){.btn:active{transform:scale(.98)}}
+</style>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#F2652A"/><stop offset="1" stop-color="#F6B343"/></linearGradient></defs></svg>
+<div class="phone">
+<div class="scroll">
+  <div class="top">
+    <div class="avatar">А</div>
+    <div class="hello"><b>Привет, Андрей</b><span>Суббота, 3 октября · неделя 3 из 4</span></div>
+    <div class="bell"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" /><path d="M9 17v1a3 3 0 0 0 6 0v-1" /></svg></div>
+  </div>
+
+  <h2>Тренировка дня</h2>
+  <div class="card hero">
+    <div class="eyebrow">Фаза 12 · Интенсификация · День 2</div>
+    <h3>Спина / Задняя дельта / Трицепс</h3>
+    <p>6 упражнений · темп 3010 · RIR 2</p>
+    <span class="btn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 4v16a1 1 0 0 0 1.524 .852l13 -8a1 1 0 0 0 0 -1.704l-13 -8a1 1 0 0 0 -1.524 .852z" /></svg> Начать тренировку</span>
+  </div>
+
+  <h2>Питание сегодня</h2>
+  <div class="card">
+    <div class="row">
+      <div class="big">1 420 <small>/ 2 350 ккал</small></div>
+      <span class="ghost"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg> Еда</span>
+    </div>
+    <div class="bar"><i style="width:60%"></i></div>
+    <div class="macros">
+      <div class="m"><b>112 <span>/ 180</span></b><span>Белки, г</span><div class="mb"><i style="width:62%"></i></div></div>
+      <div class="m"><b>48 <span>/ 70</span></b><span>Жиры, г</span><div class="mb"><i style="width:69%"></i></div></div>
+      <div class="m"><b>130 <span>/ 250</span></b><span>Углеводы, г</span><div class="mb"><i style="width:52%"></i></div></div>
+    </div>
+  </div>
+
+  <h2>Чек-лист дня</h2>
+  <div class="card list">
+    <div class="item"><div class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" /></svg></div><div class="t"><b>Сон</b><span>цель 7-8 часов</span></div><div class="v">7,5 ч</div><div class="done"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg></div></div>
+    <div class="item"><div class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M13 4m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M7 21l3 -4" /><path d="M16 21l-2 -4l-3 -3l1 -6" /><path d="M6 12l2 -3l4 -1l3 3l3 1" /></svg></div><div class="t"><b>Шаги</b><span>6 240 из 10 000</span><div class="minibar"><i style="width:62%"></i></div></div><div class="todo"></div></div>
+    <div class="item" style="align-items:flex-start"><div class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4.5 12.5l8 -8a4.94 4.94 0 0 1 7 7l-8 8a4.94 4.94 0 0 1 -7 -7" /><path d="M8.5 8.5l7 7" /></svg></div><div class="t"><b>БАДы</b><span>2 из 3 принято</span>
+      <div class="chips"><span class="chip"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg> Креатин</span><span class="chip"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg> Протеин</span><span class="chip on">Цитруллин</span></div></div></div>
+  </div>
+
+  <div class="card report">
+    <div class="icon" style="width:38px;height:38px;border-radius:12px;background:var(--chip);display:grid;place-items:center;color:var(--acc2)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /><path d="M9 14l2 2l4 -4" /></svg></div>
+    <div class="t"><b>Отчёт недели: завтра</b><span>вес внесён 6 из 7 дней · фото и замеры</span></div>
+    <span class="chev"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg></span>
+  </div>
+  <div class="note">Макет экрана «Дом», цифры примерные</div>
+</div>
+<nav class="nav">
+  <a class="on" href="#dom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l-2 0l9 -9l9 9l-2 0" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg>Дом</a>
+  <a href="#tren"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M2 12h1" /><path d="M6 8h-2a1 1 0 0 0 -1 1v6a1 1 0 0 0 1 1h2" /><path d="M6 7v10a1 1 0 0 0 1 1h1a1 1 0 0 0 1 -1v-10a1 1 0 0 0 -1 -1h-1a1 1 0 0 0 -1 1z" /><path d="M9 12h6" /><path d="M15 7v10a1 1 0 0 0 1 1h1a1 1 0 0 0 1 -1v-10a1 1 0 0 0 -1 -1h-1a1 1 0 0 0 -1 1z" /><path d="M18 8h2a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-2" /><path d="M22 12h-1" /></svg>Тренировки</a>
+  <a href="#pit"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19 3v12h-5c-.023 -3.681 .184 -7.406 5 -12zm0 12v6h-1v-3m-10 -14v17m-3 -17v3a3 3 0 1 0 6 0v-3" /></svg>Питание</a>
+  <a href="#prog"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 19l16 0" /><path d="M4 15l4 -6l4 2l4 -5l4 4" /></svg>Прогресс</a>
+  <a href="#otchet"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /><path d="M9 14l2 2l4 -4" /></svg>Отчёт</a>
+</nav>
+</div>
