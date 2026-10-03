@@ -1,113 +1,56 @@
-<title>Дом клиента</title>
+<title>Дом</title>
 <style>
-:root{color-scheme:dark;--bg:#0E0F1A;--card:#1A1A26;--chip:#262633;--line:#2E2F3C;--text:#FFFFFF;--muted:#7A7C83;--acc:#F2652A;--acc2:#F6B343;--grad:linear-gradient(90deg,#F2652A,#F6B343)}
-:root:not([data-theme="light"]),:root[data-theme="dark"],:root[data-theme="light"]{color-scheme:dark}
-*{box-sizing:border-box}
-html,body{height:100%}
-body{margin:0;background:#06070D;color:var(--text);font-family:Manrope,"Helvetica Neue",Arial,sans-serif;font-size:15px;line-height:1.35;-webkit-font-smoothing:antialiased}
-.phone{max-width:420px;margin:0 auto;min-height:100%;background:var(--bg);display:flex;flex-direction:column;position:relative}
-.scroll{padding:18px 16px 110px}
-.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
-.avatar{width:44px;height:44px;border-radius:50%;background:var(--chip);display:grid;place-items:center;font-weight:700;color:var(--acc2);border:1px solid var(--line)}
-.hello{flex:1;margin-left:12px}
-.hello b{display:block;font-size:19px;font-weight:700}
-.hello span{color:var(--muted);font-size:13px}
-.bell{width:40px;height:40px;border-radius:50%;background:var(--chip);display:grid;place-items:center;color:var(--muted)}
-.bell svg,.icon svg{width:22px;height:22px}
-h2{font-size:14px;font-weight:600;color:var(--muted);margin:0 0 10px;letter-spacing:.02em;text-transform:uppercase}
-.card{background:var(--card);border-radius:20px;padding:16px;margin-bottom:14px;border:1px solid rgba(255,255,255,.03)}
-.card.hero{padding:18px 16px 16px;background:radial-gradient(120% 90% at 100% 0%,rgba(242,101,42,.22),transparent 55%),var(--card)}
-.eyebrow{font-size:12px;color:var(--acc2);font-weight:600;margin-bottom:6px}
-.hero h3{margin:0;font-size:22px;font-weight:800;line-height:1.15}
-.hero p{margin:6px 0 14px;color:var(--muted);font-size:13px}
-.btn{display:inline-flex;align-items:center;gap:8px;background:var(--grad);color:#14110E;font-weight:800;border-radius:999px;padding:12px 18px;font-size:15px}
-.btn svg{width:18px;height:18px}
-.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.big{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums}
-.big small{font-size:14px;color:var(--muted);font-weight:500}
-.bar{height:8px;border-radius:999px;background:var(--chip);overflow:hidden;margin:12px 0}
-.bar i{display:block;height:100%;background:var(--grad);border-radius:999px}
+.top{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.avatar{width:44px;height:44px;border-radius:50%;background:var(--chip);display:grid;place-items:center;font-weight:800;color:var(--acc2);border:1px solid var(--line)}
+.hello{flex:1;min-width:0}.hello b{display:block;font-size:19px;font-weight:800}.hello span{color:var(--muted);font-size:13px}
+.streak{display:inline-flex;align-items:center;gap:4px;background:var(--chip);border-radius:999px;padding:6px 10px;font-size:12px;font-weight:700;color:var(--acc2);white-space:nowrap}
+.streak svg{width:14px;height:14px}
+.hero h3{margin:0;font-size:21px;font-weight:800;line-height:1.15}.hero p{margin:6px 0 14px;color:var(--muted);font-size:13px}
 .macros{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.m{background:var(--chip);border-radius:14px;padding:10px 10px 8px;text-align:center}
-.m b{display:block;font-size:16px;font-variant-numeric:tabular-nums}
-.m span{font-size:11px;color:var(--muted)}
-.m .mb{height:4px;border-radius:99px;background:#33344a;margin-top:8px;overflow:hidden}
-.m .mb i{display:block;height:100%;background:var(--grad)}
-.ghost{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--acc);color:var(--acc2);border-radius:999px;padding:8px 14px;font-weight:700;font-size:13px}
-.ghost svg{width:16px;height:16px}
-.list{display:flex;flex-direction:column;gap:10px}
-.item{display:flex;align-items:center;gap:12px;background:var(--chip);border-radius:16px;padding:12px}
-.item .icon{width:38px;height:38px;border-radius:12px;background:#30313F;display:grid;place-items:center;color:var(--acc2);flex:none}
-.item .t{flex:1;min-width:0}
-.item .t b{display:block;font-size:15px;font-weight:700}
-.item .t span{font-size:12px;color:var(--muted)}
-.item .v{font-weight:800;font-variant-numeric:tabular-nums;font-size:15px}
-.done{width:28px;height:28px;border-radius:50%;background:var(--grad);display:grid;place-items:center;color:#14110E;flex:none}
-.done svg{width:16px;height:16px}
-.todo{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--acc);flex:none}
-.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
-.chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:7px 12px;font-size:13px;font-weight:600;background:#30313F;color:var(--text)}
-.chip.on{background:transparent;border:1.5px solid var(--acc);color:var(--acc2)}
-.chip svg{width:14px;height:14px}
-.minibar{height:5px;border-radius:99px;background:#33344a;margin-top:8px;overflow:hidden}
-.minibar i{display:block;height:100%;background:var(--grad)}
-.report{display:flex;align-items:center;gap:12px}
-.report .t{flex:1}
-.report .t b{display:block}
-.report .t span{color:var(--muted);font-size:13px}
-.report .chev{color:var(--muted)}
-.nav{position:fixed;left:0;right:0;bottom:0;margin:0 auto;max-width:420px;background:#12131E;border-top:1px solid var(--line);padding:10px 8px calc(10px + env(safe-area-inset-bottom,0px));display:grid;grid-template-columns:repeat(5,1fr)}
-.nav a{display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--muted);text-decoration:none;font-size:11px;font-weight:600}
-.nav a svg{width:26px;height:26px}
-.nav a.on{color:var(--acc2)}
-.nav a.on svg{stroke:url(#g)}
-.note{font-size:11px;color:var(--muted);text-align:center;margin-top:6px}
-@media (prefers-reduced-motion:no-preference){.btn:active{transform:scale(.98)}}
+.m{background:var(--chip);border-radius:14px;padding:10px 8px 8px;text-align:center}.m b{display:block;font-size:16px;font-variant-numeric:tabular-nums}.m span{font-size:11px;color:var(--muted)}
+.ck{display:flex;align-items:center;gap:12px;background:var(--chip);border-radius:16px;padding:10px 12px}
+.ck .t{flex:1;min-width:0}.ck .t b{display:block;font-size:14px}.ck .t span{font-size:12px;color:var(--muted)}
+.ck input{width:74px;height:36px;border-radius:10px;border:1.5px solid transparent;background:var(--card);color:var(--text);font:inherit;font-weight:800;text-align:center;font-variant-numeric:tabular-nums}
+.ck input:focus{outline:none;border-color:var(--acc)}
+.kb{display:flex;gap:12px;align-items:center;background:radial-gradient(120% 120% at 0% 100%,rgba(246,179,67,.18),transparent 60%),var(--card);border-radius:20px;padding:14px;color:var(--text);text-decoration:none;margin-bottom:12px;border:1px solid rgba(255,255,255,.03)}
+.kb .t{flex:1;min-width:0}.kb .t b{display:block;font-size:15px}.kb .t span{font-size:12px;color:var(--muted)}
+.rep{display:flex;align-items:center;gap:12px;color:var(--text);text-decoration:none}
+.rep .t{flex:1;min-width:0}.rep .t b{display:block}.rep .t span{color:var(--muted);font-size:12px}
 </style>
-<div class="phone">
-<div class="scroll">
-  <div class="top">
-    <div class="avatar">А</div>
-    <div class="hello"><b>Привет, Андрей</b><span>Суббота, 3 октября · неделя 3 из 4</span></div>
-    <div class="bell">{{bell}}</div>
-  </div>
-
-  <h2>Тренировка дня</h2>
-  <div class="card hero">
-    <div class="eyebrow">Фаза 12 · Интенсификация · День 2</div>
-    <h3>Спина / Задняя дельта / Трицепс</h3>
-    <p>6 упражнений · темп 3010 · RIR 2</p>
-    <a class="btn" href="tren-den.html">{{player-play-filled}} Начать тренировку</a>
-  </div>
-
-  <h2>Питание сегодня</h2>
-  <div class="card">
-    <div class="row">
-      <div class="big">1 420 <small>/ 2 350 ккал</small></div>
-      <span class="ghost">{{plus}} Еда</span>
-    </div>
-    <div class="bar"><i style="width:60%"></i></div>
-    <div class="macros">
-      <div class="m"><b>112 <span>/ 180</span></b><span>Белки, г</span><div class="mb"><i style="width:62%"></i></div></div>
-      <div class="m"><b>48 <span>/ 70</span></b><span>Жиры, г</span><div class="mb"><i style="width:69%"></i></div></div>
-      <div class="m"><b>130 <span>/ 250</span></b><span>Углеводы, г</span><div class="mb"><i style="width:52%"></i></div></div>
-    </div>
-  </div>
-
-  <h2>Чек-лист дня</h2>
-  <div class="card list">
-    <div class="item"><div class="icon">{{moon}}</div><div class="t"><b>Сон</b><span>цель 7-8 часов</span></div><div class="v">7,5 ч</div><div class="done">{{check}}</div></div>
-    <div class="item"><div class="icon">{{walk}}</div><div class="t"><b>Шаги</b><span>6 240 из 10 000</span><div class="minibar"><i style="width:62%"></i></div></div><div class="todo"></div></div>
-    <div class="item" style="align-items:flex-start"><div class="icon">{{pill}}</div><div class="t"><b>БАДы</b><span>2 из 3 принято</span>
-      <div class="chips"><span class="chip">{{check}} Креатин</span><span class="chip">{{check}} Протеин</span><span class="chip on">Цитруллин</span></div></div></div>
-  </div>
-
-  <div class="card report">
-    <div class="icon" style="width:38px;height:38px;border-radius:12px;background:var(--chip);display:grid;place-items:center;color:var(--acc2)">{{clipboard-check}}</div>
-    <div class="t"><b>Отчёт недели: завтра</b><span>вес внесён 6 из 7 дней · фото и замеры</span></div>
-    <span class="chev">{{chevron-right}}</span>
-  </div>
-  <div class="note">Макет экрана «Дом», цифры примерные</div>
+<div class="phone"><div class="scroll" id="root"></div>{{nav:dom}}</div>
+<script>
+const D=window.DATA,U=window.UI;const I={bell:`{{bell}}`,play:`{{player-play-filled}}`,plus:`{{plus}}`,check:`{{check}}`,moon:`{{moon}}`,walk:`{{walk}}`,pill:`{{pill}}`,clip:`{{clipboard-check}}`,chev:`{{chevron-right}}`,flame:`{{flame}}`,book:`{{book}}`,scale:`{{scale}}`};
+const today=D.DAYS[D.DAYS.length-1],W=D.WORKOUTS.find(w=>w.today),norm=D.normAt(D.TODAY);
+const dayS=D.store.get('day:'+D.TODAY,{weight:today.weight,sleep:today.sleep,steps:today.steps,supps:today.supps.slice()});
+const added=D.store.get('food:'+D.TODAY,[]);const eaten={kcal:today.food.kcal+D.sum(added.map(a=>a.kcal)),p:today.food.p+D.sum(added.map(a=>a.p)),f:today.food.f+D.sum(added.map(a=>a.f)),c:today.food.c+D.sum(added.map(a=>a.c))};
+const doneToday=D.store.get('done:'+D.TODAY,null);
+const lessonsN=D.LESSONS.reduce((a,c)=>a+c.items.length,0),seen=D.store.get('lessons',[]);const newest=D.LESSONS.flatMap(c=>c.items).find(l=>l.new);
+function weekStrip(){const mon=D.d(D.weekOf(D.TODAY));let h='<div class="week">';for(let i=0;i<7;i++){const dt=D.iso(D.addDays(mon,i));const w=D.WORKOUTS.find(x=>x.date===dt);let cls='',ic='';
+  if(dt===D.TODAY){cls='now';ic=doneToday?I.check:''}else if(dt<D.TODAY){cls='ok';ic=I.check}else if(i===6){cls='miss';ic=''}else{cls='miss'}
+  if(w&&w.done){cls='ok';ic=I.play}
+  h+=`<div>${D.RU_D[(i+1)%7]}<i class="${cls}">${ic}</i></div>`}return h+'</div>'}
+function render(){const r=document.getElementById('root');const pct=Math.min(1,eaten.kcal/norm.kcal);
+r.innerHTML=`<div class="top"><div class="avatar">${D.C.initial}</div><div class="hello"><b>Привет, ${D.C.name}</b><span>${D.fmtD(D.TODAY,true)} · неделя 3 из 4</span></div><span class="streak">${I.flame} 7 нед</span></div>
+${weekStrip()}
+<h2>Тренировка дня</h2>
+<div class="card hero"><div class="eyebrow">Фаза 12 · Интенсификация · День ${W.day}</div><h3>${W.title}</h3><p>${W.ex.length} упражнений · темп ${W.ex[0].target.tempo} · RIR ${W.ex[0].target.rir}</p>
+${doneToday?`<div class="pb">${I.check} Выполнена · ${doneToday.mins} мин · ${doneToday.ton} кг · оценка ${doneToday.rating}/10</div>`:`<a class="btn" href="tren-den.html?d=${W.day}">${I.play} Начать тренировку</a>`}</div>
+<h2>Питание сегодня</h2>
+<div class="card"><div class="row"><div class="big">${eaten.kcal.toLocaleString('ru')} <small>/ ${norm.kcal.toLocaleString('ru')} ккал</small></div><a class="ghost" href="pit.html#add">${I.plus} Еда</a></div>
+<div class="bar"><i style="width:${pct*100}%"></i></div>
+<div class="macros">${[['Белки',eaten.p,norm.p],['Жиры',eaten.f,norm.f],['Углеводы',eaten.c,norm.c]].map(([n,v,t])=>`<div class="m"><b>${v} <span>/ ${t}</span></b><span>${n}, г</span><div class="minibar"><i style="width:${Math.min(100,v/t*100)}%"></i></div></div>`).join('')}</div></div>
+<h2>Чек-лист дня</h2>
+<div class="card list">
+ <div class="ck"><div class="ico">${I.scale}</div><div class="t"><b>Вес утром</b><span>вчера ${D.DAYS[D.DAYS.length-2].weight} кг</span></div><input inputmode="decimal" id="wIn" value="${dayS.weight}"><span class="muted" style="font-size:12px">кг</span></div>
+ <div class="ck"><div class="ico">${I.moon}</div><div class="t"><b>Сон</b><span>цель 7-8 часов</span></div><input inputmode="decimal" id="sIn" value="${dayS.sleep}"><span class="muted" style="font-size:12px">ч</span></div>
+ <div class="ck"><div class="ico">${I.walk}</div><div class="t"><b>Шаги</b><span>цель 10 000</span><div class="minibar"><i style="width:${Math.min(100,dayS.steps/100)}%"></i></div></div><input inputmode="numeric" id="stIn" value="${dayS.steps}"></div>
+ <div class="ck" style="align-items:flex-start"><div class="ico">${I.pill}</div><div class="t"><b>БАДы</b><span>${dayS.supps.filter(Boolean).length} из ${D.SUPPS.length} принято</span><div class="chips">${D.SUPPS.map((s,i)=>`<button class="chip ${dayS.supps[i]?'green':'on'}" data-supp="${i}">${dayS.supps[i]?I.check+' ':''}${s.name}</button>`).join('')}</div></div></div>
 </div>
-{{nav:dom}}
-</div>
+<div class="card rep" onclick="location.href='otchet.html'"><div class="ico">${I.clip}</div><div class="t"><b>Отчёт недели: завтра</b><span>вес внесён 6 из 7 дней · 2 видео подходов · прошлый разбор получен</span></div><span class="muted">${I.chev}</span></div>
+<a class="kb" href="baza.html"><div class="ico">${I.book}</div><div class="t"><b>База знаний</b><span>${lessonsN} уроков · просмотрено ${seen.length}${newest?' · новое: «'+newest.t+'»':''}</span></div><span class="muted">${I.chev}</span></a>
+<div class="note">Демо-клиент: 7 недель ведения, цифры сгенерированы для макета</div>`;
+r.querySelector('#wIn').onchange=e=>{dayS.weight=e.target.value;save('Вес записан')};r.querySelector('#sIn').onchange=e=>{dayS.sleep=e.target.value;save('Сон записан')};r.querySelector('#stIn').onchange=e=>{dayS.steps=+e.target.value||0;save('Шаги записаны');render()};
+r.querySelectorAll('[data-supp]').forEach(b=>b.onclick=()=>{const i=+b.dataset.supp;dayS.supps[i]=!dayS.supps[i];save(dayS.supps[i]?D.SUPPS[i].name+': принято':D.SUPPS[i].name+': снято');render()})}
+function save(t){D.store.set('day:'+D.TODAY,dayS);U.toast(t)}
+render();
+</script>

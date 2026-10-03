@@ -1,41 +1,39 @@
 <title>Тренировки</title>
 <style>
-.title{font-size:24px;font-weight:800;margin:0 0 14px}
-.weeks{display:flex;gap:6px;margin-top:12px}
-.weeks i{flex:1;height:6px;border-radius:99px;background:var(--chip2)}
-.weeks i.ok{background:var(--grad)}
-.weeks i.now{background:var(--grad);opacity:.6}
+.weeks{display:flex;gap:6px;margin-top:12px}.weeks i{flex:1;height:6px;border-radius:99px;background:var(--chip2)}.weeks i.ok{background:var(--grad)}.weeks i.now{background:var(--grad);opacity:.55}
 .day{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:18px;padding:14px;margin-bottom:10px;text-decoration:none;color:var(--text);border:1px solid rgba(255,255,255,.03)}
 .day.today{background:radial-gradient(120% 120% at 100% 0%,rgba(242,101,42,.2),transparent 60%),var(--card);border-color:rgba(242,101,42,.35)}
 .day .n{width:44px;height:44px;border-radius:14px;background:var(--chip2);display:grid;place-items:center;font-weight:800;color:var(--acc2);flex:none}
-.day .t{flex:1;min-width:0}
-.day .t b{display:block;font-size:15px;font-weight:700}
-.day .t span{font-size:12px;color:var(--muted)}
-.more{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:16px;padding:14px;margin-bottom:10px;text-decoration:none;color:var(--text)}
-.more b{flex:1;font-weight:700}
-.more .chev{color:var(--muted)}
-.hero h3{margin:0;font-size:21px;font-weight:800}
-.hero p{margin:6px 0 0;color:var(--muted);font-size:13px}
+.day .t{flex:1;min-width:0}.day .t b{display:block;font-size:15px;font-weight:700}.day .t span{font-size:12px;color:var(--muted)}
+.more{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:16px;padding:14px;margin-bottom:10px;text-decoration:none;color:var(--text);cursor:pointer}
+.more b{flex:1;font-weight:700}.more .chev{color:var(--muted)}
+.hero h3{margin:0;font-size:21px;font-weight:800}.hero p{margin:6px 0 0;color:var(--muted);font-size:13px}
+.hist{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:16px;padding:12px 14px;margin-bottom:8px;color:var(--text);text-decoration:none}
+.hist .t{flex:1;min-width:0}.hist .t b{display:block;font-size:14px}.hist .t span{font-size:12px;color:var(--muted)}
+.hist .v{text-align:right;font-variant-numeric:tabular-nums}.hist .v b{display:block;font-size:14px}.hist .v span{font-size:11px;color:var(--muted)}
 </style>
-<div class="phone"><div class="scroll">
-  <h1 class="title">Тренировки</h1>
-  <div class="card hero">
-    <div class="eyebrow">Фаза 12 из 12 · Интенсификация</div>
-    <h3>Контроль эксцентрика</h3>
-    <p>Темп 3010: три секунды на опускание. Три тренировки в неделю</p>
-    <div class="weeks"><i class="ok"></i><i class="ok"></i><i class="now"></i><i></i></div>
-    <div class="row" style="margin-top:8px"><span class="muted" style="font-size:12px">Неделя 3 из 4</span><span class="muted" style="font-size:12px">RIR 2</span></div>
-  </div>
-
-  <h2>Эта неделя</h2>
-  <a class="day" href="#"><div class="n">1</div><div class="t"><b>Грудь / Бицепс / Средняя дельта</b><span>6 упражнений · выполнена в четверг</span></div><div class="done">{{check}}</div></a>
-  <a class="day today" id="day2" href="tren-den.html"><div class="n">2</div><div class="t"><b>Спина / Задняя дельта / Трицепс</b><span id="day2sub">6 упражнений · сегодня</span></div><span class="btn" id="day2btn" style="padding:10px 14px;font-size:14px">{{player-play-filled}} Начать</span></a>
-  <a class="day" href="#"><div class="n">3</div><div class="t"><b>Низ</b><span>6 упражнений · суббота</span></div><div class="todo"></div></a>
-
-  <h2>Ещё</h2>
-  <a class="more" href="#"><div class="ico">{{calendar-check}}</div><b>Все фазы: 12</b><span class="chev">{{chevron-right}}</span></a>
-  <div class="note">Макет вкладки «Тренировки», данные из Фазы 12 таблицы</div>
-<script>try{var st=JSON.parse(localStorage.getItem("trenDen")||"{}");if(st.finished){document.getElementById("day2sub").textContent="6 упражнений · выполнена сегодня · "+(st.rating?("оценка "+st.rating+"/10"):"");var b=document.getElementById("day2btn");b.outerHTML='<div class="done">{{check}}</div>';}}catch(e){}</script>
-</div>
-{{nav:tren}}
-</div>
+<div class="phone"><div class="scroll" id="root"></div>{{nav:tren}}</div>
+<script>
+const D=window.DATA,U=window.UI;const I={check:`{{check}}`,play:`{{player-play-filled}}`,chev:`{{chevron-right}}`,cal:`{{calendar-check}}`,help:`{{help}}`,hist:`{{history}}`};
+const ph=D.PH['12'];const cur=D.SCHED.filter(s=>s.phase==='12'&&s.week===3);
+const stat=dt=>D.store.get('done:'+dt,null);
+function render(){const r=document.getElementById('root');
+const days=cur.map(s=>{const w=D.WORKOUTS.find(x=>x.date===s.date);const dn=stat(s.date);let right,sub,cls='';
+ if(w.done){right=`<div class="done">${I.check}</div>`;sub=`${w.ex.length} упражнений · ${D.fmtDD(w.date)} · ${w.ton.toLocaleString('ru')} кг · ${w.rating}/10`}
+ else if(s.today){cls='today';right=dn?`<div class="done">${I.check}</div>`:`<span class="btn" style="padding:10px 14px;font-size:14px">${I.play} Начать</span>`;sub=dn?`выполнена сегодня · ${dn.ton} кг · ${dn.rating}/10`:`${w.ex.length} упражнений · сегодня`}
+ else{right='<div class="todo"></div>';sub=`${w.ex.length} упражнений · ${D.fmtDD(w.date)}`}
+ return `<a class="day ${cls}" href="tren-den.html?d=${s.day}${w.done?'&date='+w.date:''}"><div class="n">${s.day}</div><div class="t"><b>${w.title}</b><span>${sub}</span></div>${right}</a>`}).join('');
+const past=D.WORKOUTS.filter(w=>w.done).slice(-6).reverse();
+r.innerHTML=`<h1 class="title">Тренировки</h1>
+<div class="card hero"><div class="eyebrow">Фаза 12 из 12 · Интенсификация</div><h3>Контроль эксцентрика</h3><p>Темп 3010: три секунды на опускание. Три тренировки в неделю, RIR 2 на этой неделе</p>
+<div class="weeks"><i class="ok"></i><i class="ok"></i><i class="now"></i><i></i></div><div class="row" style="margin-top:8px"><span class="muted" style="font-size:12px">Неделя 3 из 4</span><button class="chip" data-help style="padding:4px 10px;font-size:11px">${I.help} как читать программу</button></div></div>
+<h2>Эта неделя</h2>${days}
+<h2>Ещё</h2>
+<div class="more" data-phases><div class="ico">${I.cal}</div><b>Все фазы: 12</b><span class="chev">${I.chev}</span></div>
+<h2>Последние тренировки</h2>
+${past.map(w=>`<a class="hist" href="tren-den.html?date=${w.date}"><div class="ico">${I.hist}</div><div class="t"><b>${w.title}</b><span>${D.fmtDD(w.date)} · фаза ${w.phase}, неделя ${w.week} · ${w.mins} мин</span></div><div class="v"><b>${w.ton.toLocaleString('ru')} кг</b><span>оценка ${w.rating}/10</span></div></a>`).join('')}
+<div class="note">Тоннаж = сумма кг × повторения за тренировку</div>`;
+r.querySelector('[data-phases]').onclick=()=>U.openSheet(`<h3>Все фазы</h3><p>Одна фаза = 4 недели. Текущая двенадцатая</p>${D.PHASE_LIST.map((n,i)=>{const k=i+1;const st=k===12?'<span class="badge">сейчас</span>':k===11?'<span class="badge grey">17 авг - 13 сен</span>':'<span class="badge grey">ранее</span>';return `<div class="opt"><div class="ico" style="font-weight:800;color:var(--acc2)">${k}</div><div class="t"><b>${n}${st}</b><span>${k<=11?'завершена':'неделя 3 из 4'}</span></div></div>`}).join('')}<div class="row2"><button class="ghost" data-close>Закрыть</button></div>`);
+r.querySelector('[data-help]').onclick=()=>U.openSheet(`<h3>Как читать программу</h3><p>Урок из базы знаний, 6 минут</p><div class="video">${I.play}</div><ul class="pts"><li><b>4 × 6</b><span>четыре подхода по шесть повторений</span></li><li><b>3010</b><span>3 с опускание, 0 пауза внизу, 1 с подъём, 0 пауза вверху</span></li><li><b>RIR 2</b><span>останавливаешься, когда можешь сделать ещё два</span></li><li><b>Прошлый раз</b><span>твои веса с прошлой недели, от них и отталкивайся</span></li></ul><div class="row2"><a class="ghost" href="baza.html">Вся база знаний</a><button class="btn" data-close>Понятно</button></div>`)}
+render();
+</script>
