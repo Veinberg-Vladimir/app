@@ -1,0 +1,41 @@
+<title>Тренировки</title>
+<style>
+.title{font-size:24px;font-weight:800;margin:0 0 14px}
+.weeks{display:flex;gap:6px;margin-top:12px}
+.weeks i{flex:1;height:6px;border-radius:99px;background:var(--chip2)}
+.weeks i.ok{background:var(--grad)}
+.weeks i.now{background:var(--grad);opacity:.6}
+.day{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:18px;padding:14px;margin-bottom:10px;text-decoration:none;color:var(--text);border:1px solid rgba(255,255,255,.03)}
+.day.today{background:radial-gradient(120% 120% at 100% 0%,rgba(242,101,42,.2),transparent 60%),var(--card);border-color:rgba(242,101,42,.35)}
+.day .n{width:44px;height:44px;border-radius:14px;background:var(--chip2);display:grid;place-items:center;font-weight:800;color:var(--acc2);flex:none}
+.day .t{flex:1;min-width:0}
+.day .t b{display:block;font-size:15px;font-weight:700}
+.day .t span{font-size:12px;color:var(--muted)}
+.more{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:16px;padding:14px;margin-bottom:10px;text-decoration:none;color:var(--text)}
+.more b{flex:1;font-weight:700}
+.more .chev{color:var(--muted)}
+.hero h3{margin:0;font-size:21px;font-weight:800}
+.hero p{margin:6px 0 0;color:var(--muted);font-size:13px}
+</style>
+<div class="phone"><div class="scroll">
+  <h1 class="title">Тренировки</h1>
+  <div class="card hero">
+    <div class="eyebrow">Фаза 12 из 12 · Интенсификация</div>
+    <h3>Контроль эксцентрика</h3>
+    <p>Темп 3010: три секунды на опускание. Три тренировки в неделю</p>
+    <div class="weeks"><i class="ok"></i><i class="ok"></i><i class="now"></i><i></i></div>
+    <div class="row" style="margin-top:8px"><span class="muted" style="font-size:12px">Неделя 3 из 4</span><span class="muted" style="font-size:12px">RIR 2</span></div>
+  </div>
+
+  <h2>Эта неделя</h2>
+  <a class="day" href="#"><div class="n">1</div><div class="t"><b>Грудь / Бицепс / Средняя дельта</b><span>6 упражнений · выполнена в четверг</span></div><div class="done">{{check}}</div></a>
+  <a class="day today" href="tren-den.html"><div class="n">2</div><div class="t"><b>Спина / Задняя дельта / Трицепс</b><span>6 упражнений · сегодня</span></div><span class="btn" style="padding:10px 14px;font-size:14px">{{player-play-filled}} Начать</span></a>
+  <a class="day" href="#"><div class="n">3</div><div class="t"><b>Низ</b><span>6 упражнений · суббота</span></div><div class="todo"></div></a>
+
+  <h2>Ещё</h2>
+  <a class="more" href="#"><div class="ico">{{history}}</div><b>История упражнений</b><span class="chev">{{chevron-right}}</span></a>
+  <a class="more" href="#"><div class="ico">{{calendar-check}}</div><b>Все фазы: 12</b><span class="chev">{{chevron-right}}</span></a>
+  <div class="note">Макет вкладки «Тренировки», данные из Фазы 12 таблицы</div>
+</div>
+{{nav:tren}}
+</div>

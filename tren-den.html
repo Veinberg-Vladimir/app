@@ -1,0 +1,79 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="app.css"><title>День 2</title></head><body>
+<style>
+.hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.hdr a{color:var(--text)}
+.timer{display:flex;align-items:center;gap:8px;font-weight:800;font-size:20px;font-variant-numeric:tabular-nums}
+.timer svg{color:var(--acc);width:20px;height:20px}
+.dayt{font-size:12px;color:var(--acc2);font-weight:700}
+.dayh{font-size:21px;font-weight:800;margin:2px 0 4px}
+.hint{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:12px;margin:10px 0 14px}
+.hint svg{width:14px;height:14px}
+.ex{background:var(--card);border-radius:20px;padding:14px;margin-bottom:12px;border:1px solid rgba(255,255,255,.03)}
+.ex.open{border-color:rgba(242,101,42,.35)}
+.exh{display:flex;gap:12px;align-items:flex-start}
+.thumb{width:64px;height:64px;border-radius:14px;background:linear-gradient(160deg,#2B2C3A,#15161F);display:grid;place-items:center;color:var(--acc2);flex:none;position:relative}
+.thumb svg{width:22px;height:22px}
+.exh .t{flex:1;min-width:0}
+.exh .t b{display:block;font-size:15px;font-weight:700;line-height:1.2}
+.exh .t .sub{font-size:12px;color:var(--muted);margin-top:4px}
+.acts{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.acts .chip{padding:5px 10px;font-size:12px}
+.meta{display:grid;grid-template-columns:1fr auto auto;gap:8px;margin-top:12px;font-size:12px;color:var(--muted);align-items:center}
+.meta b{color:var(--text);font-weight:700;font-variant-numeric:tabular-nums}
+.tempo{display:inline-flex;gap:3px;align-items:center}
+.tempo i{font-style:normal;background:var(--chip2);border-radius:6px;padding:2px 6px;color:var(--text);font-weight:700}
+.sets{display:grid;grid-template-columns:repeat(auto-fit,minmax(56px,1fr));gap:6px;margin-top:12px}
+.set{display:flex;flex-direction:column;align-items:center;border-radius:14px;padding:8px 4px;background:var(--chip2);font-variant-numeric:tabular-nums}
+.set b{font-size:14px;font-weight:800;white-space:nowrap}
+.set span{font-size:10px;color:var(--muted);margin-top:2px;display:flex;align-items:center;gap:3px}
+.set span svg{width:11px;height:11px}
+.set.ok{background:transparent;border:1.5px solid var(--line);color:var(--muted)}
+.set.ok b{color:var(--text)}
+.set.now{background:transparent;border:1.5px solid var(--acc);color:var(--acc2)}
+.set.now b{color:var(--acc2)}
+.vol{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:10px}
+.vol .bar{margin:6px 0 0;height:4px;flex:1}
+.rest{display:flex;align-items:center;gap:10px;background:var(--card);border-radius:16px;padding:12px 14px;margin:-4px 0 12px;border:1px solid rgba(255,255,255,.03)}
+.rest .lbl{font-weight:700;font-size:13px}
+.rest .cnt{margin-left:auto;font-weight:800;font-variant-numeric:tabular-nums;font-size:18px}
+.sum{display:flex;align-items:center;gap:12px}
+.sum .t{flex:1;min-width:0}
+.sum .t b{display:block;font-size:14px;font-weight:700}
+.sum .t span{font-size:12px;color:var(--muted)}
+.sum .chev{color:var(--muted)}
+.finish{display:block;text-align:center;margin:6px 0 0}
+</style>
+<div class="phone"><div class="scroll">
+  <div class="hdr"><a href="tren.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l14 0" /><path d="M5 12l6 6" /><path d="M5 12l6 -6" /></svg></a><div class="timer"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 4h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h2a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2z" /><path d="M17 4h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h2a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2z" /></svg> 24:10</div><span class="muted"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z" /><path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /></svg></span></div>
+  <div class="dayt">Фаза 12 · неделя 3 · день 2</div>
+  <div class="dayh">Спина / Задняя дельта / Трицепс</div>
+  <div class="hint"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16 3l4 4l-4 4" /><path d="M10 7l10 0" /><path d="M8 13l-4 4l4 4" /><path d="M4 17l9 0" /></svg> Свайп влево по упражнению: замена на похожее</div>
+
+  <div class="ex open">
+    <div class="exh"><div class="thumb"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 4v16a1 1 0 0 0 1.524 .852l13 -8a1 1 0 0 0 0 -1.704l-13 -8a1 1 0 0 0 -1.524 .852z" /></svg></div><div class="t"><b>A · Тяга верхнего блока, прямым хватом</b><div class="sub">5 подходов × 6 · RIR 2</div>
+      <div class="acts"><span class="chip"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16 3l4 4l-4 4" /><path d="M10 7l10 0" /><path d="M8 13l-4 4l4 4" /><path d="M4 17l9 0" /></svg> Замена</span><span class="chip"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 3m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z" /><path d="M9 7l6 0" /><path d="M9 11l6 0" /><path d="M9 15l4 0" /></svg> Заметки</span></div></div><div class="todo"></div></div>
+    <div class="meta"><span>Прошлый раз <b>83 · 93 · 97 · 100</b></span><span class="tempo"><i>3</i><i>0</i><i>1</i><i>0</i></span><span>RIR <b>2</b></span></div>
+    <div class="sets">
+      <div class="set ok"><b>6 × 80</b><span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg> сделано</span></div>
+      <div class="set ok"><b>6 × 85</b><span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg> сделано</span></div>
+      <div class="set now"><b>6 × 90</b><span>предложено</span></div>
+      <div class="set"><b>6 × 95</b><span>подход 4</span></div>
+      <div class="set"><b>6 × 100</b><span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 10l4.553 -2.276a1 1 0 0 1 1.447 .894v6.764a1 1 0 0 1 -1.447 .894l-4.553 -2.276v-4z" /><path d="M3 6m0 2a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2z" /></svg> видео</span></div>
+    </div>
+    <div class="vol"><span>Объём 990 кг</span><span>цель 2 700 кг</span></div>
+    <div class="bar" style="margin:6px 0 0;height:4px"><i style="width:37%"></i></div>
+  </div>
+  <div class="rest"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 13a7 7 0 1 0 14 0a7 7 0 0 0 -14 0z" /><path d="M14.5 10.5l-2.5 2.5" /><path d="M17 8l1 -1" /><path d="M14 3h-4" /></svg><span class="lbl">Отдых</span><span class="chip on" style="padding:5px 10px">120 с</span><span class="chip" style="padding:5px 10px">180 с</span><span class="cnt">01:32</span></div>
+
+  <div class="ex"><div class="sum"><div class="thumb" style="width:48px;height:48px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 4v16a1 1 0 0 0 1.524 .852l13 -8a1 1 0 0 0 0 -1.704l-13 -8a1 1 0 0 0 -1.524 .852z" /></svg></div><div class="t"><b>B · Тяга штанги к груди в наклоне</b><span>4 × 8 · 3010 · RIR 2 · прошлый раз 70 · 80 · 90 · 100</span></div><span class="chev"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></span></div></div>
+  <div class="ex"><div class="sum"><div class="thumb" style="width:48px;height:48px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 4v16a1 1 0 0 0 1.524 .852l13 -8a1 1 0 0 0 0 -1.704l-13 -8a1 1 0 0 0 -1.524 .852z" /></svg></div><div class="t"><b>C · Тяга горизонтального блока</b><span>3 × 10-12 · 3010 · RIR 1-2 · прошлый раз 66 · 73 · 79</span></div><span class="chev"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></span></div></div>
+  <div class="ex"><div class="sum"><div class="thumb" style="width:48px;height:48px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 4v16a1 1 0 0 0 1.524 .852l13 -8a1 1 0 0 0 0 -1.704l-13 -8a1 1 0 0 0 -1.524 .852z" /></svg></div><div class="t"><b>D · Обратные разведения в кроссовере</b><span>4 × 12-18 · 2011 · RIR 1-2 · прошлый раз 4 · 6 · 9</span></div><span class="chev"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></span></div></div>
+  <div class="ex"><div class="sum"><div class="thumb" style="width:48px;height:48px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 4v16a1 1 0 0 0 1.524 .852l13 -8a1 1 0 0 0 0 -1.704l-13 -8a1 1 0 0 0 -1.524 .852z" /></svg></div><div class="t"><b>F · Разгибания на трицепс с EZ-грифом из-за головы</b><span>3 × 10-12 · 3010 · RIR 2 · прошлый раз 26 · 28 · 30</span></div><span class="chev"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></span></div></div>
+  <div class="ex"><div class="sum"><div class="thumb" style="width:48px;height:48px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 4v16a1 1 0 0 0 1.524 .852l13 -8a1 1 0 0 0 0 -1.704l-13 -8a1 1 0 0 0 -1.524 .852z" /></svg></div><div class="t"><b>G · Разгибания на трицепс в кроссовере, V-рукоять</b><span>3 × 8-10 · 2010 · RIR 1-2 · первый раз</span></div><span class="chev"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></span></div></div>
+
+  <a class="ghost finish" href="tren.html">Завершить тренировку</a>
+  <div class="note">Макет экрана тренировки, День 2 Фазы 12. Веса из таблицы, предложенные по правилу лесенки</div>
+</div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#F2652A"/><stop offset="1" stop-color="#F6B343"/></linearGradient></defs></svg><nav class="nav"><a href="dom.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l-2 0l9 -9l9 9l-2 0" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg>Дом</a><a class="on" href="tren.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M2 12h1" /><path d="M6 8h-2a1 1 0 0 0 -1 1v6a1 1 0 0 0 1 1h2" /><path d="M6 7v10a1 1 0 0 0 1 1h1a1 1 0 0 0 1 -1v-10a1 1 0 0 0 -1 -1h-1a1 1 0 0 0 -1 1z" /><path d="M9 12h6" /><path d="M15 7v10a1 1 0 0 0 1 1h1a1 1 0 0 0 1 -1v-10a1 1 0 0 0 -1 -1h-1a1 1 0 0 0 -1 1z" /><path d="M18 8h2a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-2" /><path d="M22 12h-1" /></svg>Тренировки</a><a class="soon" href="#"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19 3v12h-5c-.023 -3.681 .184 -7.406 5 -12zm0 12v6h-1v-3m-10 -14v17m-3 -17v3a3 3 0 1 0 6 0v-3" /></svg>Питание</a><a class="soon" href="#"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 19l16 0" /><path d="M4 15l4 -6l4 2l4 -5l4 4" /></svg>Прогресс</a><a class="soon" href="#"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /><path d="M9 14l2 2l4 -4" /></svg>Отчёт</a></nav>
+</div>
+</body></html>
