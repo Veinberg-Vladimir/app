@@ -17,7 +17,7 @@ const round=(v,step)=>Math.round(v/step)*step;
 const e1rm=(kg,reps)=>kg*(1+reps/30);
 function navyFat(waist,neck,height){return 495/(1.0324-0.19077*Math.log10(waist-neck)+0.15456*Math.log10(height))-450}
 
-const C={name:'Андрей',initial:'А',height:182,age:34,start:'2026-08-17',today:TODAY,goal:'минус 10 кг к Новому году',startWeight:96.4};
+const C={name:'Андрей',initial:'А',height:182,age:34,start:'2026-08-17',today:TODAY,goal:'минус 10 кг к Новому году',startWeight:96.4,stepsGoal:10000,sleepGoal:7.5,vip:true,tariff:'с тренером'};
 const PH=window.PHASES;
 const PHASE_LIST=['Пост-утомление','Интенсификация 4 + 1','Фаза 3','ЕВП','Пирамида 12-10-8-8','Интенсивность 6-8','Ноги + спина, аккомодация 8-10','3 раза в неделю','Аккомодация, повторы с паузой','Интенсивность 4 × 6, темп 5010','Аккумуляция 12-10-8-8','Интенсификация, контроль эксцентрика'];
 
@@ -54,8 +54,9 @@ function genSets(phaseKey,week,e,dateStr){
   return out;
 }
 const WORKOUTS=SCHED.map(s=>{const ph=PH[s.phase];const day=ph.days[s.day-1];
-  const ex=day.ex.map(e=>{const wk=e.weeks[s.week-1];const sets=(s.plan||s.today)?[]:genSets(s.phase,s.week,e,s.date);
-    return {code:e.code,name:e.name,sets,target:{sets:wk.sets,reps:wk.reps,tempo:wk.tempo,rir:wk.rir},sup:/^[A-Z]\d$/.test(e.code)?e.code[0]:null}});
+  const ex=day.ex.map((e,idx)=>{const wk=e.weeks[s.week-1];const sets=(s.plan||s.today)?[]:genSets(s.phase,s.week,e,s.date);const sup=/^[A-Z]\d$/.test(e.code)?e.code[0]:null;const first=sup&&e.code.endsWith('1');
+    const rest=sup?(first?60:150):idx<2?150:idx<4?90:75;
+    return {code:e.code,name:e.name,sets,target:{sets:wk.sets,reps:wk.reps,tempo:wk.tempo,rir:wk.rir,rest},sup}});
   const ton=ex.reduce((a,e)=>a+e.sets.reduce((b,x)=>b+x.kg*x.reps,0),0);
   const mins=(s.plan||s.today)?0:Math.round(rnd(52,71));
   return Object.assign({},s,{title:day.title.replace(/\//g,' / ').replace(/Ср дельта/,'Средняя дельта').replace(/Задн дельта/,'Задняя дельта'),phaseName:ph.name,ex,ton,mins,done:!(s.plan||s.today),rating:(s.plan||s.today)?null:Math.round(rnd(6,9.4))})});
@@ -81,13 +82,13 @@ if(DAYS.length){const t=DAYS[DAYS.length-1];t.sleep=7.5;t.steps=6240;t.supps=[tr
 /* отчёты по воскресеньям */
 const REPORTS=[];
 const sundays=['2026-08-23','2026-08-30','2026-09-06','2026-09-13','2026-09-20','2026-09-27'];
-const measAt=(k)=>({waist:+(102-6*k).toFixed(1),neck:+(41-0.5*k).toFixed(1),chest:+(108-2*k).toFixed(1),hips:+(104-3*k).toFixed(1),arm:+(37+0.5*k).toFixed(1)});
+const measAt=(k)=>({waist:+(102-6*k).toFixed(1),neck:+(41-0.5*k).toFixed(1),chest:+(108-2*k).toFixed(1),thighR:+(62-2*k).toFixed(1),thighL:+(61.5-2*k).toFixed(1),bicepsR:+(37+0.5*k).toFixed(1),bicepsL:+(36.5+0.5*k).toFixed(1)});
 const START_MEAS=Object.assign({date:C.start},measAt(0));
 const COMMENTS=['Старт хороший, вес пошёл. Норму не трогаем, шаги держи от 8 000','Темп в норме. На тренировках добавляй по плану, не торопись','Вес встал первую неделю, это вода и соль, ждём ещё неделю','Две недели без сдвига: режу калории на 200, углеводы вечером убираем','Пошло. Сон коротковат, 6 с половиной мало для восстановления','Отличная неделя. Фаза 12 тяжёлая, следи за техникой в тягах'];
 sundays.forEach((s,k)=>{const idx=DAYS.findIndex(x=>x.date===s);const wk=DAYS.slice(Math.max(0,idx-6),idx+1);const prev=DAYS.slice(Math.max(0,idx-13),Math.max(0,idx-6));
   const avg=a=>a.reduce((x,y)=>x+y,0)/a.length;
   const trs=WORKOUTS.filter(w=>w.done&&w.date>=wk[0].date&&w.date<=s);
-  REPORTS.push({date:s,n:k+1,weightWas:+avg(prev.length?prev.map(x=>x.weight):[C.startWeight]).toFixed(1),weightNow:+avg(wk.map(x=>x.weight)).toFixed(1),sleep:+avg(wk.map(x=>x.sleep)).toFixed(1),energy:Math.round(rnd(6,9)),stress:Math.round(rnd(2,6)),training:trs.length?Math.round(avg(trs.map(t=>t.rating))):0,trainings:trs.length,appetite:['обычный','обычный','повышенный к вечеру','обычный','сильный после тренировок','обычный'][k],adherence:[92,88,85,78,90,95][k],steps:Math.round(avg(wk.map(x=>x.steps))),food:{kcal:Math.round(avg(wk.map(x=>x.food.kcal))),p:Math.round(avg(wk.map(x=>x.food.p))),f:Math.round(avg(wk.map(x=>x.food.f))),c:Math.round(avg(wk.map(x=>x.food.c)))},meas:Object.assign({date:s},measAt((k+1)/6)),videos:trs.length*2,comment:COMMENTS[k],hard:['Тянет на сладкое после ужина','Мало сплю из-за работы','Пропустил одну тренировку, командировка','Срыв в субботу на дне рождения','Всё по плану','Устаю к концу недели'][k]})});
+  REPORTS.push({date:s,n:k+1,weightWas:+avg(prev.length?prev.map(x=>x.weight):[C.startWeight]).toFixed(1),weightNow:+avg(wk.map(x=>x.weight)).toFixed(1),sleep:+avg(wk.map(x=>x.sleep)).toFixed(1),energy:Math.round(rnd(6,9)),stress:Math.round(rnd(2,6)),training:trs.length?Math.round(avg(trs.map(t=>t.rating))):0,trainings:trs.length,appetite:['обычное','обычное','повышенное','обычное','повышенное','слабое'][k],adherence:[92,88,85,78,90,95][k],steps:Math.round(avg(wk.map(x=>x.steps))),food:{kcal:Math.round(avg(wk.map(x=>x.food.kcal))),p:Math.round(avg(wk.map(x=>x.food.p))),f:Math.round(avg(wk.map(x=>x.food.f))),c:Math.round(avg(wk.map(x=>x.food.c)))},meas:Object.assign({date:s},measAt((k+1)/6)),videos:trs.length*2,comment:COMMENTS[k],hard:['Тянет на сладкое после ужина','Мало сплю из-за работы','Пропустил одну тренировку, командировка','Срыв в субботу на дне рождения','Всё по плану','Устаю к концу недели'][k]})});
 const MEASURES=[START_MEAS].concat(REPORTS.map(r=>r.meas));
 
 /* библиотека знаний */
@@ -105,8 +106,8 @@ function weekOf(s){const x=d(s);const day=(x.getDay()+6)%7;return iso(addDays(x,
 function tonnage(from,to){return sum(doneW.filter(w=>w.date>=from&&w.date<=to).map(w=>w.ton))}
 function exHistory(name){const key=normKey(name);
   return doneW.map(w=>{const e=w.ex.find(x=>normKey(x.name)===key);return e?{date:w.date,phase:w.phase,week:w.week,sets:e.sets,best:Math.max(...e.sets.map(s=>s.kg)),vol:sum(e.sets.map(s=>s.kg*s.reps)),e1:Math.max(...e.sets.map(s=>e1rm(s.kg,s.reps)))}:null}).filter(Boolean)}
-const EX_ALL=(()=>{const m=new Map();doneW.forEach(w=>w.ex.forEach(e=>{const k=normKey(e.name);if(!m.has(k))m.set(k,{name:e.name,code:e.code,muscle:muscleOf(k)})}));WORKOUTS.filter(w=>!w.done).forEach(w=>w.ex.forEach(e=>{if(!m.has(normKey(e.name)))m.set(normKey(e.name),{name:e.name,code:e.code,muscle:muscleOf(e.name)})}));return [...m.values()]})();
-function muscleOf(n){n=n.toLowerCase();if(/жим лежа|наклонн|сведения|грудн|пулловер/.test(n))return 'Грудь';if(/тяга|подтяг/.test(n))return 'Спина';if(/махи|армейск|пек дек|обратные|дельт/.test(n))return 'Дельты';if(/бицепс/.test(n))return 'Бицепс';if(/трицепс|французск/.test(n))return 'Трицепс';if(/присед|румынск|маятник|ног|выпад/.test(n))return 'Ноги';if(/пресс/.test(n))return 'Пресс';return 'Другое'}
+const EX_ALL=(()=>{const m=new Map();doneW.forEach(w=>w.ex.forEach(e=>{const k=normKey(e.name);if(!m.has(k))m.set(k,{name:e.name,code:e.code,muscle:muscleOf(e.name)})}));WORKOUTS.filter(w=>!w.done).forEach(w=>w.ex.forEach(e=>{if(!m.has(normKey(e.name)))m.set(normKey(e.name),{name:e.name,code:e.code,muscle:muscleOf(e.name)})}));return [...m.values()]})();
+function muscleOf(n){n=n.toLowerCase();if(/жим лежа|наклонн|сведения|грудн|пулловер/.test(n))return 'Грудь';if(/жим штанги|армейск|жим гантелей сидя/.test(n))return 'Дельты';if(/тяга|подтяг/.test(n))return 'Спина';if(/махи|армейск|пек дек|обратные|дельт/.test(n))return 'Дельты';if(/бицепс/.test(n))return 'Бицепс';if(/трицепс|французск/.test(n))return 'Трицепс';if(/присед|румынск|маятник|ног|выпад/.test(n))return 'Ноги';if(/пресс/.test(n))return 'Пресс';return 'Другое'}
 const ALTS={'Спина':['Подтягивания, прямым широким хватом','Тяга в вертикальном хаммере','Тяга Т-грифа','Тяга гантели в наклоне'],'Грудь':['Жим в хаммере на середину грудных','Жим гантелей лежа на скамье 30°','Сведения в тренажере'],'Дельты':['Махи в стороны в тренажере','Жим гантелей сидя','Тяга каната к лицу'],'Бицепс':['Сгибания со штангой','Молотки с гантелями','Сгибания в кроссовере'],'Трицепс':['Разгибания с канатом','Французский жим с EZ-грифом','Отжимания на брусьях'],'Ноги':['Гакк-присед','Жим платформы','Болгарские сплит-приседания','Сгибания ног лёжа'],'Пресс':['Подъёмы ног в висе','Скручивания на блоке'],'Другое':['Похожее упражнение']};
 
 /* сила: расчётный максимум сейчас против первой недели */
@@ -114,5 +115,5 @@ function strength(){return EX_ALL.map(x=>{const h=exHistory(x.name);if(h.length<
 
 const store={get(k,f){try{const v=localStorage.getItem('app:'+k);return v==null?f:JSON.parse(v)}catch(e){return f}},set(k,v){try{localStorage.setItem('app:'+k,JSON.stringify(v))}catch(e){}},del(k){try{localStorage.removeItem('app:'+k)}catch(e){}}};
 
-window.DATA={normKey,C,TODAY,PH,PHASE_LIST,SCHED,WORKOUTS,DAYS,NORMS,normAt,SUPPS,REPORTS,MEASURES,LESSONS,EX_ALL,ALTS,strength,exHistory,tonnage,weekOf,sum,e1rm,navyFat,fmtD,fmtDD,iso,d,addDays,round,store,RU_D};
+window.DATA={MEAS_FIELDS:[['Талия','waist'],['Шея','neck'],['Грудь','chest'],['Бедро П','thighR'],['Бедро Л','thighL'],['Бицепс П','bicepsR'],['Бицепс Л','bicepsL']],normKey,C,TODAY,PH,PHASE_LIST,SCHED,WORKOUTS,DAYS,NORMS,normAt,SUPPS,REPORTS,MEASURES,LESSONS,EX_ALL,ALTS,strength,exHistory,tonnage,weekOf,sum,e1rm,navyFat,fmtD,fmtDD,iso,d,addDays,round,store,RU_D};
 })();

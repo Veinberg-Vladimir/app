@@ -1,4 +1,5 @@
-import re,glob,os,shutil
+import re,glob,os,shutil,time
+V=str(int(time.time()))
 HERE=os.path.dirname(os.path.abspath(__file__)); ROOT=os.path.dirname(HERE)
 def icon(name):
     s=open(f'{HERE}/icons/{name}.svg',encoding='utf-8').read()
@@ -12,7 +13,7 @@ def nav(active):
         cls=' class="on"' if key==active else ''
         out.append(f'<a{cls} href="{href}">{icon(ic)}{label}</a>')
     out.append('</nav>'); return ''.join(out)
-HEAD='<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0E0F1A"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="app.css"><script src="phases.js"></script><script src="data.js"></script><script src="ui.js"></script>'
+HEAD='<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0E0F1A"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="app.css?v='+V+'"><script src="phases.js?v='+V+'"></script><script src="data.js?v='+V+'"></script><script src="ui.js?v='+V+'"></script>'
 for f in ['data.js','ui.js','phases.js']: shutil.copy(f'{HERE}/{f}',f'{ROOT}/{f}')
 for tpl in sorted(glob.glob(f'{HERE}/*.tpl.html')):
     name=os.path.basename(tpl).replace('.tpl.html','')

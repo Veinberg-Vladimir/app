@@ -14,10 +14,15 @@
 </style>
 <div class="phone"><div class="scroll" id="root"></div>{{nav:tren}}</div>
 <script>
-const D=window.DATA,U=window.UI;const I={check:`{{check}}`,play:`{{player-play-filled}}`,chev:`{{chevron-right}}`,cal:`{{calendar-check}}`,help:`{{help}}`,hist:`{{history}}`};
-const ph=D.PH['12'];const cur=D.SCHED.filter(s=>s.phase==='12'&&s.week===3);
+const D=window.DATA,U=window.UI;const I={check:`{{check}}`,play:`{{player-play-filled}}`,chev:`{{chevron-right}}`,cal:`{{calendar-check}}`,help:`{{help}}`,hist:`{{history}}`,back:`{{arrow-left}}`};
+const PHQ=new URLSearchParams(location.search).get('phase');const ph=D.PH['12'];const cur=D.SCHED.filter(s=>s.phase==='12'&&s.week===3);
 const stat=dt=>D.store.get('done:'+dt,null);
-function render(){const r=document.getElementById('root');
+function renderPhase(){const r=document.getElementById('root');const ws=D.WORKOUTS.filter(w=>w.phase===PHQ&&w.done);const name=D.PH[PHQ].name;const weeks=[1,2,3,4];
+r.innerHTML=`<div class="hdr"><a href="tren.html">${I.back}</a><b style="font-size:15px">Фаза ${PHQ}</b><span style="width:30px"></span></div>
+<div class="card hero"><div class="eyebrow">Фаза ${PHQ} из 12 · завершена</div><h3>${name.split(' (')[0]}</h3><p>${name.includes('(')?name.split('(')[1].replace(')',''):''} · ${ws.length} тренировок · ${D.sum(ws.map(w=>w.ton)).toLocaleString('ru')} кг за фазу</p><div class="weeks"><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i></div></div>
+${weeks.map(wk=>`<h2>Неделя ${wk}</h2>${ws.filter(w=>w.week===wk).map(w=>`<a class="hist" href="tren-den.html?date=${w.date}"><div class="n" style="width:40px;height:40px;border-radius:12px;background:var(--chip2);display:grid;place-items:center;font-weight:800;color:var(--acc2)">${w.day}</div><div class="t"><b>${w.title}</b><span>${D.fmtDD(w.date)} · ${w.mins} мин</span></div><div class="v"><b>${w.ton.toLocaleString('ru')} кг</b><span>оценка ${w.rating}/10</span></div></a>`).join('')}`).join('')}
+<div class="note">Прошлая фаза открыта только для просмотра</div>`}
+function render(){if(PHQ&&D.PH[PHQ]){renderPhase();return}const r=document.getElementById('root');
 const days=cur.map(s=>{const w=D.WORKOUTS.find(x=>x.date===s.date);const dn=stat(s.date);let right,sub,cls='';
  if(w.done){right=`<div class="done">${I.check}</div>`;sub=`${w.ex.length} упражнений · ${D.fmtDD(w.date)} · ${w.ton.toLocaleString('ru')} кг · ${w.rating}/10`}
  else if(s.today){cls='today';right=dn?`<div class="done">${I.check}</div>`:`<span class="btn" style="padding:10px 14px;font-size:14px">${I.play} Начать</span>`;sub=dn?`выполнена сегодня · ${dn.ton} кг · ${dn.rating}/10`:`${w.ex.length} упражнений · сегодня`}
@@ -33,7 +38,7 @@ r.innerHTML=`<h1 class="title">Тренировки</h1>
 <h2>Последние тренировки</h2>
 ${past.map(w=>`<a class="hist" href="tren-den.html?date=${w.date}"><div class="ico">${I.hist}</div><div class="t"><b>${w.title}</b><span>${D.fmtDD(w.date)} · фаза ${w.phase}, неделя ${w.week} · ${w.mins} мин</span></div><div class="v"><b>${w.ton.toLocaleString('ru')} кг</b><span>оценка ${w.rating}/10</span></div></a>`).join('')}
 <div class="note">Тоннаж = сумма кг × повторения за тренировку</div>`;
-r.querySelector('[data-phases]').onclick=()=>U.openSheet(`<h3>Все фазы</h3><p>Одна фаза = 4 недели. Текущая двенадцатая</p>${D.PHASE_LIST.map((n,i)=>{const k=i+1;const st=k===12?'<span class="badge">сейчас</span>':k===11?'<span class="badge grey">17 авг - 13 сен</span>':'<span class="badge grey">ранее</span>';return `<div class="opt"><div class="ico" style="font-weight:800;color:var(--acc2)">${k}</div><div class="t"><b>${n}${st}</b><span>${k<=11?'завершена':'неделя 3 из 4'}</span></div></div>`}).join('')}<div class="row2"><button class="ghost" data-close>Закрыть</button></div>`);
+r.querySelector('[data-phases]').onclick=()=>U.openSheet(`<h3>Все фазы</h3><p>Одна фаза = 4 недели. Текущая двенадцатая</p>${D.PHASE_LIST.map((n,i)=>{const k=i+1;const st=k===12?'<span class="badge">сейчас</span>':k===11?'<span class="badge grey">17 авг - 13 сен</span>':'<span class="badge grey">ранее</span>';const href=k===12?'tren.html':k===11?'tren.html?phase=11':null;return `<${href?'a href="'+href+'"':'div'} class="opt" ${href?'':'style="opacity:.55"'}><div class="ico" style="font-weight:800;color:var(--acc2)">${k}</div><div class="t"><b>${n}${st}</b><span>${k===12?'неделя 3 из 4':k===11?'открыть программу и подходы':'завершена, в демо без данных'}</span></div>${href?'<span class="muted">'+I.chev+'</span>':''}</${href?'a':'div'}>`}).join('')}<div class="row2"><button class="ghost" data-close>Закрыть</button></div>`);
 r.querySelector('[data-help]').onclick=()=>U.openSheet(`<h3>Как читать программу</h3><p>Урок из базы знаний, 6 минут</p><div class="video">${I.play}</div><ul class="pts"><li><b>4 × 6</b><span>четыре подхода по шесть повторений</span></li><li><b>3010</b><span>3 с опускание, 0 пауза внизу, 1 с подъём, 0 пауза вверху</span></li><li><b>RIR 2</b><span>останавливаешься, когда можешь сделать ещё два</span></li><li><b>Прошлый раз</b><span>твои веса с прошлой недели, от них и отталкивайся</span></li></ul><div class="row2"><a class="ghost" href="baza.html">Вся база знаний</a><button class="btn" data-close>Понятно</button></div>`)}
 render();
 </script>

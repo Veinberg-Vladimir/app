@@ -19,7 +19,7 @@
 </style>
 <div class="phone"><div class="scroll" id="root"></div>{{nav:dom}}</div>
 <script>
-const D=window.DATA,U=window.UI;const I={bell:`{{bell}}`,play:`{{player-play-filled}}`,plus:`{{plus}}`,check:`{{check}}`,moon:`{{moon}}`,walk:`{{walk}}`,pill:`{{pill}}`,clip:`{{clipboard-check}}`,chev:`{{chevron-right}}`,flame:`{{flame}}`,book:`{{book}}`,scale:`{{scale}}`};
+const D=window.DATA,U=window.UI;const I={bell:`{{bell}}`,play:`{{player-play-filled}}`,plus:`{{plus}}`,check:`{{check}}`,moon:`{{moon}}`,walk:`{{walk}}`,clip:`{{clipboard-check}}`,chev:`{{chevron-right}}`,book:`{{book}}`,scale:`{{scale}}`};
 const today=D.DAYS[D.DAYS.length-1],W=D.WORKOUTS.find(w=>w.today),norm=D.normAt(D.TODAY);
 const dayS=D.store.get('day:'+D.TODAY,{weight:today.weight,sleep:today.sleep,steps:today.steps,supps:today.supps.slice()});
 const added=D.store.get('food:'+D.TODAY,[]);const eaten={kcal:today.food.kcal+D.sum(added.map(a=>a.kcal)),p:today.food.p+D.sum(added.map(a=>a.p)),f:today.food.f+D.sum(added.map(a=>a.f)),c:today.food.c+D.sum(added.map(a=>a.c))};
@@ -28,9 +28,17 @@ const lessonsN=D.LESSONS.reduce((a,c)=>a+c.items.length,0),seen=D.store.get('les
 function weekStrip(){const mon=D.d(D.weekOf(D.TODAY));let h='<div class="week">';for(let i=0;i<7;i++){const dt=D.iso(D.addDays(mon,i));const w=D.WORKOUTS.find(x=>x.date===dt);let cls='',ic='';
   if(dt===D.TODAY){cls='now';ic=doneToday?I.check:''}else if(dt<D.TODAY){cls='ok';ic=I.check}else if(i===6){cls='miss';ic=''}else{cls='miss'}
   if(w&&w.done){cls='ok';ic=I.play}
-  h+=`<div>${D.RU_D[(i+1)%7]}<i class="${cls}">${ic}</i></div>`}return h+'</div>'}
+  h+=`<div data-day="${dt}" style="cursor:pointer">${D.RU_D[(i+1)%7]}<i class="${cls}">${ic}</i></div>`}return h+'</div>'}
+function daySheet(dt){const day=D.DAYS.find(x=>x.date===dt);const w=D.WORKOUTS.find(x=>x.date===dt);const n=D.normAt(dt);
+  if(!day&&!w){U.openSheet(`<h3>${D.fmtD(dt,true)}</h3><p>${dt==='2026-10-04'?'День отчёта: завтра заполняешь отчёт недели, половина соберётся сама':'Ещё не наступил'}</p><div class="row2">${dt==='2026-10-04'?'<a class="btn" href="otchet.html">Открыть отчёт</a>':''}<button class="ghost" data-close>Закрыть</button></div>`);return}
+  const food=dt===D.TODAY?eaten:day.food;const dv=dt===D.TODAY?dayS:day;
+  U.openSheet(`<h3>${D.fmtD(dt,true)}</h3><p>${dt===D.TODAY?'сегодня':'что было в этот день'}</p>
+  <div class="stats"><div class="stat"><b>${dv.weight}</b><span>кг утром</span></div><div class="stat"><b>${dv.sleep}</b><span>ч сна</span></div><div class="stat"><b>${(+dv.steps).toLocaleString('ru')}</b><span>шагов</span></div></div>
+  ${w?`<div class="opt" onclick="location.href='tren-den.html?${w.done?'date='+w.date:'d='+w.day}'"><div class="ico">${I.play}</div><div class="t"><b>${w.title}</b><span>${w.done?w.ton.toLocaleString('ru')+' кг · '+w.mins+' мин · оценка '+w.rating+'/10':'сегодня, ещё не начата'}</span></div><span class="muted">${I.chev}</span></div>`:'<div class="note" style="text-align:left">Тренировки не было, день отдыха</div>'}
+  <div class="opt" onclick="location.href='pit.html'"><div class="t"><b>${food.kcal.toLocaleString('ru')} ккал · норма ${n.kcal.toLocaleString('ru')}</b><span>Б ${food.p} · Ж ${food.f} · У ${food.c}</span></div><span class="muted">${I.chev}</span></div>
+  <div class="row2"><button class="ghost" data-close>Закрыть</button></div>`)}
 function render(){const r=document.getElementById('root');const pct=Math.min(1,eaten.kcal/norm.kcal);
-r.innerHTML=`<div class="top"><div class="avatar">${D.C.initial}</div><div class="hello"><b>Привет, ${D.C.name}</b><span>${D.fmtD(D.TODAY,true)} · неделя 3 из 4</span></div><span class="streak">${I.flame} 7 нед</span></div>
+r.innerHTML=`<div class="top"><div class="avatar">${D.C.initial}</div><div class="hello"><b>Привет, ${D.C.name}</b><span>${D.fmtD(D.TODAY,true)} · неделя 3 из 4 · 7-я неделя ведения</span></div></div>
 ${weekStrip()}
 <h2>Тренировка дня</h2>
 <div class="card hero"><div class="eyebrow">Фаза 12 · Интенсификация · День ${W.day}</div><h3>${W.title}</h3><p>${W.ex.length} упражнений · темп ${W.ex[0].target.tempo} · RIR ${W.ex[0].target.rir}</p>
@@ -44,13 +52,12 @@ ${doneToday?`<div class="pb">${I.check} Выполнена · ${doneToday.mins} 
  <div class="ck"><div class="ico">${I.scale}</div><div class="t"><b>Вес утром</b><span>вчера ${D.DAYS[D.DAYS.length-2].weight} кг</span></div><input inputmode="decimal" id="wIn" value="${dayS.weight}"><span class="muted" style="font-size:12px">кг</span></div>
  <div class="ck"><div class="ico">${I.moon}</div><div class="t"><b>Сон</b><span>цель 7-8 часов</span></div><input inputmode="decimal" id="sIn" value="${dayS.sleep}"><span class="muted" style="font-size:12px">ч</span></div>
  <div class="ck"><div class="ico">${I.walk}</div><div class="t"><b>Шаги</b><span>цель 10 000</span><div class="minibar"><i style="width:${Math.min(100,dayS.steps/100)}%"></i></div></div><input inputmode="numeric" id="stIn" value="${dayS.steps}"></div>
- <div class="ck" style="align-items:flex-start"><div class="ico">${I.pill}</div><div class="t"><b>БАДы</b><span>${dayS.supps.filter(Boolean).length} из ${D.SUPPS.length} принято</span><div class="chips">${D.SUPPS.map((s,i)=>`<button class="chip ${dayS.supps[i]?'green':'on'}" data-supp="${i}">${dayS.supps[i]?I.check+' ':''}${s.name}</button>`).join('')}</div></div></div>
 </div>
 <div class="card rep" onclick="location.href='otchet.html'"><div class="ico">${I.clip}</div><div class="t"><b>Отчёт недели: завтра</b><span>вес внесён 6 из 7 дней · 2 видео подходов · прошлый разбор получен</span></div><span class="muted">${I.chev}</span></div>
 <a class="kb" href="baza.html"><div class="ico">${I.book}</div><div class="t"><b>База знаний</b><span>${lessonsN} уроков · просмотрено ${seen.length}${newest?' · новое: «'+newest.t+'»':''}</span></div><span class="muted">${I.chev}</span></a>
 <div class="note">Демо-клиент: 7 недель ведения, цифры сгенерированы для макета</div>`;
 r.querySelector('#wIn').onchange=e=>{dayS.weight=e.target.value;save('Вес записан')};r.querySelector('#sIn').onchange=e=>{dayS.sleep=e.target.value;save('Сон записан')};r.querySelector('#stIn').onchange=e=>{dayS.steps=+e.target.value||0;save('Шаги записаны');render()};
-r.querySelectorAll('[data-supp]').forEach(b=>b.onclick=()=>{const i=+b.dataset.supp;dayS.supps[i]=!dayS.supps[i];save(dayS.supps[i]?D.SUPPS[i].name+': принято':D.SUPPS[i].name+': снято');render()})}
+r.querySelectorAll('[data-day]').forEach(el=>el.onclick=()=>daySheet(el.dataset.day))}
 function save(t){D.store.set('day:'+D.TODAY,dayS);U.toast(t)}
 render();
 </script>
