@@ -19,9 +19,12 @@
 </style>
 <div class="phone"><div class="scroll" id="root"></div>{{nav:dom}}</div>
 <script>
-const D=window.DATA,U=window.UI;const I={bell:`{{bell}}`,play:`{{player-play-filled}}`,plus:`{{plus}}`,check:`{{check}}`,moon:`{{moon}}`,walk:`{{walk}}`,clip:`{{clipboard-check}}`,chev:`{{chevron-right}}`,book:`{{book}}`,scale:`{{scale}}`};
+const D=window.DATA,U=window.UI;const I={bolt:`{{bolt}}`,wave:`{{activity}}`,bell:`{{bell}}`,play:`{{player-play-filled}}`,plus:`{{plus}}`,check:`{{check}}`,moon:`{{moon}}`,walk:`{{walk}}`,clip:`{{clipboard-check}}`,chev:`{{chevron-right}}`,book:`{{book}}`,scale:`{{scale}}`};
 const today=D.DAYS[D.DAYS.length-1],W=D.WORKOUTS.find(w=>w.today),norm=D.normAt(D.TODAY);
-const dayS=D.store.get('day:'+D.TODAY,{weight:today.weight,sleep:today.sleep,steps:today.steps,supps:today.supps.slice()});
+const dayS=D.store.get('day:'+D.TODAY,{weight:today.weight,sleep:today.sleep,steps:today.steps,energy:null,stress:null});
+let health=D.store.get('health:'+D.TODAY,null);
+(function(){const h=location.hash.slice(1);if(!h||!/steps=|weight=/.test(h))return;const kv={};h.split('&').forEach(x=>{const [k,v]=x.split('=');kv[k]=decodeURIComponent(v||'')});const st=Math.round(parseFloat(String(kv.steps||'').replace(/[^\d.,]/g,'').replace(',','.')));const wt=parseFloat(String(kv.weight||'').replace(/[^\d.,]/g,'').replace(',','.'));
+  health={steps:isNaN(st)?null:st,weight:isNaN(wt)?null:+wt.toFixed(1),at:new Date().toTimeString().slice(0,5)};if(health.steps)dayS.steps=health.steps;if(health.weight)dayS.weight=health.weight;D.store.set('health:'+D.TODAY,health);D.store.set('day:'+D.TODAY,dayS);history.replaceState(null,'',location.pathname);setTimeout(()=>U.toast('Получено из «Здоровья»: '+(health.steps?health.steps.toLocaleString('ru')+' шагов':'')+(health.weight?' · '+health.weight+' кг':'')),300)})();
 const added=D.store.get('food:'+D.TODAY,[]);const eaten={kcal:today.food.kcal+D.sum(added.map(a=>a.kcal)),p:today.food.p+D.sum(added.map(a=>a.p)),f:today.food.f+D.sum(added.map(a=>a.f)),c:today.food.c+D.sum(added.map(a=>a.c))};
 const doneToday=D.store.get('done:'+D.TODAY,null);
 const lessonsN=D.LESSONS.reduce((a,c)=>a+c.items.length,0),seen=D.store.get('lessons',[]);const newest=D.LESSONS.flatMap(c=>c.items).find(l=>l.new);
@@ -49,15 +52,17 @@ ${doneToday?`<div class="pb">${I.check} Выполнена · ${doneToday.mins} 
 <div class="macros">${[['Белки',eaten.p,norm.p],['Жиры',eaten.f,norm.f],['Углеводы',eaten.c,norm.c]].map(([n,v,t])=>`<div class="m"><b>${v} <span>/ ${t}</span></b><span>${n}, г</span><div class="minibar"><i style="width:${Math.min(100,v/t*100)}%"></i></div></div>`).join('')}</div></div>
 <h2>Чек-лист дня</h2>
 <div class="card list">
- <div class="ck"><div class="ico">${I.scale}</div><div class="t"><b>Вес утром</b><span>вчера ${D.DAYS[D.DAYS.length-2].weight} кг</span></div><input inputmode="decimal" id="wIn" value="${dayS.weight}"><span class="muted" style="font-size:12px">кг</span></div>
+ <div class="ck"><div class="ico">${I.scale}</div><div class="t"><b>Вес утром</b><span>${health&&health.weight?'из «Здоровья» в '+health.at:'вчера '+D.DAYS[D.DAYS.length-2].weight+' кг'}</span></div><input inputmode="decimal" id="wIn" value="${dayS.weight}"><span class="muted" style="font-size:12px">кг</span></div>
  <div class="ck"><div class="ico">${I.moon}</div><div class="t"><b>Сон</b><span>цель 7-8 часов</span></div><input inputmode="decimal" id="sIn" value="${dayS.sleep}"><span class="muted" style="font-size:12px">ч</span></div>
- <div class="ck"><div class="ico">${I.walk}</div><div class="t"><b>Шаги</b><span>цель 10 000</span><div class="minibar"><i style="width:${Math.min(100,dayS.steps/100)}%"></i></div></div><input inputmode="numeric" id="stIn" value="${dayS.steps}"></div>
+ <div class="ck"><div class="ico">${I.walk}</div><div class="t"><b>Шаги</b><span>${health&&health.steps?'из «Здоровья» в '+health.at+' · план '+D.C.stepsGoal.toLocaleString('ru'):'план '+D.C.stepsGoal.toLocaleString('ru')+' · <a href="komanda.html" style="color:var(--acc2)">считать автоматически</a>'}</span><div class="minibar"><i style="width:${Math.min(100,dayS.steps/D.C.stepsGoal*100)}%"></i></div></div><input inputmode="numeric" id="stIn" value="${dayS.steps}"></div>
+ <div class="ck" style="align-items:flex-start"><div class="ico">${I.bolt}</div><div class="t"><b>Энергия</b><span>как силы сегодня, 1 слабо, 5 полон сил</span><div class="chips" style="margin-top:6px">${[1,2,3,4,5].map(n=>`<button class="chip ${dayS.energy===n?'green':''}" data-en="${n}" style="min-width:40px;justify-content:center">${n}</button>`).join('')}</div></div></div>
+ <div class="ck" style="align-items:flex-start"><div class="ico">${I.wave}</div><div class="t"><b>Стресс</b><span>1 спокойно, 5 на пределе</span><div class="chips" style="margin-top:6px">${[1,2,3,4,5].map(n=>`<button class="chip ${dayS.stress===n?'green':''}" data-st="${n}" style="min-width:40px;justify-content:center">${n}</button>`).join('')}</div></div></div>
 </div>
 <div class="card rep" onclick="location.href='otchet.html'"><div class="ico">${I.clip}</div><div class="t"><b>Отчёт недели: завтра</b><span>вес внесён 6 из 7 дней · 2 видео подходов · прошлый разбор получен</span></div><span class="muted">${I.chev}</span></div>
 <a class="kb" href="baza.html"><div class="ico">${I.book}</div><div class="t"><b>База знаний</b><span>${lessonsN} уроков · просмотрено ${seen.length}${newest?' · новое: «'+newest.t+'»':''}</span></div><span class="muted">${I.chev}</span></a>
-<div class="note">Демо-клиент: 7 недель ведения, цифры сгенерированы для макета</div>`;
+<div class="note">Энергия и стресс одним нажатием: в отчёте вопросы 3 и 4 посчитаются сами как среднее за неделю. Демо-клиент, 7 недель</div>`;
 r.querySelector('#wIn').onchange=e=>{dayS.weight=e.target.value;save('Вес записан')};r.querySelector('#sIn').onchange=e=>{dayS.sleep=e.target.value;save('Сон записан')};r.querySelector('#stIn').onchange=e=>{dayS.steps=+e.target.value||0;save('Шаги записаны');render()};
-r.querySelectorAll('[data-day]').forEach(el=>el.onclick=()=>daySheet(el.dataset.day))}
+r.querySelectorAll('[data-day]').forEach(el=>el.onclick=()=>daySheet(el.dataset.day));r.querySelectorAll('[data-en]').forEach(b=>b.onclick=()=>{dayS.energy=+b.dataset.en;save('Энергия '+dayS.energy+' из 5');render()});r.querySelectorAll('[data-st]').forEach(b=>b.onclick=()=>{dayS.stress=+b.dataset.st;save('Стресс '+dayS.stress+' из 5');render()})}
 function save(t){D.store.set('day:'+D.TODAY,dayS);U.toast(t)}
 render();
 </script>
