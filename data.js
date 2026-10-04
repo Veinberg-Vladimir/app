@@ -90,6 +90,13 @@ sundays.forEach((s,k)=>{const idx=DAYS.findIndex(x=>x.date===s);const wk=DAYS.sl
   const trs=WORKOUTS.filter(w=>w.done&&w.date>=wk[0].date&&w.date<=s);
   REPORTS.push({date:s,n:k+1,weightWas:+avg(prev.length?prev.map(x=>x.weight):[C.startWeight]).toFixed(1),weightNow:+avg(wk.map(x=>x.weight)).toFixed(1),sleep:+avg(wk.map(x=>x.sleep)).toFixed(1),energy:Math.round(rnd(6,9)),stress:Math.round(rnd(2,6)),training:trs.length?Math.round(avg(trs.map(t=>t.rating))):0,trainings:trs.length,appetite:['обычное','обычное','повышенное','обычное','повышенное','слабое'][k],adherence:[92,88,85,78,90,95][k],steps:Math.round(avg(wk.map(x=>x.steps))),food:{kcal:Math.round(avg(wk.map(x=>x.food.kcal))),p:Math.round(avg(wk.map(x=>x.food.p))),f:Math.round(avg(wk.map(x=>x.food.f))),c:Math.round(avg(wk.map(x=>x.food.c)))},meas:Object.assign({date:s},measAt((k+1)/6)),videos:trs.length*2,comment:COMMENTS[k],hard:['Тянет на сладкое после ужина','Мало сплю из-за работы','Пропустил одну тренировку, командировка','Срыв в субботу на дне рождения','Всё по плану','Устаю к концу недели'][k]})});
 const MEASURES=[START_MEAS].concat(REPORTS.map(r=>r.meas));
+/* разбор недели по пунктам (демо-тексты) */
+REPORTS.forEach((r,k)=>{const d=+(r.weightNow-r.weightWas).toFixed(1);const n=normAt(r.date);const trs=WORKOUTS.filter(w=>w.done&&w.date>r.date.slice(0,8)+'00'&&w.date<=r.date).slice(-3);
+  r.review=[['Вес и замеры',`${r.weightWas} → ${r.weightNow} кг, ${d>0?'+':''}${d} за неделю. Талия ${r.meas.waist} см. ${d<=-0.5?'Темп по плану':d<=-0.2?'Темп медленнее плана, смотрим питание':'Вес стоит, смотрим соблюдение и соль'}`],
+  ['Питание и голод',`Среднее ${r.food.kcal.toLocaleString('ru')} ккал при норме ${n.kcal.toLocaleString('ru')}, белок ${r.food.p} г. Соблюдение ${r.adherence} %. Голод ${r.appetite}`],
+  ['Сон и стресс',`Сон ${r.sleep} ч, стресс ${r.stress}/10, энергия ${r.energy}/10${r.sleep<7?'. Сна мало, это тормозит и вес, и силу':''}`],
+  ['Тренировки',`${r.trainings} из 3, силовые ${r.training}/10, шаги ${r.steps.toLocaleString('ru')} в день`],
+  ['Решение на неделю',COMMENTS[k]]]});
 
 /* библиотека знаний */
 const LESSONS=[
@@ -115,5 +122,5 @@ function strength(){return EX_ALL.map(x=>{const h=exHistory(x.name);if(h.length<
 
 const store={get(k,f){try{const v=localStorage.getItem('app:'+k);return v==null?f:JSON.parse(v)}catch(e){return f}},set(k,v){try{localStorage.setItem('app:'+k,JSON.stringify(v))}catch(e){}},del(k){try{localStorage.removeItem('app:'+k)}catch(e){}}};
 
-window.DATA={MEAS_FIELDS:[['Талия','waist'],['Шея','neck'],['Грудь','chest'],['Бедро П','thighR'],['Бедро Л','thighL'],['Бицепс П','bicepsR'],['Бицепс Л','bicepsL']],normKey,C,TODAY,PH,PHASE_LIST,SCHED,WORKOUTS,DAYS,NORMS,normAt,SUPPS,REPORTS,MEASURES,LESSONS,EX_ALL,ALTS,strength,exHistory,tonnage,weekOf,sum,e1rm,navyFat,fmtD,fmtDD,iso,d,addDays,round,store,RU_D};
+window.DATA={MEAS_FIELDS:[['Талия','waist'],['Грудь','chest'],['Бедро П','thighR'],['Бедро Л','thighL'],['Бицепс П','bicepsR'],['Бицепс Л','bicepsL']],normKey,C,TODAY,PH,PHASE_LIST,SCHED,WORKOUTS,DAYS,NORMS,normAt,SUPPS,REPORTS,MEASURES,LESSONS,EX_ALL,ALTS,strength,exHistory,tonnage,weekOf,sum,e1rm,navyFat,fmtD,fmtDD,iso,d,addDays,round,store,RU_D};
 })();
