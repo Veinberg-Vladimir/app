@@ -5,10 +5,12 @@
 .med{width:38px;height:38px;border-radius:12px;background:var(--chip2);display:grid;place-items:center;color:var(--acc2);flex:none}.med svg{width:18px;height:18px}
 .hero{background:radial-gradient(120% 90% at 100% 0%,rgba(242,101,42,.22),transparent 55%),var(--card)}
 .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.stat b .arr{display:inline-flex;align-items:center;vertical-align:-1px;margin-right:1px;font-size:inherit;line-height:1}.stat b .arr svg{display:inline-block;width:14px;height:14px;stroke-width:2.5}.stat b .arr.good{color:#5BE49B}.stat b .arr.bad{color:#E5533D}
 </style>
 <div class="phone"><div class="scroll" id="root"></div>{{nav:prog}}</div>
 <script>
-const D=window.DATA,U=window.UI;const I={trophy:`{{trophy}}`,search:`{{search}}`,chev:`{{chevron-right}}`,play:`{{player-play-filled}}`,photo:`{{photo}}`,barbell:`{{barbell}}`};
+const D=window.DATA,U=window.UI;const I={trophy:`{{trophy}}`,search:`{{search}}`,chev:`{{chevron-right}}`,play:`{{player-play-filled}}`,photo:`{{photo}}`,barbell:`{{barbell}}`,dn:`{{arrow-narrow-down}}`,up:`{{arrow-narrow-up}}`};
+const arr=(v,goodWhenDown)=>{if(Math.abs(v)<0.05)return '';const down=v<0;const good=goodWhenDown?down:!down;return `<span class="arr ${good?'good':'bad'}">${down?I.dn:I.up}</span>`};
 const st={tab:D.store.get('prog:tab','obshee'),per:'month',wper:'all',q:'',muscle:'Все',openG:null,compare:false};
 const doneW=D.WORKOUTS.filter(w=>w.done);const wk0=D.weekOf(D.TODAY);
 const rng={week:[wk0,D.TODAY],month:['2026-09-04',D.TODAY],all:['2026-08-01',D.TODAY]};
@@ -38,7 +40,7 @@ function generalBlock(){const a='2026-09-21',b='2026-09-27';const sc=weekScore(a
   const last=D.REPORTS[5];
   return `<div class="chart hero"><div class="cap"><b>Успеваемость недели</b><span>21 - 27 сен, последняя полная</span></div><div style="display:flex;gap:16px;align-items:center"><div>${U.ring(sc.avg,112,Math.round(sc.avg*100)+'%','среднее')}</div><div style="flex:1;min-width:0">${bars}</div></div><div class="note" style="margin-top:10px">Считается само из логов. Среднее по четырём заданиям тренера. Текущая неделя закроется в воскресенье</div></div>
   <div class="chart"><div class="cap"><b>По неделям</b><span>средняя успеваемость, %</span></div>${U.bars(weeks,{yfmt:v=>Math.round(v)+'%'})}</div>
-  <div class="card"><div class="row"><b>Итог 7 недель</b><span class="muted" style="font-size:12px">с 17 авг</span></div><div class="stats" style="margin-bottom:0"><div class="stat"><b>${(D.DAYS[D.DAYS.length-1].weight-D.C.startWeight).toFixed(1)}</b><span>кг веса</span></div><div class="stat"><b>${(D.MEASURES[D.MEASURES.length-1].waist-D.MEASURES[0].waist).toFixed(0)} см</b><span>талия</span></div><div class="stat"><b>+${(D.strength().reduce((a,s)=>a+s.pct,0)/D.strength().length).toFixed(1)}%</b><span>сила</span></div></div></div>`}
+  <div class="card"><div class="row"><b>Итог 7 недель</b><span class="muted" style="font-size:12px">с 17 авг</span></div>${(()=>{const dW=D.DAYS[D.DAYS.length-1].weight-D.C.startWeight,dT=D.MEASURES[D.MEASURES.length-1].waist-D.MEASURES[0].waist,dS=D.strength().reduce((a,s)=>a+s.pct,0)/D.strength().length;return `<div class="stats" style="margin-bottom:0"><div class="stat"><b>${arr(dW,true)}${Math.abs(dW).toFixed(1)}</b><span>кг веса</span></div><div class="stat"><b>${arr(dT,true)}${Math.abs(dT).toFixed(0)} см</b><span>талия</span></div><div class="stat"><b>${arr(dS,false)}${Math.abs(dS).toFixed(1)}%</b><span>сила</span></div></div>`})()}</div>`}
 function bodyBlock(){const days=D.DAYS;const n=st.wper==='week'?8:st.wper==='month'?31:days.length;const sel=days.slice(-n);const w=sel.map(x=>x.weight);const avg7=days.map((x,i)=>{const s=days.slice(Math.max(0,i-6),i+1);return +(D.sum(s.map(y=>y.weight))/s.length).toFixed(1)}).slice(-n);
   const cur=avg7[avg7.length-1],start=D.C.startWeight,d=+(cur-start).toFixed(1);const rate=+((avg7[avg7.length-1]-avg7[Math.max(0,avg7.length-8)])).toFixed(1);
   const lbl=sel.map((x,i)=>({i,t:D.fmtD(x.date)})).filter((_,i)=>i%Math.ceil(n/4)===0||i===n-1);
