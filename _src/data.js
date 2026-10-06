@@ -15,6 +15,8 @@ const fmtD=(s,full)=>{const x=typeof s==='string'?d(s):s;return full?`${RU_DF[x.
 const fmtDD=s=>{const x=d(s);return `${RU_D[x.getDay()]} ${x.getDate()} ${RU_M[x.getMonth()]}`};
 const round=(v,step)=>Math.round(v/step)*step;
 const e1rm=(kg,reps)=>kg*(1+reps/30);
+const pl=(n,one,few,many)=>{const a=Math.abs(n)%100,b=a%10;const w=(a>10&&a<20)?many:(b>1&&b<5)?few:(b===1)?one:many;return n+' '+w};
+const R2=mulberry32(7);const rnd2=(a,b)=>a+(b-a)*R2();
 function navyFat(waist,neck,height){return 495/(1.0324-0.19077*Math.log10(waist-neck)+0.15456*Math.log10(height))-450}
 
 const C={name:'Андрей',initial:'А',height:182,age:34,start:'2026-08-17',today:TODAY,goal:'минус 10 кг к Новому году',startWeight:96.4,stepsGoal:10000,sleepGoal:7.5,vip:true,tariff:'с тренером'};
@@ -75,9 +77,9 @@ while(dt<=end){const s=iso(dt);const t=i/47;
   const over=R()<0.12;const kcal=Math.round(norm.kcal+(over?rnd(300,650):rnd(-220,120)));
   const p=Math.round(norm.p+rnd(-30,10));const f=Math.round(norm.f+rnd(-10,18));const c=Math.max(120,Math.round((kcal-p*4-f*9)/4));
   const today=s===TODAY;
-  DAYS.push({date:s,weight,sleep:+rnd(6.1,8.3).toFixed(1),steps:Math.round(rnd(5200,12800)/100)*100,supps:SUPPS.map(()=>R()<0.86),food:today?{kcal:1420,p:112,f:48,c:130,meals:[{name:'Завтрак',kcal:520,items:'Овсянка 80 г, 3 яйца, банан'},{name:'Обед',kcal:640,items:'Гречка 100 г, куриная грудка 200 г, салат'},{name:'Перекус',kcal:260,items:'Творог 5% 200 г'}]}:{kcal,p,f,c},training:tr?tr.date:null});
+  DAYS.push({date:s,weight,sleep:+rnd(6.1,8.3).toFixed(1),steps:Math.round(rnd(5200,12800)/100)*100,energy:Math.round(rnd2(3,5.49)),stress:Math.round(rnd2(1,4.49)),supps:SUPPS.map(()=>R()<0.86),food:today?{kcal:1420,p:112,f:48,c:130,meals:[{name:'Завтрак',kcal:520,items:'Овсянка 80 г, 3 яйца, банан'},{name:'Обед',kcal:640,items:'Гречка 100 г, куриная грудка 200 г, салат'},{name:'Перекус',kcal:260,items:'Творог 5% 200 г'}]}:{kcal,p,f,c},training:tr?tr.date:null});
   dt=addDays(dt,1);i++}
-if(DAYS.length){const t=DAYS[DAYS.length-1];t.sleep=7.5;t.steps=6240;t.supps=[true,true,false]}
+if(DAYS.length){const t=DAYS[DAYS.length-1];t.sleep=7.5;t.steps=6240;t.supps=[true,true,false];t.energy=null;t.stress=null}
 
 /* отчёты по воскресеньям */
 const REPORTS=[];
@@ -88,13 +90,13 @@ const COMMENTS=['Старт хороший, вес пошёл. Норму не �
 sundays.forEach((s,k)=>{const idx=DAYS.findIndex(x=>x.date===s);const wk=DAYS.slice(Math.max(0,idx-6),idx+1);const prev=DAYS.slice(Math.max(0,idx-13),Math.max(0,idx-6));
   const avg=a=>a.reduce((x,y)=>x+y,0)/a.length;
   const trs=WORKOUTS.filter(w=>w.done&&w.date>=wk[0].date&&w.date<=s);
-  REPORTS.push({date:s,n:k+1,weightWas:+avg(prev.length?prev.map(x=>x.weight):[C.startWeight]).toFixed(1),weightNow:+avg(wk.map(x=>x.weight)).toFixed(1),sleep:+avg(wk.map(x=>x.sleep)).toFixed(1),energy:Math.round(rnd(6,9)),stress:Math.round(rnd(2,6)),training:trs.length?Math.round(avg(trs.map(t=>t.rating))):0,trainings:trs.length,appetite:['обычное','обычное','повышенное','обычное','повышенное','слабое'][k],adherence:[92,88,85,78,90,95][k],steps:Math.round(avg(wk.map(x=>x.steps))),food:{kcal:Math.round(avg(wk.map(x=>x.food.kcal))),p:Math.round(avg(wk.map(x=>x.food.p))),f:Math.round(avg(wk.map(x=>x.food.f))),c:Math.round(avg(wk.map(x=>x.food.c)))},meas:Object.assign({date:s},measAt((k+1)/6)),videos:trs.length*2,comment:COMMENTS[k],hard:['Тянет на сладкое после ужина','Мало сплю из-за работы','Пропустил одну тренировку, командировка','Срыв в субботу на дне рождения','Всё по плану','Устаю к концу недели'][k]})});
+  REPORTS.push({date:s,n:k+1,weightWas:+avg(prev.length?prev.map(x=>x.weight):[C.startWeight]).toFixed(1),weightNow:+avg(wk.map(x=>x.weight)).toFixed(1),sleep:+avg(wk.map(x=>x.sleep)).toFixed(1),energy:+avg(wk.filter(x=>x.energy).map(x=>x.energy)).toFixed(1),stress:+avg(wk.filter(x=>x.stress).map(x=>x.stress)).toFixed(1),training:trs.length?Math.round(avg(trs.map(t=>t.rating))):0,trainings:trs.length,appetite:['обычное','обычное','повышенное','обычное','повышенное','слабое'][k],adherence:[92,88,85,78,90,95][k],steps:Math.round(avg(wk.map(x=>x.steps))),food:{kcal:Math.round(avg(wk.map(x=>x.food.kcal))),p:Math.round(avg(wk.map(x=>x.food.p))),f:Math.round(avg(wk.map(x=>x.food.f))),c:Math.round(avg(wk.map(x=>x.food.c)))},meas:Object.assign({date:s},measAt((k+1)/6)),videos:trs.length*2,comment:COMMENTS[k],hard:['Тянет на сладкое после ужина','Мало сплю из-за работы','Пропустил одну тренировку, командировка','Срыв в субботу на дне рождения','Всё по плану','Устаю к концу недели'][k]})});
 const MEASURES=[START_MEAS].concat(REPORTS.map(r=>r.meas));
 /* разбор недели по пунктам (демо-тексты) */
 REPORTS.forEach((r,k)=>{const d=+(r.weightNow-r.weightWas).toFixed(1);const n=normAt(r.date);const trs=WORKOUTS.filter(w=>w.done&&w.date>r.date.slice(0,8)+'00'&&w.date<=r.date).slice(-3);
   r.review=[['Вес и замеры',`${r.weightWas} → ${r.weightNow} кг, ${d>0?'+':''}${d} за неделю. Талия ${r.meas.waist} см. ${d<=-0.5?'Темп по плану':d<=-0.2?'Темп медленнее плана, смотрим питание':'Вес стоит, смотрим соблюдение и соль'}`],
   ['Питание и голод',`Среднее ${r.food.kcal.toLocaleString('ru')} ккал при норме ${n.kcal.toLocaleString('ru')}, белок ${r.food.p} г. Соблюдение ${r.adherence} %. Голод ${r.appetite}`],
-  ['Сон и стресс',`Сон ${r.sleep} ч, стресс ${r.stress}/10, энергия ${r.energy}/10${r.sleep<7?'. Сна мало, это тормозит и вес, и силу':''}`],
+  ['Сон и стресс',`Сон ${r.sleep} ч, стресс ${r.stress} из 5, энергия ${r.energy} из 5${r.sleep<7?'. Сна мало, это тормозит и вес, и силу':''}`],
   ['Тренировки',`${r.trainings} из 3, силовые ${r.training}/10, шаги ${r.steps.toLocaleString('ru')} в день`],
   ['Решение на неделю',COMMENTS[k]]]});
 
@@ -122,5 +124,5 @@ function strength(){return EX_ALL.map(x=>{const h=exHistory(x.name);if(h.length<
 
 const store={get(k,f){try{const v=localStorage.getItem('app:'+k);return v==null?f:JSON.parse(v)}catch(e){return f}},set(k,v){try{localStorage.setItem('app:'+k,JSON.stringify(v))}catch(e){}},del(k){try{localStorage.removeItem('app:'+k)}catch(e){}}};
 
-window.DATA={MEAS_FIELDS:[['Талия','waist'],['Грудь','chest'],['Бедро П','thighR'],['Бедро Л','thighL'],['Бицепс П','bicepsR'],['Бицепс Л','bicepsL']],normKey,C,TODAY,PH,PHASE_LIST,SCHED,WORKOUTS,DAYS,NORMS,normAt,SUPPS,REPORTS,MEASURES,LESSONS,EX_ALL,ALTS,strength,exHistory,tonnage,weekOf,sum,e1rm,navyFat,fmtD,fmtDD,iso,d,addDays,round,store,RU_D};
+window.DATA={MEAS_FIELDS:[['Талия','waist'],['Грудь','chest'],['Бедро П','thighR'],['Бедро Л','thighL'],['Бицепс П','bicepsR'],['Бицепс Л','bicepsL']],normKey,C,TODAY,PH,PHASE_LIST,SCHED,WORKOUTS,DAYS,NORMS,normAt,SUPPS,REPORTS,MEASURES,LESSONS,EX_ALL,ALTS,strength,exHistory,tonnage,weekOf,sum,e1rm,pl,navyFat,fmtD,fmtDD,iso,d,addDays,round,store,RU_D};
 })();

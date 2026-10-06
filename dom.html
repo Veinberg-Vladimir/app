@@ -1,4 +1,4 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0E0F1A"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="app.css?v=1791302939"><script src="phases.js?v=1791302939"></script><script src="data.js?v=1791302939"></script><script src="ui.js?v=1791302939"></script><title>Дом</title></head><body>
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0E0F1A"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="app.css?v=1791306297"><script src="phases.js?v=1791306297"></script><script src="data.js?v=1791306297"></script><script src="ui.js?v=1791306297"></script><title>Дом</title></head><body>
 <style>
 .top{display:flex;align-items:center;gap:12px;margin-bottom:14px}
 .avatar{width:44px;height:44px;border-radius:50%;background:var(--chip);display:grid;place-items:center;font-weight:800;color:var(--acc2);border:1px solid var(--line)}
@@ -44,7 +44,7 @@ function render(){const r=document.getElementById('root');const pct=Math.min(1,e
 r.innerHTML=`<div class="top"><div class="avatar">${D.C.initial}</div><div class="hello"><b>Привет, ${D.C.name}</b><span>${D.fmtD(D.TODAY,true)} · неделя 3 из 4 · 7-я неделя ведения</span></div></div>
 ${weekStrip()}
 <h2>Тренировка дня</h2>
-<div class="card hero"><div class="eyebrow">Фаза 12 · Интенсификация · День ${W.day}</div><h3>${W.title}</h3><p>${W.ex.length} упражнений · темп ${W.ex[0].target.tempo} · RIR ${W.ex[0].target.rir}</p>
+<div class="card hero"><div class="eyebrow">Фаза 12 · Интенсификация</div><h3>${W.title}</h3><p>${D.pl(W.ex.length,'упражнение','упражнения','упражнений')}</p>
 ${doneToday?`<div class="pb">${I.check} Выполнена · ${doneToday.mins} мин · ${doneToday.ton} кг · оценка ${doneToday.rating}/10</div>`:`<a class="btn" href="tren-den.html?d=${W.day}">${I.play} Начать тренировку</a>`}</div>
 <h2>Питание сегодня</h2>
 <div class="card"><div class="row"><div class="big">${eaten.kcal.toLocaleString('ru')} <small>/ ${norm.kcal.toLocaleString('ru')} ккал</small></div><a class="ghost" href="pit.html#add">${I.plus} Еда</a></div>

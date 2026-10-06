@@ -14,7 +14,7 @@ const doneW=D.WORKOUTS.filter(w=>w.done);const wk0=D.weekOf(D.TODAY);
 const rng={week:[wk0,D.TODAY],month:['2026-09-04',D.TODAY],all:['2026-08-01',D.TODAY]};
 const prevRng={week:[D.iso(D.addDays(D.d(wk0),-7)),D.iso(D.addDays(D.d(wk0),-1))],month:['2026-08-05','2026-09-03'],all:null};
 const inR=(w,r)=>w.date>=r[0]&&w.date<=r[1];
-const pbSet=()=>{const best={};const pbs=[];doneW.forEach(w=>w.ex.forEach(e=>{const k=D.normKey(e.name);const mx=Math.max(...e.sets.map(s=>s.kg));if(best[k]==null||mx>best[k]){if(best[k]!=null)pbs.push({date:w.date,name:e.name,kg:mx});best[k]=mx}}));return pbs};
+const pbSet=()=>{const best={};const pbs=[];doneW.forEach(w=>w.ex.forEach(e=>{const k=D.normKey(e.name);const mxBy={};e.sets.forEach(s=>{mxBy[s.reps]=Math.max(mxBy[s.reps]||0,s.kg)});Object.keys(mxBy).forEach(r=>{const key=k+'@'+r;if(best[key]!=null&&mxBy[r]>best[key])pbs.push({date:w.date,name:e.name,kg:mxBy[r],reps:+r});best[key]=Math.max(best[key]||0,mxBy[r])})}));return pbs};
 const PBS=pbSet();
 function tiles(){const r=rng[st.per];const ws=doneW.filter(w=>inR(w,r));const ton=D.sum(ws.map(w=>w.ton));const pr=prevRng[st.per];const pton=pr?D.sum(doneW.filter(w=>inR(w,pr)).map(w=>w.ton)):0;const dlt=pr&&pton?Math.round((ton/pton-1)*100):null;
   const exN=D.sum(ws.map(w=>w.ex.length)),pbN=PBS.filter(p=>p.date>=r[0]&&p.date<=r[1]).length,mins=D.sum(ws.map(w=>w.mins));
