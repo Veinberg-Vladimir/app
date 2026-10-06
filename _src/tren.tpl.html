@@ -30,7 +30,7 @@ const days=cur.map(s=>{const w=D.WORKOUTS.find(x=>x.date===s.date);const dn=stat
  return `<a class="day ${cls}" href="tren-den.html?d=${s.day}${w.done?'&date='+w.date:''}"><div class="n">${s.day}</div><div class="t"><b>${w.title}</b><span>${sub}</span></div>${right}</a>`}).join('');
 const past=D.WORKOUTS.filter(w=>w.done).slice(-6).reverse();
 r.innerHTML=`<h1 class="title">Тренировки</h1>
-<div class="card hero"><div class="eyebrow">Фаза 12 из 12 · Интенсификация</div><h3>Контроль эксцентрика</h3><p>Темп 3010: три секунды на опускание. Три тренировки в неделю, RIR 2 на этой неделе</p>
+<div class="card hero"><div class="eyebrow">Фаза 12 из 12 · Интенсификация</div><h3>Контроль эксцентрика</h3><p>Фокус на эксцентрической фазе: замедленное опускание</p>
 <div class="weeks"><i class="ok"></i><i class="ok"></i><i class="now"></i><i></i></div><div class="row" style="margin-top:8px"><span class="muted" style="font-size:12px">Неделя 3 из 4</span><button class="chip" data-help style="padding:4px 10px;font-size:11px">${I.help} как читать программу</button></div></div>
 <h2>Эта неделя</h2>${days}
 <h2>Ещё</h2>
