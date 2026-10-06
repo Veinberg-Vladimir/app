@@ -1,0 +1,46 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0E0F1A"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="app.css?v=1791276868"><script src="phases.js?v=1791276868"></script><script src="data.js?v=1791276868"></script><script src="ui.js?v=1791276868"></script><title>Панель тренера</title></head><body>
+<style>
+.in2{width:100%;border-radius:14px;border:1.5px solid var(--line);background:var(--chip);color:var(--text);font:inherit;font-size:14px;padding:10px 12px}
+.in2:focus{outline:none;border-color:var(--acc)}
+.ta{min-height:90px;resize:vertical;font-size:12px}
+.day{background:var(--card);border-radius:18px;padding:12px 14px;margin-bottom:10px}
+.day h3{margin:0 0 8px;font-size:15px}
+.exr{border-top:1px solid var(--line);padding:8px 0}
+.exr b{display:block;font-size:13px}
+.wk{display:grid;grid-template-columns:28px 1fr 1fr 44px 40px;gap:4px;font-size:11px;color:var(--muted);margin-top:4px;font-variant-numeric:tabular-nums}
+.wk span:first-child{color:var(--acc2);font-weight:800}
+.ok{color:#5BE49B}.bad{color:#E5533D}
+</style>
+<div class="phone"><div class="scroll" id="root">
+<div class="hdr"><a href="index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l14 0" /><path d="M5 12l6 6" /><path d="M5 12l6 -6" /></svg></a><b style="font-size:17px">Панель тренера</b><span style="width:30px"></span></div>
+<div class="card hero"><div class="eyebrow">Импорт программы</div><b style="font-size:17px">Таблица → приложение</b><p class="muted" style="font-size:13px;margin:6px 0 0">Ты ведёшь программу в Google Таблице как сейчас. Приложение читает вкладку по ссылке и раскладывает по фазе, дням, упражнениям и неделям</p></div>
+<h2>Ссылка на вкладку</h2>
+<input class="in2" id="link" value="https://docs.google.com/spreadsheets/d/1X-Zx8CbHBg7rYDRUYshswRDSYCHEqPVuXNU1hyMVuT8/edit?gid=1837771494#gid=1837771494">
+<div class="row2"><button class="btn" id="go"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" /><path d="M7 11l5 5l5 -5" /><path d="M12 4l0 12" /></svg> Прочитать таблицу</button></div>
+<div class="note" style="text-align:left;margin-top:8px">Доступ к таблице: «Все, у кого есть ссылка». Или скопируй вкладку целиком и вставь ниже</div>
+<textarea class="in2 ta" id="paste" placeholder="Сюда можно вставить скопированную вкладку (Ctrl+A, Ctrl+C в Таблице)"></textarea>
+<div id="out"></div>
+<div class="note">Формат, который читается: строка «ТРЕНИРОВКА N название», строки упражнений «A) название», шапка «неделя / подходы / повторения / темп / RIR / 1 2 3 4 5», четыре строки недель. Диапазоны повторений пиши текстом с апострофом впереди ('10-12), иначе Таблица превращает их в даты</div>
+</div></div>
+<script>
+const D=window.DATA,U=window.UI;const I={check:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg>`};
+function parseCSV(text){const rows=[];let row=[],f='',q=false;for(let i=0;i<text.length;i++){const c=text[i];if(q){if(c==='"'){if(text[i+1]==='"'){f+='"';i++}else q=false}else f+=c}else{if(c==='"')q=true;else if(c===','||c==='\t'){row.push(f);f=''}else if(c==='\n'){row.push(f);rows.push(row);row=[];f=''}else if(c!=='\r')f+=c}}if(f||row.length){row.push(f);rows.push(row)}return rows}
+const dateToReps=v=>{v=String(v).trim();let m=v.match(/^(\d{1,2})[.\/](\d{1,2})[.\/](\d{2,4})$/);if(m)return `${+m[1]}-${+m[2]}`;m=v.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);if(m)return `${+m[3]}-${+m[2]}`;return v.replace(/\.0$/,'')};
+function parse(rows){const ph={name:(rows[0]&&rows[0][0]||'').trim(),days:[],warn:[]};let day=null,ex=null,hdr=null;
+  rows.forEach((r,ri)=>{const c=(r[0]||'').trim();if(!c&&!(r[1]||'').trim()&&!(r[2]||'').trim())return;
+    if(/^ТРЕНИРОВКА/i.test(c)){const m=c.match(/ТРЕНИРОВКА\s*(\d+)\s*(.*)/i);day={n:ph.days.length+1,title:(m?m[2]:c).trim(),ex:[]};ph.days.push(day);ex=null;return}
+    if(/^[A-ZА-Яa-zа-я]\d?\)/.test(c)&&day){const code=c.match(/^([A-ZА-Яa-zа-я]\d?)\)/)[1].toUpperCase().replace(/[АВСЕ]/g,ch=>({'А':'A','В':'B','С':'C','Е':'E'})[ch]);ex={code,name:c.replace(/^[A-ZА-Яa-zа-я]\d?\)\s*/,'').replace(/,\s*$/,'').trim(),weeks:[]};day.ex.push(ex);hdr=null;return}
+    if(/^недел/i.test(c)||/^повторения/i.test((r[2]||'').trim())){hdr=r.map(x=>String(x||'').trim().toLowerCase());return}
+    const wk=+c;if(ex&&wk>=1&&wk<=4&&(r[1]||'').trim()){const hasRir=!!(hdr&&hdr.some(h=>h==='rir'));const rir=hasRir?dateToReps(r[4]):'';const kg=(hasRir?r.slice(5,10):r.slice(4,9)).map(x=>{const n=parseFloat(String(x).replace(',','.'));return isNaN(n)?null:n});
+      ex.weeks.push({w:wk,sets:+r[1],reps:dateToReps(r[2]),tempo:String(r[3]||'').replace(/\.0$/,''),rir,kg});if(/^\d{4}-|^\d{1,2}[.\/]\d{1,2}[.\/]/.test(String(r[2])))ph.warn.push(`строка ${ri+1}: повторения записаны как дата, прочитал как «${dateToReps(r[2])}»`)}});
+  return ph}
+function show(ph){const n=ph.days.reduce((a,d)=>a+d.ex.length,0);const out=document.getElementById('out');
+  out.innerHTML=`<h2>Прочитано</h2><div class="card"><div class="row"><b>${ph.name||'Без названия'}</b><span class="ok">${I.check} ${ph.days.length} тренировки · ${n} упражнений</span></div>${ph.warn.length?`<div class="note" style="text-align:left;color:var(--acc2)">${ph.warn.slice(0,3).join('<br>')}${ph.warn.length>3?'<br>и ещё '+(ph.warn.length-3):''}</div>`:''}</div>
+  ${ph.days.map(d=>`<div class="day"><h3>Тренировка ${d.n} · ${d.title}</h3>${d.ex.map(e=>`<div class="exr"><b>${e.code} · ${e.name}</b><div class="wk"><span>нед</span><span>подх × повт</span><span>темп · RIR</span><span>кг</span><span></span></div>${e.weeks.map(w=>`<div class="wk"><span>${w.w}</span><span>${w.sets} × ${w.reps}</span><span>${w.tempo}${w.rir?' · '+w.rir:''}</span><span>${w.kg.filter(x=>x!=null).length?w.kg.filter(x=>x!=null).join('·'):'—'}</span><span class="${w.sets&&w.reps?'ok':'bad'}">${w.sets&&w.reps?'ок':'?'}</span></div>`).join('')}</div>`).join('')}</div>`).join('')}
+  <div class="row2"><button class="btn" id="assign">Назначить Андрею как Фазу 13</button></div><div class="note">Отдых на упражнение добавь колонкой «отдых» рядом с RIR, импорт её подхватит</div>`;
+  document.getElementById('assign').onclick=()=>U.toast('В готовом приложении фаза ляжет клиенту со следующего понедельника. Здесь демо')}
+document.getElementById('go').onclick=async()=>{const link=document.getElementById('link').value.trim();const id=(link.match(/\/d\/([a-zA-Z0-9_-]+)/)||[])[1];const gid=(link.match(/gid=(\d+)/)||[])[1]||'0';if(!id){U.toast('Не вижу ссылку на таблицу');return}
+  U.toast('Читаю таблицу…');try{const r=await fetch(`https://docs.google.com/spreadsheets/d/${id}/export?format=csv&gid=${gid}`);if(!r.ok)throw new Error(r.status);const text=await r.text();show(parse(parseCSV(text)))}catch(e){U.toast('Таблица не открылась: проверь доступ «по ссылке»');}};
+document.getElementById('paste').oninput=e=>{const t=e.target.value;if(t.length>50)show(parse(parseCSV(t)))};
+</script>
+</body></html>
