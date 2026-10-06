@@ -1,4 +1,4 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0E0F1A"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="app.css?v=1791309250"><script src="phases.js?v=1791309250"></script><script src="data.js?v=1791309250"></script><script src="ui.js?v=1791309250"></script><title>Тренировка</title></head><body>
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0E0F1A"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="app.css?v=1791310179"><script src="phases.js?v=1791310179"></script><script src="data.js?v=1791310179"></script><script src="ui.js?v=1791310179"></script><title>Тренировка</title></head><body>
 <style>
 .timer{display:flex;align-items:center;gap:8px;font-weight:800;font-size:20px;font-variant-numeric:tabular-nums}.timer svg{color:var(--acc);width:20px;height:20px}
 .dayt{font-size:12px;color:var(--acc2);font-weight:700}.dayh{font-size:21px;font-weight:800;margin:2px 0 4px}
@@ -40,7 +40,8 @@ const EX=W.ex.map((e,idx)=>{const hist=D.exHistory(e.name).filter(h=>h.date<W.da
   return {id:e.code,idx,name:e.name,sets:e.target.sets,reps:e.target.reps,tempo:e.target.tempo,rir:e.target.rir,prev,best,byReps,sup,rest:[e.target.rest,e.target.rest+30],muscle:D.EX_ALL.find(x=>D.normKey(x.name)===D.normKey(e.name)).muscle,logged:e.sets}});
 EX.forEach(e=>{if(e.sup&&EX.filter(x=>x.sup===e.sup).length<2)e.sup=null});
 const KEY='wo:'+W.date;
-let S=D.store.get(KEY,{});S.sets=S.sets||{};S.swap=S.swap||{};S.notes=S.notes||{};S.video=S.video||{};S.open=S.open||EX[0].id;S.start=S.start||Date.now();S.restSel=S.restSel||{};
+let S=D.store.get(KEY,{});S.sets=S.sets||{};S.swap=S.swap||{};S.notes=S.notes||{};S.video=S.video||{};S.open=S.open||EX[0].id;S.restSel=S.restSel||{};if(S.start&&Date.now()-S.start>3*3600000){S.start=null;S.rest=null}
+const tick=()=>{if(!S.start){S.start=Date.now();save()}};const elapsed=()=>S.start?(Date.now()-S.start)/1000:0;
 function save(){D.store.set(KEY,S)}
 function setsOf(e){if(!S.sets[e.id])S.sets[e.id]=MODE==='view'?e.logged.map(s=>({kg:String(s.kg),reps:String(s.reps),done:true})):Array.from({length:e.sets},()=>({kg:'',reps:'',done:false,rested:false}));return S.sets[e.id]}
 const nameOf=e=>S.swap[e.id]?S.swap[e.id].name:e.name;
@@ -56,15 +57,13 @@ function exHtml(e){const open=S.open===e.id,sets=setsOf(e),all=sets.every(s=>s.d
    sets.forEach((s,i)=>{const pb=isPb(e,s);h+=`<div class="set ${s.done?'fill':''} ${pb?'pb':''}" id="set-${e.id}-${i}"><span class="n">${i+1}</span><span class="goal"><b>${parseReps(e.reps,i)}${pb?' '+I.trophy:''}</b><span>${e.prev&&e.prev.sets[i]?'было '+String(e.prev.sets[i].kg).replace('.',',')+' кг × '+e.prev.sets[i].reps+' повт':e.prev?'было: подхода не было':'первый раз'}</span></span><input inputmode="decimal" placeholder="кг" value="${s.kg}" data-kg="${e.id}:${i}" ${RO?'readonly':''}><input inputmode="numeric" placeholder="повт" value="${s.reps}" data-reps="${e.id}:${i}" ${RO?'readonly':''}><button class="ok" data-ok="${e.id}:${i}" aria-label="Подход">${I.check}</button></div>`});
    const vol=sets.reduce((a,s)=>a+(+s.kg||0)*(+s.reps||0),0);
    h+=`</div><div class="vol"><span>Объём <b style="color:#fff" id="vol-${e.id}">${vol.toLocaleString('ru')} кг</b></span><span>${e.prev?'прошлый раз '+e.prev.vol.toLocaleString('ru')+' кг':''}</span></div>`;
-   if(!RO&&!D.C.vip)h+=`<div class="vid" style="color:var(--muted)">${I.video} Видео подходов тренеру: на тарифе VIP</div>`;
-   if(!RO&&D.C.vip)h+=`<label class="vid ${S.video[e.id]?'ok':''}">${S.video[e.id]?I.check+' Видео последнего подхода записано':I.video+' Снять видео последнего рабочего подхода'}<input type="file" accept="video/*" capture="environment" hidden data-vfile="${e.id}"></label>`;
-   else h+=`<div class="vid ok">${I.check} Видео последнего подхода отправлено тренеру</div>`}
+   }
   return h+'</div>'}
 function render(){const r=document.getElementById('root');let list='';let i=0;
   while(i<EX.length){const e=EX[i];if(e.sup){const pair=EX.filter(x=>x.sup===e.sup);list+=`<div class="ex super"><div class="sup">Суперсет ${pair.map(p=>p.id).join(' + ')} <span>· отдых ${pair[0].rest[0]} с после первого, ${pair[1].rest[0]} с после второго</span></div>${pair.map((p,k)=>exHtml(p)+(k<pair.length-1?`<div class="link"><i></i> отдых ${p.rest[0]} с, потом ${pair[k+1].id}</div>`:'')).join('')}</div>`;i+=pair.length}else{list+=exHtml(e);i++}}
   const banner=MODE==='view'?`<div class="banner">${I.check} Выполнена ${D.fmtDD(W.date)} · ${W.mins} мин · ${W.ton.toLocaleString('ru')} кг · оценка ${W.rating}/10</div>`:MODE==='plan'?`<div class="banner plan">${I.cal} Запланирована на ${D.fmtDD(W.date)}. Можно посмотреть и заполнить заранее</div>`:'';
   const fin=D.store.get('done:'+W.date,null);
-  r.innerHTML=`<div class="hdr"><a href="tren.html">${I.back}</a><div class="timer">${MODE==='live'?I.pause:''} <span id="clock">${MODE==='view'?fmt(W.mins*60):'00:00'}</span></div>${RO?'<span style="width:30px"></span>':`<button id="menuBtn" aria-label="Меню">${I.dots}</button>`}</div>
+  r.innerHTML=`<div class="hdr"><a href="tren.html">${I.back}</a><div class="timer">${MODE==='live'?I.pause:''} <span id="clock">${MODE==='view'?fmt(W.mins*60):fmt(elapsed())}</span></div>${RO?'<span style="width:30px"></span>':`<button id="menuBtn" aria-label="Меню">${I.dots}</button>`}</div>
   <div class="dayt">Фаза ${W.phase} · ${W.phaseName.split(' (')[0]} · неделя ${W.week} из 4</div><div class="dayh">${W.title}</div>
   ${banner}${RO?'':`<div class="hint">${I.swap} Впиши кг и повторы, галочка загорится зелёным. «Замена» подберёт похожее</div>`}
   <div id="list">${list}</div>
@@ -87,17 +86,17 @@ root.addEventListener('click',ev=>{const t=ev.target.closest('[data-open],[data-
     markDone(e,+i,kg,reps);return}
   if(t.dataset.rest){const [id,rr]=t.dataset.rest.split(':');S.restSel[id]=+rr;S.rest={ex:id,end:Date.now()+rr*1000,total:+rr};save();render();return}
   if(t.hasAttribute('data-skiprest')){S.rest=null;save();render()}});
-function markDone(e,i,kg,reps){const s=setsOf(e)[i];s.kg=kg.replace(',','.');s.reps=reps;s.done=true;save();
+function markDone(e,i,kg,reps){const s=setsOf(e)[i];s.kg=kg.replace(',','.');s.reps=reps;s.done=true;tick();save();
   const pair=e.sup?EX.filter(x=>x.sup===e.sup):null;
   if(pair&&pair[pair.length-1].id!==e.id){startRest(e);U.toast('Короткий отдых '+e.rest[0]+' с, потом '+pair[pair.indexOf(e)+1].id);return}
   if(i===e.sets-1){const nx=EX[EX.indexOf(e)+1];if(nx)S.open=nx.id}
   const nowBest=isPb(e,s);startRest(e);if(nowBest)U.toast('Рекорд в '+e.id+' на '+D.pl(+s.reps,'повторение','повторения','повторений')+'!')}
 root.addEventListener('input',ev=>{const t=ev.target;const k=t.dataset.kg||t.dataset.reps;if(!k||RO)return;const [id,i]=k.split(':');const e=EX.find(x=>x.id===id);const s=setsOf(e)[+i];if(t.dataset.kg)s.kg=t.value;else s.reps=t.value;
   const el=document.getElementById(`set-${id}-${i}`);const full=s.kg.trim()&&s.reps.trim();
-  if(full&&!s.done){s.done=true;el.classList.add('fill')}else if(!full&&s.done){s.done=false;el.classList.remove('fill')}
+  if(full&&!s.done){s.done=true;tick();el.classList.add('fill')}else if(!full&&s.done){s.done=false;el.classList.remove('fill')}
   const pbNow=isPb(e,s);el.classList.toggle('pb',pbNow);const gb=el.querySelector('.goal b');const has=gb.querySelector('svg');if(pbNow&&!has)gb.insertAdjacentHTML('beforeend',' '+I.trophy);if(!pbNow&&has)has.remove();
   save();volUpdate(e)});
-root.addEventListener('change',ev=>{const t=ev.target;if(t.dataset.vfile){S.video[t.dataset.vfile]=true;save();render();U.toast('Видео сохранено, тренер увидит его в отчёте');return}
+root.addEventListener('change',ev=>{const t=ev.target;
   const k=t.dataset.kg||t.dataset.reps;if(!k||RO)return;const [id,i]=k.split(':');const e=EX.find(x=>x.id===id);const s=setsOf(e)[+i];
   if(s.done&&!s.rested){s.rested=true;save();const pair=e.sup?EX.filter(x=>x.sup===e.sup):null;if(pair&&pair[pair.length-1].id!==e.id){startRest(e);U.toast('Короткий отдых '+e.rest[0]+' с, потом '+pair[pair.indexOf(e)+1].id);return}if(+i===e.sets-1){const nx=EX[EX.indexOf(e)+1];if(nx)S.open=nx.id}const nowBest=isPb(e,s);startRest(e);if(nowBest)U.toast('Рекорд в '+e.id+' на '+D.pl(+s.reps,'повторение','повторения','повторений')+'!')}});
 function sheetSwap(e){let sel=null,scope='today';const alts=D.ALTS[e.muscle]||D.ALTS['Другое'];
@@ -116,11 +115,11 @@ function menu(){const s=U.openSheet(`<h3>Тренировка</h3><p>Если с
   s.querySelector('#mReset').onclick=()=>{D.store.del(KEY);D.store.del('done:'+W.date);location.reload()}}
 function finish(){const all=EX.flatMap(e=>setsOf(e).map(s=>({e,s})));const done=all.filter(x=>x.s.done);const ton=Math.round(done.reduce((a,x)=>a+(+x.s.kg||0)*(+x.s.reps||0),0));
   const pbs=EX.filter(e=>setsOf(e).some(s=>isPb(e,s)));let rating=S.rating||null;
-  const draw=()=>{const s=U.openSheet(`<h3>Тренировка завершена</h3><p>${W.title}</p><div class="stats"><div class="stat"><b>${fmt((Date.now()-S.start)/1000)}</b><span>время</span></div><div class="stat"><b>${ton.toLocaleString('ru')}</b><span>кг тоннаж</span></div><div class="stat"><b>${done.length}/${all.length}</b><span>подходов</span></div></div>
+  const draw=()=>{const s=U.openSheet(`<h3>Тренировка завершена</h3><p>${W.title}</p><div class="stats"><div class="stat"><b>${fmt(elapsed())}</b><span>время</span></div><div class="stat"><b>${ton.toLocaleString('ru')}</b><span>кг тоннаж</span></div><div class="stat"><b>${done.length}/${all.length}</b><span>подходов</span></div></div>
    ${pbs.map(e=>{const s=setsOf(e).filter(x=>isPb(e,x)).sort((a,b)=>+b.kg-+a.kg)[0];return `<div class="pb">${I.trophy} Рекорд: ${e.id} · ${nameOf(e)} · ${s.kg} кг × ${s.reps}</div>`}).join('')}<h4>Как прошла тренировка?</h4><p>из 10, это пойдёт в недельный отчёт само</p><div class="rate">${Array.from({length:10},(_,i)=>`<button class="${rating===i+1?'on':''}" data-r="${i+1}">${i+1}</button>`).join('')}</div><div class="row2"><button class="ghost" data-close>Назад</button><button class="btn" id="fin">Сохранить</button></div>`);
-   s.querySelector('#fin').onclick=()=>{if(!rating){U.toast('Поставь оценку из 10');return}S.rating=rating;save();D.store.set('done:'+W.date,{rating,ton,mins:Math.max(1,Math.round((Date.now()-S.start)/60000)),pbs:pbs.length});U.closeSheet();U.toast('Сохранено. Тренер получит тренировку в сводке');setTimeout(()=>location.href='tren.html',900)};
+   s.querySelector('#fin').onclick=()=>{if(!rating){U.toast('Поставь оценку из 10');return}S.rating=rating;save();D.store.set('done:'+W.date,{rating,ton,mins:Math.max(1,Math.round(elapsed()/60)),pbs:pbs.length});U.closeSheet();U.toast('Сохранено. Тренер получит тренировку в сводке');setTimeout(()=>location.href='tren.html',900)};
    s.onclick=ev=>{const r=ev.target.closest('[data-r]');if(r){rating=+r.dataset.r;draw()}if(ev.target.closest('[data-close]'))s.onclick=null}};draw()}
-if(MODE!=='view')setInterval(()=>{const c=document.getElementById('clock');if(c)c.textContent=fmt((Date.now()-S.start)/1000);
+if(MODE!=='view')setInterval(()=>{const c=document.getElementById('clock');if(c)c.textContent=fmt(elapsed());
   if(S.rest){const left=(S.rest.end-Date.now())/1000;const cc=document.getElementById('restCnt'),b=document.getElementById('restBar');if(left<=0){S.rest=null;save();render();U.toast('Отдых закончился, следующий подход')}else{if(cc)cc.textContent=fmt(left);if(b)b.style.width=(100*left/S.rest.total)+'%'}}},1000);
 render();
 </script>
