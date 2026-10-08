@@ -14,6 +14,8 @@
 <div class="phone"><div class="scroll" id="root">
 <div class="hdr"><a href="index.html">{{arrow-left}}</a><b style="font-size:17px">Панель тренера</b><span style="width:30px"></span></div>
 <div class="card hero"><div class="eyebrow">Импорт программы</div><b style="font-size:17px">Таблица → приложение</b><p class="muted" style="font-size:13px;margin:6px 0 0">Ты ведёшь программу в Google Таблице как сейчас. Приложение читает вкладку по ссылке и раскладывает по фазе, дням, упражнениям и неделям</p></div>
+<h2>Распознавание еды</h2>
+<div class="card" id="foodai"><div class="row"><b>Баланс посредника</b><span class="muted" id="fb">нажми «Проверить»</span></div><div class="row" style="margin-top:8px"><input class="in" id="fc" placeholder="кодовое слово" autocapitalize="off" style="flex:1;padding:10px;font-size:15px"><button class="chip" id="fgo" style="padding:8px 12px">Проверить</button></div><div class="note" style="text-align:left;margin-top:8px">Баланс на aitunnel.ru, списывается за каждое фото. Ниже 100 ₽ пополни картой</div></div>
 <h2>Ссылка на вкладку</h2>
 <input class="in2" id="link" value="https://docs.google.com/spreadsheets/d/1X-Zx8CbHBg7rYDRUYshswRDSYCHEqPVuXNU1hyMVuT8/edit?gid=1837771494#gid=1837771494">
 <div class="row2"><button class="btn" id="go">{{download}} Прочитать таблицу</button></div>
@@ -42,4 +44,10 @@ function show(ph){const n=ph.days.reduce((a,d)=>a+d.ex.length,0);const out=docum
 document.getElementById('go').onclick=async()=>{const link=document.getElementById('link').value.trim();const id=(link.match(/\/d\/([a-zA-Z0-9_-]+)/)||[])[1];const gid=(link.match(/gid=(\d+)/)||[])[1]||'0';if(!id){U.toast('Не вижу ссылку на таблицу');return}
   U.toast('Читаю таблицу…');try{const r=await fetch(`https://docs.google.com/spreadsheets/d/${id}/export?format=csv&gid=${gid}`);if(!r.ok)throw new Error(r.status);const text=await r.text();show(parse(parseCSV(text)))}catch(e){U.toast('Таблица не открылась: проверь доступ «по ссылке»');}};
 document.getElementById('paste').oninput=e=>{const t=e.target.value;if(t.length>50)show(parse(parseCSV(t)))};
+
+(function(){const FOOD_AI_URL='https://food-ai.veinberg-app.workers.dev';const D=window.DATA;const fc=document.getElementById('fc'),fb=document.getElementById('fb');fc.value=D.store.get('access:code','');
+document.getElementById('fgo').onclick=async()=>{const code=fc.value.trim();if(!code)return;D.store.set('access:code',code);fb.textContent='…';
+ try{const r=await fetch(FOOD_AI_URL+'/balance?code='+encodeURIComponent(code));const j=await r.json();if(!r.ok){fb.textContent=j.error==='forbidden'?'слово не подошло':'сервер недоступен';return}
+  const b=j.balance==null?'?':Math.round(j.balance)+' ₽';fb.innerHTML=(j.balance!=null&&j.balance<100?'<span style="color:var(--acc2)">'+b+' · пополни</span>':b)+' · сегодня фото: '+j.today}
+ catch(e){fb.textContent='нет связи'}}})();
 </script>
