@@ -38,7 +38,7 @@ const MISS=!doneToday&&(DEMO_MISS||(D.d(D.TODAY)-D.d(wkStart))/864e5>=7);
 I.alert=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M12 8v4" /><path d="M12 16h.01" /></svg>`;
 const lessonsN=D.LESSONS.reduce((a,c)=>a+c.items.length,0),seen=D.store.get('lessons',[]);const newest=D.LESSONS.flatMap(c=>c.items).find(l=>l.new);
 function weekStrip(){const mon=D.d(D.weekOf(D.TODAY));let h='<div class="week">';for(let i=0;i<7;i++){const dt=D.iso(D.addDays(mon,i));const w=D.WORKOUTS.find(x=>x.date===dt);let cls='',ic='';
-  if(dt===D.TODAY){cls='now';ic=doneToday?I.check:''}else if(dt<D.TODAY){cls='';ic=''}else{cls='miss'}
+  if(dt===D.TODAY){cls='now';ic=doneToday?I.check:''}else if(dt<D.TODAY){cls='ok';ic=I.check}else{cls='miss'}
   if(w&&w.done){cls='ok';ic=I.play}
   h+=`<div data-day="${dt}" style="cursor:pointer">${D.RU_D[(i+1)%7]}<i class="${cls}">${ic}</i></div>`}return h+'</div>'}
 function daySheet(dt){const day=D.DAYS.find(x=>x.date===dt);const w=D.WORKOUTS.find(x=>x.date===dt);const n=D.normAt(dt);

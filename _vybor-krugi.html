@@ -1,0 +1,33 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0E0F1A"><title>Выбор: дни тренировок</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="app.css?v=1792076679">
+<style>
+.v{background:var(--card);border-radius:20px;padding:14px 14px 12px;margin-bottom:14px}
+.v h3{margin:0 0 4px;font-size:16px;font-weight:800;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.v h3 .n{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--chip2);font-size:14px}
+.v p{margin:0 0 12px;font-size:12px;color:var(--muted);line-height:1.4}
+.v .week{margin:0}
+.week i.tr1{background:#2FBF71;color:#06120B}
+.week i.tr2{background:#FFFFFF;color:#14110E}
+.week i.tr3{background:var(--grad);color:#14110E;box-shadow:0 0 0 2px var(--card),0 0 0 4px #FFFFFF}
+.week i.past4{background:var(--chip2);color:#C9CAD1}
+.week i.tr4{background:var(--grad);color:#14110E}
+.rec{font-size:11px;font-weight:700;color:#5BE49B;background:rgba(47,191,113,.15);border:1px solid rgba(47,191,113,.5);border-radius:999px;padding:2px 8px}
+.lead{color:var(--muted);font-size:13px;line-height:1.45;margin:0 0 16px}
+</style></head><body>
+<div class="phone"><div class="scroll" id="root">
+<h1>Цвет дня с тренировкой</h1>
+<p class="lead">Неделя как у демо-клиента: тренировка в четверг, сегодня суббота. Прошедшие дни с галочкой, как было. У дня с тренировкой значок гантели, как во вкладке «Тренировки». Ответь номером</p>
+</div></div>
+<script>
+const CHK="<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path stroke=\"none\" d=\"M0 0h24v24H0z\" fill=\"none\"/><path d=\"M5 12l5 5l10 -10\" /></svg>", BAR="<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path stroke=\"none\" d=\"M0 0h24v24H0z\" fill=\"none\"/><path d=\"M2 12h1\" /><path d=\"M6 8h-2a1 1 0 0 0 -1 1v6a1 1 0 0 0 1 1h2\" /><path d=\"M6 7v10a1 1 0 0 0 1 1h1a1 1 0 0 0 1 -1v-10a1 1 0 0 0 -1 -1h-1a1 1 0 0 0 -1 1z\" /><path d=\"M9 12h6\" /><path d=\"M15 7v10a1 1 0 0 0 1 1h1a1 1 0 0 0 1 -1v-10a1 1 0 0 0 -1 -1h-1a1 1 0 0 0 -1 1z\" /><path d=\"M18 8h2a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-2\" /><path d=\"M22 12h-1\" /></svg>";
+const V=[
+ [1,'Зелёный','Прошедшие дни оранжевые с галочкой, как было. Тренировка зелёная: зелёный в приложении уже значит «сделано»',true],
+ [2,'Белый','Прошедшие дни оранжевые с галочкой, как было. Тренировка белая, самая светлая точка недели',false],
+ [3,'Оранжевый с кольцом','Тренировка того же цвета, что прошедшие дни, но с белым кольцом вокруг',false],
+ [4,'Прошедшие серые','Прошедшие дни серые с галочкой, тренировка оранжевая. Цвет прошедших дней меняется, галочки остаются',false]];
+const days=['пн','вт','ср','чт','пт','сб','вс'],st=['p','p','p','t','p','now','f'];
+const root=document.getElementById('root');
+V.forEach(([n,t,d,rec])=>{let h='<div class="week">';days.forEach((dn,i)=>{const s=st[i];let cls='',ic='';
+ if(s==='p'){cls=n===4?'past4':'ok';ic=CHK}else if(s==='t'){cls='tr'+n;ic=BAR}else if(s==='now'){cls='now'}else{cls='miss'}
+ h+=`<div>${dn}<i class="${cls}">${ic}</i></div>`});h+='</div>';
+ root.insertAdjacentHTML('beforeend',`<div class="v"><h3><span class="n">${n}</span>${t}${rec?'<span class="rec">советую</span>':''}</h3><p>${d}</p>${h}</div>`)});
+</script></body></html>
