@@ -117,7 +117,6 @@ textarea.fx:focus{outline:none;border-color:var(--acc)}
 <script>
 const D=window.DATA,U=window.UI;const I={plus:`{{plus}}`,cam:`{{camera-plus}}`,search:`{{search}}`,help:`{{help}}`,check:`{{check}}`,x:`{{x}}`,play:`{{player-play-filled}}`,chev:`{{chevron-right}}`,camera:`{{camera}}`,dish:`{{tools-kitchen-2}}`,barcode:`{{barcode}}`,label:`{{file-text}}`,photo:`{{photo}}`,q:`{{question-mark}}`,back:`{{arrow-left}}`,clock:`{{clock}}`,down:`{{chevron-down}}`,minus:`{{minus}}`,flame:`{{flame-filled}}`,meat:`{{meat}}`,drop:`{{droplet}}`,wheat:`{{wheat}}`,spark:`{{sparkles}}`};
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const PRODUCTS=[['Куриная грудка',165,31,3.6,0],['Гречка варёная',110,4,1,21],['Рис варёный',130,2.7,0.3,28],['Творог 5%',121,17,5,3],['Яйцо куриное',157,13,11,1],['Овсянка сухая',370,13,7,62],['Банан',89,1.1,0.3,23],['Говядина тушёная',250,26,15,0],['Лосось',208,20,13,0],['Картофель варёный',77,2,0.1,17],['Хлеб цельнозерновой',250,9,3,45],['Масло оливковое',884,0,100,0],['Протеин сывороточный',400,80,5,10],['Йогурт греческий 2%',73,10,2,4],['Яблоко',52,0.3,0.2,14],['Орехи грецкие',654,15,65,14]].map(p=>({n:p[0],kcal:p[1],p:p[2],f:p[3],c:p[4]}));
 const today=D.DAYS[D.DAYS.length-1],norm=D.normAt(D.TODAY);let added=D.store.get('food:'+D.TODAY,[]);
 let tab=D.store.get('pit:tab','dnevnik');
 const MENU=[['Завтрак',[['Овсянка на воде с ягодами и яйцом',420,22,12,55,'Овсянка 70 г, яйцо, ягоды 100 г'],['Омлет из трёх яиц с овощами',380,26,26,8,'3 яйца, помидор, шпинат, 5 г масла'],['Творог 5 % с бананом',350,30,9,35,'Творог 200 г, банан']]],['Обед',[['Гречка с куриной грудкой и овощами',560,48,10,62,'Гречка 100 г сухой, грудка 180 г, овощи 150 г'],['Рис с индейкой и салатом',580,45,12,70,'Рис 90 г сухой, индейка 180 г, салат с маслом 5 г'],['Картофель с говядиной',620,42,20,65,'Картофель 300 г, говядина 150 г, огурец']]],['Ужин',[['Лосось с брокколи',520,38,30,15,'Лосось 180 г, брокколи 250 г'],['Куриные бёдра без кожи с овощами',480,40,22,20,'Бёдра 200 г, овощи гриль 250 г'],['Творожная запеканка',400,35,10,30,'Творог 250 г, яйцо, рисовая мука 30 г']]],['Перекус',[['Греческий йогурт с орехами',260,16,14,15,'Йогурт 2 % 200 г, грецкие 15 г'],['Протеиновый коктейль',150,26,2,5,'Протеин 30 г, вода'],['Яблоко и миндаль',230,7,15,20,'Яблоко, миндаль 30 г']]]];
@@ -152,17 +151,49 @@ ${MENU.map(([cat,items])=>`<h2>${cat}</h2>${items.map((m,i)=>`<div class="meal" 
 <div class="note">Демо-меню из 12 блюд. Фото блюда и рецепт откроются по нажатию на карточку, когда тренер их загрузит</div>`;
 r.querySelectorAll('[data-ptab]').forEach(b=>b.onclick=()=>{tab=b.dataset.ptab;D.store.set('pit:tab',tab);render();window.scrollTo(0,0)});
 r.querySelectorAll('[data-menu]').forEach(b=>b.onclick=()=>{const [cat,i]=b.dataset.menu.split(':');const m=MENU.find(x=>x[0]===cat)[1][+i];added.push({n:m[0],g:0,kcal:m[1],p:m[2],f:m[3],c:m[4],menu:true});D.store.set('food:'+D.TODAY,added);U.toast(m[0]+': в дневнике')})}
-function sheetAdd(onPick){onPick=onPick||portion;let q='',remote=[],loading=false,timer=null,offErr=false;
-  const draw=()=>{const local=PRODUCTS.filter(p=>!q||p.n.toLowerCase().includes(q.toLowerCase()));const list=q.length>=3?remote:[];
-   const s=U.openSheet(`<h3>Добавить еду</h3><div class="search">${I.search}<input id="pq" placeholder="Продукт, например гречка" value="${q}"></div>
-   ${local.length?`<div class="muted" style="font-size:11px;margin:4px 0">Частые продукты</div>${local.slice(0,q?6:16).map(p=>`<div class="prod" data-p="${PRODUCTS.indexOf(p)}"><div class="t"><b>${p.n}</b><span>на 100 г · Б ${p.p} Ж ${p.f} У ${p.c}</span></div><div class="v">${p.kcal} ккал</div></div>`).join('')}`:''}
-   ${q.length>=3?`<div class="muted" style="font-size:11px;margin:10px 0 4px">Открытая база продуктов${loading?' · ищу…':offErr?' · не ответила, попробуй через минуту':list.length?' · '+list.length+' найдено':' · ничего не нашёл'}</div>${list.map((p,i)=>`<div class="prod" data-r="${i}"><div class="t"><b>${p.n}</b><span>${p.brand?p.brand+' · ':''}на 100 г · Б ${p.p} Ж ${p.f} У ${p.c}</span></div><div class="v">${p.kcal} ккал</div></div>`).join('')}`:`<div class="note" style="margin-top:8px">Набери от трёх букв, подтянется открытая база Open Food Facts со штрихкодами. База FatSecret подключится так же, после регистрации у них</div>`}
-   <div class="row2"><button class="ghost" data-close>Закрыть</button></div>`);
-   const inp=s.querySelector('#pq');inp.oninput=e=>{q=e.target.value;clearTimeout(timer);if(q.length>=3){loading=true;timer=setTimeout(async()=>{try{remote=await offSearch(q);offErr=false}catch(err){remote=[];offErr=true}loading=false;draw();const x=document.getElementById('pq');if(x){x.focus();x.setSelectionRange(q.length,q.length)}},800)}draw();const x=document.getElementById('pq');x.focus();x.setSelectionRange(q.length,q.length)};
-   s.querySelectorAll('[data-p]').forEach(el=>el.onclick=()=>onPick(PRODUCTS[+el.dataset.p]));s.querySelectorAll('[data-r]').forEach(el=>el.onclick=()=>onPick(remote[+el.dataset.r]))};draw()}
-function portion(p){let g=150;const draw=()=>{const k=g/100;const s=U.openSheet(`<h3>${p.n}</h3><p>Сколько грамм?</p><div class="port">${[50,100,150,200,300].map(x=>`<button class="chip ${x===g?'on':''}" data-g="${x}">${x} г</button>`).join('')}</div><input class="in" id="gIn" inputmode="numeric" value="${g}"><div class="res"><b>${Math.round(p.kcal*k)} ккал</b><span>Б ${Math.round(p.p*k)} · Ж ${Math.round(p.f*k)} · У ${Math.round(p.c*k)}</span></div><div class="row2"><button class="ghost" data-close>Отмена</button><button class="btn" id="addGo">Добавить</button></div>`);
+/* база продуктов в телефоне: ядро (таблицы USDA с русскими названиями и российские продукты по середине брендов) и товары из магазинов (российская часть Open Food Facts, лицензия ODbL). Поиск идёт по файлу, без запроса на каждую букву */
+const FDB={core:null,off:null,byCode:null,loading:null};
+const normS=s=>String(s||'').toLowerCase().replace(/ё/g,'е').replace(/,/g,'.').replace(/[^a-zа-я0-9%.]+/g,' ').replace(/(\d)\s+%/g,'$1%').replace(/\s+/g,' ').trim();
+const LAT="qwertyuiop[]asdfghjkl;'zxcvbnm,.`",CYR='йцукенгшщзхъфывапролджэячсмитьбюё';
+const fromLat=s=>s.replace(/[a-z\[\];',.`]/g,ch=>{const i=LAT.indexOf(ch);return i<0?ch:CYR[i]});
+const fmt1=x=>String(x).replace('.',',');
+function fdbLoad(){if(FDB.loading)return FDB.loading;FDB.loading=Promise.all([fetch('data/food-core.json').then(r=>r.json()),fetch('data/food-off-ru.json').then(r=>r.json())]).then(([core,off])=>{
+  FDB.core=core.map(x=>({n:x.n,al:x.al||[],kcal:x.kcal,p:x.p,f:x.f,c:x.c,src:x.s,k:normS(x.n+' '+(x.al||[]).join(' '))}));
+  FDB.off=off.map(x=>({n:x.n,br:x.br||'',b:x.b,q:x.q,kcal:x.kcal,p:x.p,f:x.f,c:x.c,src:'off',k:normS(x.n+' '+(x.br||''))}));
+  FDB.byCode=new Map(FDB.off.map(x=>[x.b,x]));return FDB}).catch(e=>{FDB.loading=null;throw e});return FDB.loading}
+/* каждое слово запроса должно быть началом какого-то слова в названии; выше: ядро, точное слово, совпадение с началом названия, короткое название */
+function fdbSearch(q,lim){const q0=normS(q),qs=[q0];if(/[a-z]/.test(q0)&&!/[а-я]/.test(q0))qs.push(normS(fromLat(q0)));
+  const run=(list,bonus)=>{const res=[];for(const it of list){let best=-1;const w=' '+it.k+' ';for(const qq of qs){const toks=qq.split(' ').filter(Boolean);if(!toks.length)continue;let sc=bonus,ok=true;for(const t of toks){const i=w.indexOf(' '+t);if(i<0){ok=false;break}sc+=w.startsWith(' '+t+' ',i)?12:6}if(!ok)continue;if(it.k.startsWith(toks[0]))sc+=25;sc-=it.k.length/12;for(const [re,pen,qre] of RARE)if(re.test(it.k)&&!qre.test(qq))sc-=pen;if(sc>best)best=sc}if(best>-1)res.push([best,it])}const seen=new Set();return res.sort((a,b)=>b[0]-a[0]).map(x=>x[1]).filter(it=>{const key=it.k+'|'+it.kcal+'|'+it.p;if(seen.has(key))return false;seen.add(key);return true}).slice(0,lim)};
+  return {core:run(FDB.core,100),off:run(FDB.off,0)}}
+/* редкие варианты ниже, пока человек сам их не написал: утиное яйцо, зелёный томат, грудка с кожей */
+const RARE=[[/утин|гусин|перепел|страус|индюш(ье|ьи) яй/,6,/утин|гусин|перепел|страус|индюш/],[/зелен|желт/,5,/зелен|желт/],[/с кожей/,4,/кож/],[/(^| )дик/,4,/дик/],[/нарезк|в кляре|панир|копчен|вялен|консерв|в сиропе|сублимир/,4,/нарезк|кляр|панир|копч|вял|консерв|сироп|сублим/]];
+const POPULAR=['гречка вар','куриная грудка без кожи вар','творог 5','яйцо кур вар','рис бел вар','овсян хлоп сух','банан','яблоко','кефир 1','хлеб бородин','картофель вар','огурец'];
+const recentGet=()=>D.store.get('food:recent',[]);
+function recentPush(p){const r=recentGet().filter(x=>!(x.n===p.n&&(x.b||'')===(p.b||'')));r.unshift({n:p.n,br:p.br||'',b:p.b||'',q:p.q||0,kcal:p.kcal,p:p.p,f:p.f,c:p.c,src:p.src||''});D.store.set('food:recent',r.slice(0,8))}
+function sheetAdd(onPick){onPick=onPick||portion;let q='',shown=[],world=null,worldLoading=false;
+  const s=U.openSheet(`<h3>Добавить еду</h3><div class="search">${I.search}<input id="pq" placeholder="Продукт или бренд, например творог 5" autocomplete="off" autocapitalize="off"></div><div id="pqRes"></div><div class="row2"><button class="ghost" data-close>Закрыть</button></div>`);
+  const box=s.querySelector('#pqRes'),inp=s.querySelector('#pq');
+  const row=p=>{const i=shown.push(p)-1;return `<div class="prod" data-i="${i}"><div class="t"><b>${esc(p.n)}</b><span>${p.br?esc(p.br)+' · ':''}на 100 г · Б ${fmt1(p.p)} Ж ${fmt1(p.f)} У ${fmt1(p.c)}</span></div><div class="v">${p.kcal} ккал</div></div>`};
+  const cap=t=>`<div class="muted" style="font-size:11px;margin:10px 0 2px">${t}</div>`;
+  const draw=()=>{shown=[];if(!FDB.core){box.innerHTML='<div class="note">Загружаю базу продуктов…</div>';return}
+   const qq=q.trim();let h='';
+   if(normS(qq).length<2){const rec=recentGet();if(rec.length)h+=cap('Недавние')+rec.map(row).join('');
+     const pop=POPULAR.map(t=>fdbSearch(t,1).core[0]).filter(Boolean).filter(p=>!rec.some(r=>r.n===p.n));h+=cap('Частые продукты')+pop.map(row).join('');
+     h+=`<div class="note" style="margin-top:8px">В базе ${FDB.core.length.toLocaleString('ru')} продуктов и блюд и ${FDB.off.length.toLocaleString('ru')} товаров из магазинов со штрих-кодом. Набери название или бренд</div>`}
+   else{const r=fdbSearch(qq,25);if(r.core.length)h+=cap('Продукты')+r.core.slice(0,15).map(row).join('');if(r.off.length)h+=cap('Товары из магазинов')+r.off.map(row).join('');
+     if(world&&world.q===qq&&world.list.length)h+=cap('Мировая база Open Food Facts')+world.list.map(row).join('');
+     if(!r.core.length&&!r.off.length&&!(world&&world.q===qq&&world.list.length))h+=`<div class="note" style="margin:10px 0 6px">Ничего не нашёл. Проверь написание или найди по-другому</div>`;
+     if(r.core.length+r.off.length<5)h+=`<div class="row2" style="margin-top:6px"><button class="ghost" id="pqWorld">${worldLoading?'Ищу…':world&&world.q===qq&&!world.list.length?'В мировой базе тоже нет':'Искать в мировой базе'}</button><button class="ghost" id="pqLab">${I.label} Снять этикетку</button></div>`;
+     if(r.off.length||(world&&world.list.length))h+='<div class="note">Товары из магазинов: база Open Food Facts, лицензия ODbL</div>'}
+   box.innerHTML=h;
+   box.querySelectorAll('[data-i]').forEach(el=>el.onclick=()=>onPick(shown[+el.dataset.i]));
+   const bw=box.querySelector('#pqWorld');if(bw)bw.onclick=async()=>{if(worldLoading)return;worldLoading=true;draw();const qx=qq;let list=[];try{list=(await offSearch(qx)).map(x=>Object.assign(x,{br:x.brand,src:'off'}))}catch(e){U.toast('Мировая база не ответила, попробуй через минуту')}worldLoading=false;world={q:qx,list};draw()};
+   const bl=box.querySelector('#pqLab');if(bl)bl.onclick=()=>{U.closeSheet();FS.mode='lab';openScanner()}};
+  let t=null;inp.oninput=e=>{q=e.target.value;clearTimeout(t);t=setTimeout(draw,90)};
+  draw();fdbLoad().then(draw).catch(()=>{box.innerHTML='<div class="note">База продуктов не загрузилась, проверь интернет и открой ещё раз</div>'});setTimeout(()=>inp.focus(),250)}
+function portion(p){let g=p.q&&p.q<=400?p.q:100;const draw=()=>{const k=g/100;const s=U.openSheet(`<h3>${esc(p.n)}</h3><p>${p.br?esc(p.br)+' · ':''}Сколько грамм?${p.q?' Упаковка '+p.q+' г':''}</p><div class="port">${[...new Set([50,100,150,200,300].concat(p.q&&p.q<=1000?[p.q]:[]))].sort((a,b)=>a-b).slice(0,6).map(x=>`<button class="chip ${x===g?'on':''}" data-g="${x}">${x} г</button>`).join('')}</div><input class="in" id="gIn" inputmode="numeric" value="${g}"><div class="res"><b>${Math.round(p.kcal*k)} ккал</b><span>Б ${Math.round(p.p*k)} · Ж ${Math.round(p.f*k)} · У ${Math.round(p.c*k)}</span></div><div class="row2"><button class="ghost" data-close>Отмена</button><button class="btn" id="addGo">Добавить</button></div>`);
   s.querySelectorAll('[data-g]').forEach(b=>b.onclick=()=>{g=+b.dataset.g;draw()});s.querySelector('#gIn').onchange=e=>{g=+e.target.value||g;draw()};
-  s.querySelector('#addGo').onclick=()=>{added.push({n:p.n,g,kcal:Math.round(p.kcal*k),p:Math.round(p.p*k),f:Math.round(p.f*k),c:Math.round(p.c*k)});D.store.set('food:'+D.TODAY,added);U.closeSheet();render();U.toast('Добавлено')}};draw()}
+  s.querySelector('#addGo').onclick=()=>{recentPush(p);added.push({n:p.n,g,kcal:Math.round(p.kcal*k),p:Math.round(p.p*k),f:Math.round(p.f*k),c:Math.round(p.c*k)});D.store.set('food:'+D.TODAY,added);U.closeSheet();render();U.toast('Добавлено')}};draw()}
 const FOOD_AI_URL='https://food-ai.veinberg-app.workers.dev';
 function foodCode(){return D.store.get('access:code','')}
 function askCode(next){const s=U.openSheet(`<h3>Кодовое слово</h3><p>Его даёт тренер. Ввести один раз, телефон запомнит</p><input class="in" id="ac" placeholder="кодовое слово" autocapitalize="off" style="width:100%;padding:12px;font-size:16px;box-sizing:border-box"><div class="row2"><button class="ghost" data-close>Отмена</button><button class="btn" id="acGo">Сохранить</button></div>`);
@@ -230,7 +261,8 @@ function fsFail(msg,lab){FS.busy=false;$('fsRes').classList.remove('busy');$('fr
  $('fbA').onclick=()=>{if(lab)FS.mode='lab';fsRetake()};$('fbB').onclick=()=>{fsClose();sheetAdd()}}
 function fsRetake(){FS.tok++;FS.busy=false;FS.lastAt=Date.now();R=null;U.closeSheet();$('fsRes').classList.remove('show','busy');$('fsCam').classList.add('show');fsMode(FS.mode);fsStart()}
 async function onCode(code,frame){if(FS.busy)return;FS.busy=true;FS.lastCode=code;FS.lastAt=Date.now();fsStop();const tok=fsResult({kind:'bar',img:frame,code});fsBusy('Ищу продукт по штрих-коду','код '+code);
- let p=null,err=false;try{p=await offByCode(code)}catch(e){err=true}if(tok!==FS.tok)return;FS.busy=false;
+ let p=null,err=false;const loc=await fdbLoad().then(()=>FDB.byCode.get(code)).catch(()=>null);
+ if(loc)p={product_name:loc.n,brands:loc.br,product_quantity:loc.q,nutriments:{'energy-kcal_100g':loc.kcal,proteins_100g:loc.p,fat_100g:loc.f,carbohydrates_100g:loc.c}};else{try{p=await offByCode(code)}catch(e){err=true}}if(tok!==FS.tok)return;FS.busy=false;
  const n=(p&&p.nutriments)||{};const kcal=p?(+n['energy-kcal_100g']||Math.round((+n['energy_100g']||0)/4.184)):0;
  if(!p||!kcal){fsFail(err?'Открытая база продуктов не ответила. Попробуй ещё раз или сними этикетку':'Код '+code+' не нашёлся в открытой базе. Сними этикетку, приложение прочитает цифры с неё',true);return}
  const name=(p.product_name_ru||p.product_name||'Продукт').trim(),brand=(p.brands||'').split(',')[0].trim();let g=+p.product_quantity||0;if(!(g>0&&g<=500))g=100;
