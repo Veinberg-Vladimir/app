@@ -1,0 +1,65 @@
+<title>Блюда: 30 образцов</title>
+<style>
+.bl-head p{color:var(--muted);font-size:13px;margin:0 0 12px}
+.bl-stamp{background:var(--chip);border:1.5px dashed var(--line);border-radius:14px;padding:10px 12px;font-size:12px;color:var(--muted);margin-bottom:12px}
+.bl-filters{display:flex;gap:6px;overflow-x:auto;margin:0 -16px 8px;padding:0 16px 4px;scrollbar-width:none}
+.bl-filters::-webkit-scrollbar{display:none}
+.bl-filters .chip{flex:none;border:0;cursor:pointer;font:inherit;font-size:13px;font-weight:600}
+.bl-card{background:var(--card);border-radius:18px;padding:14px;margin-bottom:10px;cursor:pointer;border:1px solid rgba(255,255,255,.03)}
+.bl-top{display:flex;gap:12px;align-items:flex-start}
+.bl-top .t{flex:1;min-width:0}
+.bl-top .t b{display:block;font-size:15px;font-weight:800;line-height:1.3}
+.bl-top .t span{display:block;font-size:12px;color:var(--muted);margin-top:3px}
+.bl-k{flex:none;text-align:right}
+.bl-k b{font-size:20px;font-weight:800;font-variant-numeric:tabular-nums}
+.bl-k span{display:block;font-size:11px;color:var(--muted)}
+.bl-mac{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.bl-mac i{font-style:normal;font-size:12px;font-weight:700;background:var(--chip);border-radius:999px;padding:5px 9px;font-variant-numeric:tabular-nums}
+.bl-mac i.tag{color:var(--acc2);background:rgba(246,179,67,.12)}
+.bl-meta{display:flex;gap:10px;align-items:center;font-size:12px;color:var(--muted);margin-top:8px}
+.bl-meta svg{width:14px;height:14px}
+.bl-s h4{margin:16px 0 8px}
+.bl-ing{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid var(--line);font-size:14px}
+.bl-ing b{font-weight:800;white-space:nowrap;font-variant-numeric:tabular-nums}
+.bl-steps{margin:0;padding:0;list-style:none;counter-reset:st}
+.bl-steps li{counter-increment:st;display:flex;gap:10px;font-size:14px;line-height:1.4;margin-bottom:8px}
+.bl-steps li:before{content:counter(st);flex:none;width:24px;height:24px;border-radius:50%;background:var(--grad);color:#14110E;font-weight:800;font-size:12px;display:grid;place-items:center}
+.bl-tip{background:rgba(246,179,67,.1);border-radius:14px;padding:10px 12px;font-size:13px;line-height:1.4;margin-top:6px}
+.bl-tip b{color:var(--acc2)}
+.bl-kc{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px}
+.bl-kc div{background:var(--chip);border-radius:12px;padding:8px 4px;text-align:center}
+.bl-kc b{display:block;font-size:16px;font-variant-numeric:tabular-nums}
+.bl-kc span{font-size:10.5px;color:var(--muted)}
+</style>
+<div class="phone"><div class="scroll" id="root"></div>{{nav:pit}}</div>
+<script>
+const U=window.UI;const I={clock:`{{clock}}`,flame:`{{flame-filled}}`,back:`{{arrow-left}}`};
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const f1=x=>String(x).replace('.',',');
+const MEALS=[['все','Все'],['завтрак','Завтраки'],['обед','Обеды'],['ужин','Ужины'],['перекус','Перекусы']];
+const TAGS=['белковое','быстро','как из доставки','вместо коктейля','без мяса и рыбы','мало ингредиентов'];
+let DISH=[],meal='все',tag='';
+function render(){const r=document.getElementById('root');
+ const list=DISH.filter(x=>(meal==='все'||x.meal===meal)&&(!tag||x.tags.includes(tag)));
+ r.innerHTML=`<a href="pit.html" class="muted" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;font-size:13px;margin-bottom:8px">${I.back} Питание</a>
+ <div class="bl-head"><h1 class="title" style="margin-bottom:4px">Блюда</h1><p>30 образцов будущей базы. КБЖУ посчитаны из граммов по базе продуктов приложения</p></div>
+ <div class="bl-stamp">Образцы на утверждение: состав, порции, тексты. Фото блюд и подгонка порций под личную норму появятся после «ок»</div>
+ <div class="bl-filters">${MEALS.map(([k,t])=>`<button class="chip ${k===meal?'on':''}" data-meal="${k}">${t}</button>`).join('')}</div>
+ <div class="bl-filters">${TAGS.map(t=>`<button class="chip ${t===tag?'on':'dim'}" data-tag="${t}">${t}</button>`).join('')}</div>
+ ${list.map(x=>`<div class="bl-card" data-i="${DISH.indexOf(x)}"><div class="bl-top"><div class="t"><b>${esc(x.n)}</b><span>${esc(x.d)}</span></div><div class="bl-k"><b>${x.kcal}</b><span>ккал</span></div></div>
+  <div class="bl-mac"><i>Б ${Math.round(x.p)}</i><i>Ж ${Math.round(x.f)}</i><i>У ${Math.round(x.c)}</i>${x.tags.filter(t=>t!=='мало ингредиентов').slice(0,2).map(t=>`<i class="tag">${esc(t)}</i>`).join('')}</div>
+  <div class="bl-meta">${I.clock}<span>${x.time} мин</span><span>·</span><span>${esc(x.meal)}</span><span>·</span><span>порция ${x.out} г</span></div></div>`).join('')||'<div class="note">По этим фильтрам блюд нет</div>'}
+ <div class="note">Порции стандартные, на одного. В приложении граммы будут подгоняться под норму человека</div>`;
+ r.querySelectorAll('[data-meal]').forEach(b=>b.onclick=()=>{meal=b.dataset.meal;render()});
+ r.querySelectorAll('[data-tag]').forEach(b=>b.onclick=()=>{tag=tag===b.dataset.tag?'':b.dataset.tag;render()});
+ r.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>open(DISH[+b.dataset.i]))}
+function open(x){U.openSheet(`<div class="bl-s"><h3>${esc(x.n)}</h3><p>${esc(x.d)}</p>
+ <div class="bl-meta" style="margin-top:0">${I.clock}<span>${x.time} мин</span><span>·</span><span>порция ${x.out} г</span>${x.batch?`<span>·</span><span>${esc(x.batch)}</span>`:''}</div>
+ <div class="bl-kc"><div><b>${x.kcal}</b><span>ккал</span></div><div><b>${f1(x.p)}</b><span>белки, г</span></div><div><b>${f1(x.f)}</b><span>жиры, г</span></div><div><b>${f1(x.c)}</b><span>углеводы, г</span></div></div>
+ <div class="note" style="text-align:left">На 100 г готового блюда ${x.k100} ккал</div>
+ <h4>Состав на порцию</h4>${x.ing.map(i=>`<div class="bl-ing"><span>${esc(i.n)}</span><b>${i.g} г</b></div>`).join('')}
+ <h4>Как готовить</h4><ol class="bl-steps">${x.steps.map(s=>`<li><span>${esc(s)}</span></li>`).join('')}</ol>
+ <div class="bl-tip"><b>Как вкуснее.</b> ${esc(x.tip)}</div>${x.plus?`<div class="bl-tip" style="margin-top:8px"><b>Больше белка.</b> ${esc(x.plus)}</div>`:''}
+ <div class="row2"><button class="btn" data-close>Понятно</button></div></div>`)}
+fetch('data/dishes-sample.json').then(r=>r.json()).then(d=>{DISH=d;render()}).catch(()=>{document.getElementById('root').innerHTML='<div class="note">Не загрузилось, проверь интернет</div>'});
+</script>
