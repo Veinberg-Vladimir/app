@@ -1,4 +1,4 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0E0F1A"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="app.css?v=1792703269"><script src="phases.js?v=1792703269"></script><script src="data.js?v=1792703269"></script><script src="ui.js?v=1792703269"></script><title>Блюда: 30 образцов</title></head><body>
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0E0F1A"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="app.css?v=1792760218"><script src="phases.js?v=1792760218"></script><script src="data.js?v=1792760218"></script><script src="ui.js?v=1792760218"></script><title>Блюда: 30 образцов</title></head><body>
 <style>
 .bl-head p{color:var(--muted);font-size:13px;margin:0 0 12px}
 .bl-stamp{background:var(--chip);border:1.5px dashed var(--line);border-radius:14px;padding:10px 12px;font-size:12px;color:var(--muted);margin-bottom:12px}
@@ -7,6 +7,10 @@
 .bl-filters .chip{flex:none;border:0;cursor:pointer;font:inherit;font-size:13px;font-weight:600}
 .bl-card{background:var(--card);border-radius:18px;padding:14px;margin-bottom:10px;cursor:pointer;border:1px solid rgba(255,255,255,.03)}
 .bl-top{display:flex;gap:12px;align-items:flex-start}
+.bl-ph{width:78px;height:78px;border-radius:14px;object-fit:cover;flex:none;background:var(--chip)}
+.bl-hero{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:16px;display:block;margin:4px 0 6px;background:var(--chip)}
+.bl-src{font-size:11px;color:var(--muted);margin:0 0 10px}
+.bl-src a{color:var(--acc2);text-decoration:none}
 .bl-top .t{flex:1;min-width:0}
 .bl-top .t b{display:block;font-size:15px;font-weight:800;line-height:1.3}
 .bl-top .t span{display:block;font-size:12px;color:var(--muted);margin-top:3px}
@@ -38,22 +42,24 @@ const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;'
 const f1=x=>String(x).replace('.',',');
 const MEALS=[['все','Все'],['завтрак','Завтраки'],['обед','Обеды'],['ужин','Ужины'],['перекус','Перекусы']];
 const TAGS=['белковое','быстро','как из доставки','вместо коктейля','без мяса и рыбы','мало ингредиентов'];
-let DISH=[],meal='все',tag='';
+let DISH=[],PH={},meal='все',tag='';
+const ph=x=>{const e=PH[String(DISH.indexOf(x)+1)];return e&&e.main||''};
+const phsrc=x=>{const e=PH[String(DISH.indexOf(x)+1)];if(!e)return '';const v=(e.variants||[]).find(v=>v.file===e.main)||{};return v.src==='Pexels'?`Фото: Pexels, свободная лицензия · <a href="bluda-foto.html">другие варианты</a>`:`Фото: генерация под снимок с фотоаппарата · <a href="bluda-foto.html">другие варианты</a>`};
 function render(){const r=document.getElementById('root');
  const list=DISH.filter(x=>(meal==='все'||x.meal===meal)&&(!tag||x.tags.includes(tag)));
  r.innerHTML=`<a href="pit.html" class="muted" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;font-size:13px;margin-bottom:8px">${I.back} Питание</a>
  <div class="bl-head"><h1 class="title" style="margin-bottom:4px">Блюда</h1><p>30 образцов будущей базы. КБЖУ посчитаны из граммов по базе продуктов приложения</p></div>
- <div class="bl-stamp">Образцы на утверждение: состав, порции, тексты. Фото блюд и подгонка порций под личную норму появятся после «ок»</div>
+ <div class="bl-stamp">Образцы на утверждение: состав, порции, тексты, фото. Другие варианты фото с номерами: <a href="bluda-foto.html" style="color:var(--acc2);text-decoration:none">лист выбора</a>. Подгонка порций под личную норму появится после «ок»</div>
  <div class="bl-filters">${MEALS.map(([k,t])=>`<button class="chip ${k===meal?'on':''}" data-meal="${k}">${t}</button>`).join('')}</div>
  <div class="bl-filters">${TAGS.map(t=>`<button class="chip ${t===tag?'on':'dim'}" data-tag="${t}">${t}</button>`).join('')}</div>
- ${list.map(x=>`<div class="bl-card" data-i="${DISH.indexOf(x)}"><div class="bl-top"><div class="t"><b>${esc(x.n)}</b><span>${esc(x.d)}</span></div><div class="bl-k"><b>${x.kcal}</b><span>ккал</span></div></div>
+ ${list.map(x=>`<div class="bl-card" data-i="${DISH.indexOf(x)}"><div class="bl-top">${ph(x)?`<img class="bl-ph" src="${ph(x)}" alt="" loading="lazy">`:''}<div class="t"><b>${esc(x.n)}</b><span>${esc(x.d)}</span></div><div class="bl-k"><b>${x.kcal}</b><span>ккал</span></div></div>
   <div class="bl-mac"><i>Б ${Math.round(x.p)}</i><i>Ж ${Math.round(x.f)}</i><i>У ${Math.round(x.c)}</i>${x.tags.filter(t=>t!=='мало ингредиентов').slice(0,2).map(t=>`<i class="tag">${esc(t)}</i>`).join('')}</div>
   <div class="bl-meta">${I.clock}<span>${x.time} мин</span><span>·</span><span>${esc(x.meal)}</span><span>·</span><span>порция ${x.out} г</span></div></div>`).join('')||'<div class="note">По этим фильтрам блюд нет</div>'}
  <div class="note">Порции стандартные, на одного. В приложении граммы будут подгоняться под норму человека</div>`;
  r.querySelectorAll('[data-meal]').forEach(b=>b.onclick=()=>{meal=b.dataset.meal;render()});
  r.querySelectorAll('[data-tag]').forEach(b=>b.onclick=()=>{tag=tag===b.dataset.tag?'':b.dataset.tag;render()});
  r.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>open(DISH[+b.dataset.i]))}
-function open(x){U.openSheet(`<div class="bl-s"><h3>${esc(x.n)}</h3><p>${esc(x.d)}</p>
+function open(x){U.openSheet(`<div class="bl-s"><h3>${esc(x.n)}</h3>${ph(x)?`<img class="bl-hero" src="${ph(x)}" alt=""><p class="bl-src">${phsrc(x)}</p>`:''}<p>${esc(x.d)}</p>
  <div class="bl-meta" style="margin-top:0">${I.clock}<span>${x.time} мин</span><span>·</span><span>порция ${x.out} г</span>${x.batch?`<span>·</span><span>${esc(x.batch)}</span>`:''}</div>
  <div class="bl-kc"><div><b>${x.kcal}</b><span>ккал</span></div><div><b>${f1(x.p)}</b><span>белки, г</span></div><div><b>${f1(x.f)}</b><span>жиры, г</span></div><div><b>${f1(x.c)}</b><span>углеводы, г</span></div></div>
  <div class="note" style="text-align:left">На 100 г готового блюда ${x.k100} ккал</div>
@@ -61,6 +67,6 @@ function open(x){U.openSheet(`<div class="bl-s"><h3>${esc(x.n)}</h3><p>${esc(x.d
  <h4>Как готовить</h4><ol class="bl-steps">${x.steps.map(s=>`<li><span>${esc(s)}</span></li>`).join('')}</ol>
  <div class="bl-tip"><b>Как вкуснее.</b> ${esc(x.tip)}</div>${x.plus?`<div class="bl-tip" style="margin-top:8px"><b>Больше белка.</b> ${esc(x.plus)}</div>`:''}
  <div class="row2"><button class="btn" data-close>Понятно</button></div></div>`)}
-fetch('data/dishes-sample.json').then(r=>r.json()).then(d=>{DISH=d;render()}).catch(()=>{document.getElementById('root').innerHTML='<div class="note">Не загрузилось, проверь интернет</div>'});
+Promise.all([fetch('data/dishes-sample.json').then(r=>r.json()),fetch('data/dishes-photos.json').then(r=>r.json()).catch(()=>({}))]).then(([d,p])=>{DISH=d;PH=p;render()}).catch(()=>{document.getElementById('root').innerHTML='<div class="note">Не загрузилось, проверь интернет</div>'});
 </script>
 </body></html>

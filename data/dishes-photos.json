@@ -1,0 +1,941 @@
+{
+ "1": {
+  "main": "img/bluda/01-1.jpg",
+  "variants": [
+   {
+    "file": "img/bluda/01-1.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/38101010/",
+    "license": "Pexels License",
+    "alt": "Plate of cottage cheese pancakes served with fresh strawberries and cranberries, garnished",
+    "raw": "01-1-pexels-38101010.jpg",
+    "orig": "1800x2699"
+   },
+   {
+    "file": "img/bluda/01-2.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/36612300/",
+    "license": "Pexels License",
+    "alt": "Tasty syrniki served with strawberries, blueberries, and cream, perfect for breakfast.",
+    "raw": "01-2-pexels-36612300.jpg",
+    "orig": "1800x2699"
+   },
+   {
+    "file": "img/bluda/01-3.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/20182313/",
+    "license": "Pexels License",
+    "alt": "Top view of pancakes with berry sauce and cream on a white plate.",
+    "raw": "01-3-pexels-20182313.jpg",
+    "orig": "1800x2699"
+   }
+  ]
+ },
+ "2": {
+  "main": "img/bluda/02-1.jpg",
+  "variants": [
+   {
+    "file": "img/bluda/02-1.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/28766045/",
+    "license": "Pexels License",
+    "alt": "Top view of a breakfast bowl with bananas, blueberries, oats, and walnuts.",
+    "raw": "02-1-pexels-28766045.jpg",
+    "orig": "1800x2707"
+   },
+   {
+    "file": "img/bluda/02-2.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/9304016/",
+    "license": "Pexels License",
+    "alt": "Delicious banana oatmeal topped with honey drizzling from a stick in a rustic wooden bowl.",
+    "raw": "02-2-pexels-9304016.jpg",
+    "orig": "1800x2250"
+   },
+   {
+    "file": "img/bluda/02-3.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/28792769/",
+    "license": "Pexels License",
+    "alt": "Creamy oatmeal topped with sliced banana and cinnamon for a healthy breakfast.",
+    "raw": "02-3-pexels-28792769.jpg",
+    "orig": "1800x3622"
+   }
+  ]
+ },
+ "3": {
+  "main": "img/bluda/03-ga.jpg",
+  "variants": [
+   {
+    "file": "img/bluda/03-ga.jpg",
+    "src": "Генерация",
+    "model": "GPT image через Codex, промпт 03-omlet-a.txt",
+    "license": "своё"
+   },
+   {
+    "file": "img/bluda/03-1.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/5961362/",
+    "license": "Pexels License",
+    "alt": "A delicious omelette served with a fresh green salad on a decorative porcelain plate.",
+    "raw": "03-1-pexels-5961362.jpg",
+    "orig": "1800x2700"
+   },
+   {
+    "file": "img/bluda/03-2.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/23884204/",
+    "license": "Pexels License",
+    "alt": "Appetizing omelette with fresh veggies and cream cheese on a plate, perfect breakfast.",
+    "raw": "03-2-pexels-23884204.jpg",
+    "orig": "1800x2700"
+   },
+   {
+    "file": "img/bluda/03-gb.jpg",
+    "src": "Генерация",
+    "model": "GPT image через Codex, промпт 03-omlet-b.txt",
+    "license": "своё"
+   }
+  ]
+ },
+ "5": {
+  "main": "img/bluda/05-ga.jpg",
+  "variants": [
+   {
+    "file": "img/bluda/05-ga.jpg",
+    "src": "Генерация",
+    "model": "GPT image через Codex, промпт 05-buterbrody-a.txt",
+    "license": "своё"
+   },
+   {
+    "file": "img/bluda/05-1.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/14458909/",
+    "license": "Pexels License",
+    "alt": "Delicious open-faced sandwich with ham on a decorative plate, perfect for meal inspiration",
+    "raw": "05-1-pexels-14458909.jpg",
+    "orig": "1800x1350"
+   },
+   {
+    "file": "img/bluda/05-gb.jpg",
+    "src": "Генерация",
+    "model": "GPT image через Codex, промпт 05-buterbrody-b.txt",
+    "license": "своё"
+   }
+  ]
+ },
+ "6": {
+  "main": "img/bluda/06-1.jpg",
+  "variants": [
+   {
+    "file": "img/bluda/06-1.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/8601533/",
+    "license": "Pexels License",
+    "alt": "Delicious Russian blini served with cream and jam on a ceramic plate.",
+    "raw": "06-1-pexels-8601533.jpg",
+    "orig": "1800x2700"
+   },
+   {
+    "file": "img/bluda/06-2.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/9589798/",
+    "license": "Pexels License",
+    "alt": "Delicious rustic breakfast scene with pancakes, tea, and a vintage cookbook for cozy morni",
+    "raw": "06-2-pexels-9589798.jpg",
+    "orig": "1800x1350"
+   }
+  ]
+ },
+ "7": {
+  "main": "img/bluda/07-1.jpg",
+  "variants": [
+   {
+    "file": "img/bluda/07-1.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/7803315/",
+    "license": "Pexels License",
+    "alt": "Tasty homemade cottage cheese casserole with brown crust and slice on spatula served on pl",
+    "raw": "07-1-pexels-7803315.jpg",
+    "orig": "1800x2700"
+   },
+   {
+    "file": "img/bluda/07-2.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/30925500/",
+    "license": "Pexels License",
+    "alt": "Cheesecake slice with toppings, served with a cup of coffee on a café table.",
+    "raw": "07-2-pexels-30925500.jpg",
+    "orig": "1800x2700"
+   },
+   {
+    "file": "img/bluda/07-3.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/30925474/",
+    "license": "Pexels License",
+    "alt": "Savor a slice of cheesecake with raisins alongside coffee in a modern café setting.",
+    "raw": "07-3-pexels-30925474.jpg",
+    "orig": "1800x1200"
+   },
+   {
+    "file": "img/bluda/07-ga.jpg",
+    "src": "Генерация",
+    "model": "GPT image через Codex, промпт 07-zapekanka-a.txt",
+    "license": "своё"
+   }
+  ]
+ },
+ "8": {
+  "main": "img/bluda/08-1.jpg",
+  "variants": [
+   {
+    "file": "img/bluda/08-1.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/30925494/",
+    "license": "Pexels License",
+    "alt": "Tasty full breakfast with eggs, bacon, sausages, and fresh vegetables.",
+    "raw": "08-1-pexels-30925494.jpg",
+    "orig": "1800x1200"
+   },
+   {
+    "file": "img/bluda/08-2.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/13599868/",
+    "license": "Pexels License",
+    "alt": "Closeup of a savory breakfast plate with eggs, tomatoes, and toast.",
+    "raw": "08-2-pexels-13599868.jpg",
+    "orig": "1800x2400"
+   },
+   {
+    "file": "img/bluda/08-3.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/2961957/",
+    "license": "Pexels License",
+    "alt": "Close-up of a breakfast plate with fried eggs, bacon, and sauce, ready to enjoy.",
+    "raw": "08-3-pexels-2961957.jpg",
+    "orig": "1800x1011"
+   }
+  ]
+ },
+ "9": {
+  "main": "img/bluda/09-1.jpg",
+  "variants": [
+   {
+    "file": "img/bluda/09-1.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/8599740/",
+    "license": "Pexels License",
+    "alt": "Delicious borscht soup served in a ceramic bowl with brown bread and fresh pickles.",
+    "raw": "09-1-pexels-8599740.jpg",
+    "orig": "1800x2700"
+   },
+   {
+    "file": "img/bluda/09-2.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/8599742/",
+    "license": "Pexels License",
+    "alt": "Top-down view of traditional borscht soup served with dill and slices of brown rye bread o",
+    "raw": "09-2-pexels-8599742.jpg",
+    "orig": "1800x1200"
+   },
+   {
+    "file": "img/bluda/09-3.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/32020818/",
+    "license": "Pexels License",
+    "alt": "Fresh borscht served with sour cream and rye bread, garnished with herbs.",
+    "raw": "09-3-pexels-32020818.jpg",
+    "orig": "1800x2400"
+   }
+  ]
+ },
+ "10": {
+  "main": "img/bluda/10-1.jpg",
+  "variants": [
+   {
+    "file": "img/bluda/10-1.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/8878621/",
+    "license": "Pexels License",
+    "alt": "Warm bowl of homemade chicken noodle soup garnished with parsley.",
+    "raw": "10-1-pexels-8878621.jpg",
+    "orig": "1800x2400"
+   },
+   {
+    "file": "img/bluda/10-2.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/34326231/",
+    "license": "Pexels License",
+    "alt": "A comforting bowl of chicken noodle soup garnished with fresh herbs, perfect for a cozy me",
+    "raw": "10-2-pexels-34326231.jpg",
+    "orig": "1800x2700"
+   },
+   {
+    "file": "img/bluda/10-3.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/32649105/",
+    "license": "Pexels License",
+    "alt": "Top view of a homemade chicken noodle soup garnished with fresh dill.",
+    "raw": "10-3-pexels-32649105.jpg",
+    "orig": "1800x2400"
+   }
+  ]
+ },
+ "11": {
+  "main": "img/bluda/11-1.jpg",
+  "variants": [
+   {
+    "file": "img/bluda/11-1.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/30852894/",
+    "license": "Pexels License",
+    "alt": "Delicious Solyanka soup with sour cream, dill, and vegetables in a rustic bowl.",
+    "raw": "11-1-pexels-30852894.jpg",
+    "orig": "1800x2700"
+   },
+   {
+    "file": "img/bluda/11-2.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/8601391/",
+    "license": "Pexels License",
+    "alt": "A rustic bowl of Russian solyanka soup with a gold spoon on a white surface.",
+    "raw": "11-2-pexels-8601391.jpg",
+    "orig": "1800x1200"
+   },
+   {
+    "file": "img/bluda/11-3.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/8601385/",
+    "license": "Pexels License",
+    "alt": "A bowl of solyanka soup with garnish, paired with dark and light bread slices on white bac",
+    "raw": "11-3-pexels-8601385.jpg",
+    "orig": "1800x2700"
+   }
+  ]
+ },
+ "12": {
+  "main": "img/bluda/12-1.jpg",
+  "variants": [
+   {
+    "file": "img/bluda/12-1.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/20323457/",
+    "license": "Pexels License",
+    "alt": "Close-up of crispy meatballs served atop smooth mashed potatoes, garnished with herbs.",
+    "raw": "12-1-pexels-20323457.jpg",
+    "orig": "1800x2699"
+   },
+   {
+    "file": "img/bluda/12-2.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/20323448/",
+    "license": "Pexels License",
+    "alt": "Gourmet dish with meatballs, mashed potatoes, and creamy dip on a white plate.",
+    "raw": "12-2-pexels-20323448.jpg",
+    "orig": "1800x2699"
+   },
+   {
+    "file": "img/bluda/12-3.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/17560416/",
+    "license": "Pexels License",
+    "alt": "Close-up of a dinner plate featuring meat, mashed potatoes, and pickled cucumbers, garnish",
+    "raw": "12-3-pexels-17560416.jpg",
+    "orig": "1800x1350"
+   }
+  ]
+ },
+ "13": {
+  "main": "img/bluda/13-ga.jpg",
+  "variants": [
+   {
+    "file": "img/bluda/13-ga.jpg",
+    "src": "Генерация",
+    "model": "GPT image через Codex, промпт 13-plov-kuritsa-a.txt",
+    "license": "своё"
+   },
+   {
+    "file": "img/bluda/13-1.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/36885731/",
+    "license": "Pexels License",
+    "alt": "Flavorful chicken biryani served on a vintage floral plate.",
+    "raw": "13-1-pexels-36885731.jpg",
+    "orig": "1800x2250"
+   },
+   {
+    "file": "img/bluda/13-2.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/14693845/",
+    "license": "Pexels License",
+    "alt": "A close-up of Central Asian plov served with fresh sliced cucumbers, tomatoes, and pickled",
+    "raw": "13-2-pexels-14693845.jpg",
+    "orig": "1800x1350"
+   },
+   {
+    "file": "img/bluda/13-3.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/14846853/",
+    "license": "Pexels License",
+    "alt": "A colorful plate of rice, beef, and fresh vegetables, perfect for a hearty meal.",
+    "raw": "13-3-pexels-14846853.jpg",
+    "orig": "1800x2400"
+   },
+   {
+    "file": "img/bluda/13-gb.jpg",
+    "src": "Генерация",
+    "model": "GPT image через Codex, промпт 13-plov-kuritsa-b.txt",
+    "license": "своё"
+   }
+  ]
+ },
+ "14": {
+  "main": "img/bluda/14-ga.jpg",
+  "variants": [
+   {
+    "file": "img/bluda/14-ga.jpg",
+    "src": "Генерация",
+    "model": "GPT image через Codex, промпт 14-grechka-kuritsa-a.txt",
+    "license": "своё"
+   },
+   {
+    "file": "img/bluda/14-1.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/7307354/",
+    "license": "Pexels License",
+    "alt": "Delicious buckwheat with seasoned beef and greens served on a black plate.",
+    "raw": "14-1-pexels-7307354.jpg",
+    "orig": "1800x1200"
+   },
+   {
+    "file": "img/bluda/14-gb.jpg",
+    "src": "Генерация",
+    "model": "GPT image через Codex, промпт 14-grechka-kuritsa-b.txt",
+    "license": "своё"
+   }
+  ]
+ },
+ "15": {
+  "main": "img/bluda/15-ga.jpg",
+  "variants": [
+   {
+    "file": "img/bluda/15-ga.jpg",
+    "src": "Генерация",
+    "model": "GPT image через Codex, промпт 15-makarony-flotskie-a.txt",
+    "license": "своё"
+   },
+   {
+    "file": "img/bluda/15-1.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/36223320/",
+    "license": "Pexels License",
+    "alt": "Close-up of classic Italian pasta Bolognese plated elegantly.",
+    "raw": "15-1-pexels-36223320.jpg",
+    "orig": "1800x1200"
+   },
+   {
+    "file": "img/bluda/15-2.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/36627079/",
+    "license": "Pexels License",
+    "alt": "Close-up of a hot serving tray filled with macaroni and ground beef garnished with herbs.",
+    "raw": "15-2-pexels-36627079.jpg",
+    "orig": "1800x1201"
+   },
+   {
+    "file": "img/bluda/15-gb.jpg",
+    "src": "Генерация",
+    "model": "GPT image через Codex, промпт 15-makarony-flotskie-b.txt",
+    "license": "своё"
+   }
+  ]
+ },
+ "16": {
+  "main": "img/bluda/16-1.jpg",
+  "variants": [
+   {
+    "file": "img/bluda/16-1.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/28898334/",
+    "license": "Pexels License",
+    "alt": "A bowl of homemade Russian dumplings with sour cream dipping sauce and fresh herbs.",
+    "raw": "16-1-pexels-28898334.jpg",
+    "orig": "1800x2400"
+   },
+   {
+    "file": "img/bluda/16-2.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/29545365/",
+    "license": "Pexels License",
+    "alt": "Plate of traditional dumplings topped with sour cream, perfect for a savory meal.",
+    "raw": "16-2-pexels-29545365.jpg",
+    "orig": "1800x2700"
+   },
+   {
+    "file": "img/bluda/16-3.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/8601686/",
+    "license": "Pexels License",
+    "alt": "Close-up of traditional pelmeni dumplings with dill garnish on a white plate.",
+    "raw": "16-3-pexels-8601686.jpg",
+    "orig": "1800x2700"
+   }
+  ]
+ },
+ "17": {
+  "main": "img/bluda/17-ga.jpg",
+  "variants": [
+   {
+    "file": "img/bluda/17-ga.jpg",
+    "src": "Генерация",
+    "model": "GPT image через Codex, промпт 17-mintay-a.txt",
+    "license": "своё"
+   },
+   {
+    "file": "img/bluda/17-1.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/8992936/",
+    "license": "Pexels License",
+    "alt": "Grilled fish fillet served with cheesy rice, asparagus, and lemon slice on a white plate.",
+    "raw": "17-1-pexels-8992936.jpg",
+    "orig": "1800x1807"
+   },
+   {
+    "file": "img/bluda/17-2.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/4013110/",
+    "license": "Pexels License",
+    "alt": "Plate with delicious fish with herbs and rice placed on table in restaurant",
+    "raw": "17-2-pexels-4013110.jpg",
+    "orig": "1800x2700"
+   },
+   {
+    "file": "img/bluda/17-gb.jpg",
+    "src": "Генерация",
+    "model": "GPT image через Codex, промпт 17-mintay-b.txt",
+    "license": "своё"
+   }
+  ]
+ },
+ "18": {
+  "main": "img/bluda/18-1.jpg",
+  "variants": [
+   {
+    "file": "img/bluda/18-1.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/4589138/",
+    "license": "Pexels License",
+    "alt": "Delicious roasted chicken thighs with herb-seasoned potatoes on a baking tray.",
+    "raw": "18-1-pexels-4589138.jpg",
+    "orig": "1800x2699"
+   },
+   {
+    "file": "img/bluda/18-2.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/31233881/",
+    "license": "Pexels License",
+    "alt": "Delicious roasted chicken paired with golden potatoes and fresh herbs on a rustic platter.",
+    "raw": "18-2-pexels-31233881.jpg",
+    "orig": "1800x2700"
+   },
+   {
+    "file": "img/bluda/18-3.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/4589139/",
+    "license": "Pexels License",
+    "alt": "Delicious roasted chicken legs served with golden potatoes and fresh parsley.",
+    "raw": "18-3-pexels-4589139.jpg",
+    "orig": "1800x2624"
+   }
+  ]
+ },
+ "19": {
+  "main": "img/bluda/19-1.jpg",
+  "variants": [
+   {
+    "file": "img/bluda/19-1.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/6107790/",
+    "license": "Pexels License",
+    "alt": "Delicious Caesar salad with grilled chicken, fresh lettuce, and cherry tomatoes on a white",
+    "raw": "19-1-pexels-6107790.jpg",
+    "orig": "1800x1200"
+   },
+   {
+    "file": "img/bluda/19-2.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/6107789/",
+    "license": "Pexels License",
+    "alt": "Healthy Caesar salad with grilled chicken, croutons, and cherry tomatoes in a bowl.",
+    "raw": "19-2-pexels-6107789.jpg",
+    "orig": "1800x1200"
+   },
+   {
+    "file": "img/bluda/19-3.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/5639372/",
+    "license": "Pexels License",
+    "alt": "Delicious Caesar salad with grilled chicken, croutons, lettuce, and a creamy dressing.",
+    "raw": "19-3-pexels-5639372.jpg",
+    "orig": "1800x1200"
+   }
+  ]
+ },
+ "20": {
+  "main": "img/bluda/20-1.jpg",
+  "variants": [
+   {
+    "file": "img/bluda/20-1.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/16022887/",
+    "license": "Pexels License",
+    "alt": "Close-up of a chicken wrap with fresh vegetables on a plate.",
+    "raw": "20-1-pexels-16022887.jpg",
+    "orig": "1800x1201"
+   },
+   {
+    "file": "img/bluda/20-2.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/15913640/",
+    "license": "Pexels License",
+    "alt": "Tasty chicken wrap filled with creamy sauce on a wooden cutting board.",
+    "raw": "20-2-pexels-15913640.jpg",
+    "orig": "1800x1201"
+   },
+   {
+    "file": "img/bluda/20-3.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/18852568/",
+    "license": "Pexels License",
+    "alt": "Close-up of a delicious grilled chicken shawarma wrap on a plate, perfect for food lovers.",
+    "raw": "20-3-pexels-18852568.jpg",
+    "orig": "1800x2699"
+   }
+  ]
+ },
+ "21": {
+  "main": "img/bluda/21-1.jpg",
+  "variants": [
+   {
+    "file": "img/bluda/21-1.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/5175579/",
+    "license": "Pexels License",
+    "alt": "Appetizing cheeseburger with lettuce, tomatoes, onion, and fries. Ideal for food lovers.",
+    "raw": "21-1-pexels-5175579.jpg",
+    "orig": "1800x1486"
+   },
+   {
+    "file": "img/bluda/21-2.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/31119083/",
+    "license": "Pexels License",
+    "alt": "Tasty cheeseburger with lettuce, tomato, and ketchup on a wooden board.",
+    "raw": "21-2-pexels-31119083.jpg",
+    "orig": "1800x2400"
+   },
+   {
+    "file": "img/bluda/21-3.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/4080534/",
+    "license": "Pexels License",
+    "alt": "Delicious cheeseburger with melted cheese and ketchup on a wooden table.",
+    "raw": "21-3-pexels-4080534.jpg",
+    "orig": "1800x1200"
+   }
+  ]
+ },
+ "22": {
+  "main": "img/bluda/22-1.jpg",
+  "variants": [
+   {
+    "file": "img/bluda/22-1.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/38722282/",
+    "license": "Pexels License",
+    "alt": "Appetizing stuffed bell peppers with rice, yogurt, and walnuts in a bowl.",
+    "raw": "22-1-pexels-38722282.jpg",
+    "orig": "1800x3200"
+   },
+   {
+    "file": "img/bluda/22-2.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/15820587/",
+    "license": "Pexels License",
+    "alt": "A vibrant stuffed pepper served with fresh parsley and lemon slices.",
+    "raw": "22-2-pexels-15820587.jpg",
+    "orig": "1800x1800"
+   },
+   {
+    "file": "img/bluda/22-3.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/15747862/",
+    "license": "Pexels License",
+    "alt": "Savor a gourmet stuffed red bell pepper on creamy sauce, perfect for any meal.",
+    "raw": "22-3-pexels-15747862.jpg",
+    "orig": "1800x1200"
+   }
+  ]
+ },
+ "24": {
+  "main": "img/bluda/24-1.jpg",
+  "variants": [
+   {
+    "file": "img/bluda/24-1.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/38622380/",
+    "license": "Pexels License",
+    "alt": "Delicious dish featuring fresh blueberries, yogurt, and cottage cheese on a white plate.",
+    "raw": "24-1-pexels-38622380.jpg",
+    "orig": "1800x2400"
+   },
+   {
+    "file": "img/bluda/24-2.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/11750435/",
+    "license": "Pexels License",
+    "alt": "A tantalizing dessert of fresh blueberries with cream in a chic white bowl, perfect for fo",
+    "raw": "24-2-pexels-11750435.jpg",
+    "orig": "1800x2400"
+   },
+   {
+    "file": "img/bluda/24-3.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/15048297/",
+    "license": "Pexels License",
+    "alt": "Enjoy a healthy breakfast with cottage cheese topped with fresh berries, perfect for a nut",
+    "raw": "24-3-pexels-15048297.jpg",
+    "orig": "1800x1200"
+   }
+  ]
+ },
+ "25": {
+  "main": "img/bluda/25-1.jpg",
+  "variants": [
+   {
+    "file": "img/bluda/25-1.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/35663668/",
+    "license": "Pexels License",
+    "alt": "Delicious granola yogurt bowl topped with banana slices and chocolate shavings.",
+    "raw": "25-1-pexels-35663668.jpg",
+    "orig": "1800x2400"
+   },
+   {
+    "file": "img/bluda/25-2.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/7937007/",
+    "license": "Pexels License",
+    "alt": "Close-up of a healthy granola and fruit bowl, perfect for a nutritious breakfast.",
+    "raw": "25-2-pexels-7937007.jpg",
+    "orig": "1800x2700"
+   }
+  ]
+ },
+ "26": {
+  "main": "img/bluda/26-1.jpg",
+  "variants": [
+   {
+    "file": "img/bluda/26-1.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/18142614/",
+    "license": "Pexels License",
+    "alt": "Tall glass of banana smoothie with a banana slice garnish against a neutral textured backg",
+    "raw": "26-1-pexels-18142614.jpg",
+    "orig": "1800x1200"
+   },
+   {
+    "file": "img/bluda/26-2.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/15481508/",
+    "license": "Pexels License",
+    "alt": "Creamy banana smoothie in a stylish glass with a slice garnish and straw.",
+    "raw": "26-2-pexels-15481508.jpg",
+    "orig": "1800x2700"
+   },
+   {
+    "file": "img/bluda/26-3.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/12408949/",
+    "license": "Pexels License",
+    "alt": "Sliced bananas in a bowl with a creamy smoothie glass background, healthy snack option.",
+    "raw": "26-3-pexels-12408949.jpg",
+    "orig": "1800x2700"
+   }
+  ]
+ },
+ "27": {
+  "main": "img/bluda/27-ga.jpg",
+  "variants": [
+   {
+    "file": "img/bluda/27-ga.jpg",
+    "src": "Генерация",
+    "model": "GPT image через Codex, промпт 27-yaytsa-hlebtsy-a.txt",
+    "license": "своё"
+   },
+   {
+    "file": "img/bluda/27-1.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/29998585/",
+    "license": "Pexels License",
+    "alt": "Colorful platter with boiled eggs, cucumbers, cheese, nuts, and dried fruits.",
+    "raw": "27-1-pexels-29998585.jpg",
+    "orig": "1800x2400"
+   },
+   {
+    "file": "img/bluda/27-2.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/15583257/",
+    "license": "Pexels License",
+    "alt": "Delicious plate of cut-up eggs, fresh vegetables, and greens on a marble surface.",
+    "raw": "27-2-pexels-15583257.jpg",
+    "orig": "1800x2400"
+   },
+   {
+    "file": "img/bluda/27-3.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/4397261/",
+    "license": "Pexels License",
+    "alt": "Close-up of halved boiled eggs seasoned with salt and pepper, on a marble surface.",
+    "raw": "27-3-pexels-4397261.jpg",
+    "orig": "1800x2700"
+   }
+  ]
+ },
+ "28": {
+  "main": "img/bluda/28-1.jpg",
+  "variants": [
+   {
+    "file": "img/bluda/28-1.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/30910207/",
+    "license": "Pexels License",
+    "alt": "Delicious tuna sandwich served with a refreshing beverage, perfect for a nutritious lunch.",
+    "raw": "28-1-pexels-30910207.jpg",
+    "orig": "1800x2700"
+   },
+   {
+    "file": "img/bluda/28-2.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/35677395/",
+    "license": "Pexels License",
+    "alt": "Delicious whole wheat sandwich with fresh veggies on a wooden plate.",
+    "raw": "28-2-pexels-35677395.jpg",
+    "orig": "1800x3197"
+   },
+   {
+    "file": "img/bluda/28-3.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/9180209/",
+    "license": "Pexels License",
+    "alt": "Tasty freshly baked toast with tuna fish and greenery and sauce and cup of coffee with lat",
+    "raw": "28-3-pexels-9180209.jpg",
+    "orig": "1800x2700"
+   }
+  ]
+ },
+ "29": {
+  "main": "img/bluda/29-ga.jpg",
+  "variants": [
+   {
+    "file": "img/bluda/29-ga.jpg",
+    "src": "Генерация",
+    "model": "GPT image через Codex, промпт 29-tvorog-ogurets-a.txt",
+    "license": "своё"
+   },
+   {
+    "file": "img/bluda/29-1.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/4198170/",
+    "license": "Pexels License",
+    "alt": "Top view of bowl with cottage cheese with greenery and green onion placed on white table w",
+    "raw": "29-1-pexels-4198170.jpg",
+    "orig": "1800x2700"
+   },
+   {
+    "file": "img/bluda/29-2.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/4198171/",
+    "license": "Pexels License",
+    "alt": "Top view of bowl with fresh salad from cottage cheese and green onion placed on white marb",
+    "raw": "29-2-pexels-4198171.jpg",
+    "orig": "1800x2700"
+   },
+   {
+    "file": "img/bluda/29-3.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/10165775/",
+    "license": "Pexels License",
+    "alt": "A clean and minimalistic shot of fresh cottage cheese garnished with pea shoots in a white",
+    "raw": "29-3-pexels-10165775.jpg",
+    "orig": "1800x1800"
+   }
+  ]
+ },
+ "30": {
+  "main": "img/bluda/30-1.jpg",
+  "variants": [
+   {
+    "file": "img/bluda/30-1.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/10781833/",
+    "license": "Pexels License",
+    "alt": "A delicious vegetable salad with dill, mayonnaise, and carrots served in a white bowl.",
+    "raw": "30-1-pexels-10781833.jpg",
+    "orig": "1800x1350"
+   },
+   {
+    "file": "img/bluda/30-2.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/19302573/",
+    "license": "Pexels License",
+    "alt": "Colorful vegetable salad garnished with dill and quail eggs in a speckled ceramic bowl.",
+    "raw": "30-2-pexels-19302573.jpg",
+    "orig": "1800x1349"
+   },
+   {
+    "file": "img/bluda/30-3.jpg",
+    "src": "Pexels",
+    "page": "https://www.pexels.com/photo/14846862/",
+    "license": "Pexels License",
+    "alt": "Close-up of a traditional Russian Olivier salad with eggs and chives in a glass bowl.",
+    "raw": "30-3-pexels-14846862.jpg",
+    "orig": "1800x2400"
+   }
+  ]
+ },
+ "4": {
+  "main": "img/bluda/04-ga.jpg",
+  "variants": [
+   {
+    "file": "img/bluda/04-ga.jpg",
+    "src": "Генерация",
+    "model": "GPT image через Codex, промпт 04-grechka-yaytso-a.txt",
+    "license": "своё"
+   },
+   {
+    "file": "img/bluda/04-gb.jpg",
+    "src": "Генерация",
+    "model": "GPT image через Codex, промпт 04-grechka-yaytso-b.txt",
+    "license": "своё"
+   }
+  ]
+ },
+ "23": {
+  "main": "img/bluda/23-ga.jpg",
+  "variants": [
+   {
+    "file": "img/bluda/23-ga.jpg",
+    "src": "Генерация",
+    "model": "GPT image через Codex, промпт 23-gorbusha-a.txt",
+    "license": "своё"
+   },
+   {
+    "file": "img/bluda/23-gb.jpg",
+    "src": "Генерация",
+    "model": "GPT image через Codex, промпт 23-gorbusha-b.txt",
+    "license": "своё"
+   }
+  ]
+ }
+}
