@@ -108,7 +108,7 @@ REPORTS.forEach((r,k)=>{const d=+(r.weightNow-r.weightWas).toFixed(1);const n=no
 
 /* библиотека знаний */
 const LESSONS=[
- {cat:'Как вести приложение',items:[{t:'Как читать программу: подходы, повторения, темп, RIR',min:6,new:true},{t:'Как записывать подходы и что такое «прошлый раз»',min:4},{t:'Отчёт недели: что и когда заполнять',min:5},{t:'Фото прогресса: свет, ракурс, время',min:3}]},
+ {cat:'Как вести приложение',items:[{t:'Как читать программу: подходы, повторения, темп, RIR',min:6,new:true},{t:'Как записывать подходы и что такое «прошлый раз»',min:4},{t:'Отчёт: что и когда заполнять',min:5},{t:'Фото прогресса: свет, ракурс, время',min:3}]},
  {cat:'Питание',items:[{t:'Твоя норма КБЖУ: откуда цифры',min:8},{t:'Как считать еду без весов и срывов',min:9},{t:'Что на что менять: замены продуктов',min:7},{t:'Почему вес встал и что делать',min:10,new:true}]},
  {cat:'Тренировки',items:[{t:'Темп 3010 и контроль эксцентрика',min:5},{t:'Запас повторений: как чувствовать RIR 2',min:6},{t:'Разминка перед рабочими подходами',min:4},{t:'Замена упражнения: когда можно',min:3}]},
  {cat:'Режим и восстановление',items:[{t:'Сон и похудение: 7 часов минимум',min:6},{t:'Шаги: зачем 10 000 и как добирать',min:4}]},
@@ -131,6 +131,8 @@ function strength(){return EX_ALL.map(x=>{const h=exHistory(x.name);if(h.length<
 const store={get(k,f){try{const v=localStorage.getItem('app:'+k);return v==null?f:JSON.parse(v)}catch(e){return f}},set(k,v){try{localStorage.setItem('app:'+k,JSON.stringify(v))}catch(e){}},del(k){try{localStorage.removeItem('app:'+k)}catch(e){}}};
 
 function strengthWeeks(){const S=strength();const out=[];let m=d(C.start);while(iso(m)<=TODAY){const a=iso(m),b=iso(addDays(m,6));const vals=S.map(s=>{if(weekOf(s.hist[0].date)>=a)return null;const h=s.hist.filter(x=>x.date>=a&&x.date<=b);return h.length?Math.max(...h.map(x=>x.e1))/s.first:null}).filter(Boolean);out.push(vals.length?(sum(vals)/vals.length-1)*100:null);m=addDays(m,7)}let last=0;return out.map(v=>{if(v==null)return last;last=v;return v})}
+/* лесенка Владимира (правило 1 спеки): вес(неделя w, подход s из n) = M + 0,05·M·((s − n) + (w − 3)), не ниже 0,8·M; одна формула для клиента и для панели тренера */
+function ladderKg(M,n,w){const st=M>=20?2.5:1,floor=Math.ceil(0.8*M/st)*st;return Array.from({length:n},(_,i)=>Math.max(floor,round(M+0.05*M*((i+1-n)+(w-3)),st)))}
 /* темп по правилу Владимира 28.10: минус 0,5-1,5 % веса тела в неделю, среднее за 7 дней против среднего неделей раньше. Без даты и срока */
 const PACE={lo:0.5,hi:1.5};
 function avg7At(i){const s=DAYS.slice(Math.max(0,i-6),i+1);return sum(s.map(x=>x.weight))/s.length}
@@ -138,5 +140,5 @@ function pace(){const i=DAYS.length-1;const now=avg7At(i),was=avg7At(i-7);const 
 function paceBand(a0,n){return {hi:Array.from({length:n},(_,i)=>a0*Math.pow(1-PACE.lo/100,i/7)),lo:Array.from({length:n},(_,i)=>a0*Math.pow(1-PACE.hi/100,i/7))}}
 /* сколько дней до отчёта; в демо можно показать сам день отчёта */
 function reportState(){const demo=store.get('demo:repday',false);const left=demo?0:Math.round((d(NEXT_REPORT)-d(TODAY))/86400000);return {next:demo?TODAY:NEXT_REPORT,left,demo,passed:EVERY-left,every:EVERY,when:left===0?'сегодня':left===1?'завтра':'через '+pl(left,'день','дня','дней')}}
-window.DATA={EVERY,PLAN_TR,NEXT_REPORT,LAST_REP,PERIOD_WORD,reportState,PACE,pace,paceBand,MEAS_FIELDS:[['Талия','waist'],['Грудь','chest'],['Бедро П','thighR'],['Бедро Л','thighL'],['Бицепс П','bicepsR'],['Бицепс Л','bicepsL']],normKey,C,TODAY,PH,PHASE_LIST,SCHED,WORKOUTS,DAYS,NORMS,normAt,SUPPS,REPORTS,MEASURES,LESSONS,EX_ALL,ALTS,strength,strengthWeeks,exHistory,tonnage,weekOf,sum,e1rm,pl,navyFat,fmtD,fmtDD,iso,d,addDays,round,store,RU_D};
+window.DATA={ladderKg,EVERY,PLAN_TR,NEXT_REPORT,LAST_REP,PERIOD_WORD,reportState,PACE,pace,paceBand,MEAS_FIELDS:[['Талия','waist'],['Грудь','chest'],['Бедро П','thighR'],['Бедро Л','thighL'],['Бицепс П','bicepsR'],['Бицепс Л','bicepsL']],normKey,C,TODAY,PH,PHASE_LIST,SCHED,WORKOUTS,DAYS,NORMS,normAt,SUPPS,REPORTS,MEASURES,LESSONS,EX_ALL,ALTS,strength,strengthWeeks,exHistory,tonnage,weekOf,sum,e1rm,pl,navyFat,fmtD,fmtDD,iso,d,addDays,round,store,RU_D};
 })();

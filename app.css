@@ -121,7 +121,7 @@ textarea.note-in:focus,input.in:focus{outline:none;border-color:var(--acc)}
 .delta.down{color:var(--bad)}
 .photo{aspect-ratio:3/4;border-radius:14px;background:var(--tile);display:flex;flex-direction:column;align-items:flex-end;justify-content:flex-end;padding:8px;color:var(--muted);font-size:11px;position:relative;overflow:hidden}
 .photo::before{content:"";position:absolute;left:30%;right:30%;top:12%;bottom:0;border-radius:40% 40% 0 0;background:var(--edge)}
-.photo b{color:#fff;font-size:12px}
+.photo b{color:var(--text);font-size:12px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .week{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin:0 0 16px}
