@@ -8,12 +8,15 @@ def icon(name):
     return s
 NAV=[('dom','home','Дом','dom.html'),('tren','barbell','Тренировки','tren.html'),('pit','tools-kitchen-2','Питание','pit.html'),('prog','chart-line','Прогресс','prog.html'),('otchet','clipboard-check','Отчёт','otchet.html')]
 def nav(active):
-    out=['<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#F2652A"/><stop offset="1" stop-color="#F6B343"/></linearGradient></defs></svg>','<nav class="nav">']
+    out=['<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="var(--g1)"/><stop offset="1" stop-color="var(--g2)"/></linearGradient></defs></svg>','<nav class="nav">']
     for key,ic,label,href in NAV:
         cls=' class="on"' if key==active else ''
         out.append(f'<a{cls} href="{href}">{icon(ic)}{label}</a>')
     out.append('</nav>'); return ''.join(out)
 HEAD='<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0E0F1A"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="app.css?v='+V+'"><script src="phases.js?v='+V+'"></script><script src="data.js?v='+V+'"></script><script src="ui.js?v='+V+'"></script>'
+# экраны клиента берут тему 2 (тёмная неон) или 3 (светлая), по умолчанию как в телефоне; панель тренера и служебные остаются тёмными золотыми
+CLIENT={'dom','tren','tren-den','pit','prog','prog-upr','otchet','baza','bluda','anketa','komanda'}
+THEME='<script>(function(){var h=document.documentElement;function set(){var t="auto";try{t=JSON.parse(localStorage.getItem("app:theme"))||"auto"}catch(e){}var d=t==="auto"?(matchMedia("(prefers-color-scheme: light)").matches?"light":"neon"):t;h.dataset.theme=d;var m=document.querySelector("meta[name=theme-color]");if(m)m.content=d==="light"?"#F3F5F9":"#07070C"}set();window.setTheme=function(t){try{localStorage.setItem("app:theme",JSON.stringify(t))}catch(e){}set()};try{matchMedia("(prefers-color-scheme: light)").addEventListener("change",set)}catch(e){}})()</script>'
 for f in ['data.js','ui.js','phases.js']: shutil.copy(f'{HERE}/{f}',f'{ROOT}/{f}')
 for tpl in sorted(glob.glob(f'{HERE}/*.tpl.html')):
     name=os.path.basename(tpl).replace('.tpl.html','')
@@ -22,5 +25,5 @@ for tpl in sorted(glob.glob(f'{HERE}/*.tpl.html')):
     html=re.sub(r'\{\{([a-z0-9-]+)\}\}',lambda m:icon(m.group(1)),html)
     assert '{{' not in html, name
     m=re.search(r'<title>.*?</title>',html); title=m.group(0); html=html.replace(title,'',1)
-    open(f'{ROOT}/{name}.html','w',encoding='utf-8').write(HEAD+title+'</head><body>'+html+'</body></html>')
+    open(f'{ROOT}/{name}.html','w',encoding='utf-8').write(HEAD+(THEME if name in CLIENT else '')+title+'</head><body>'+html+'</body></html>')
     print('built',name)

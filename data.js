@@ -19,7 +19,10 @@ const pl=(n,one,few,many)=>{const a=Math.abs(n)%100,b=a%10;const w=(a>10&&a<20)?
 const R2=mulberry32(7);const rnd2=(a,b)=>a+(b-a)*R2();
 function navyFat(waist,neck,height){return 495/(1.0324-0.19077*Math.log10(waist-neck)+0.15456*Math.log10(height))-450}
 
-const C={name:'Андрей',initial:'А',height:182,age:34,start:'2026-08-17',today:TODAY,goal:'минус 10 кг к Новому году',startWeight:96.4,stepsGoal:10000,sleepGoal:7.5,vip:true,tariff:'с тренером'};
+const C={name:'Андрей',initial:'А',height:182,age:34,start:'2026-08-17',today:TODAY,goal:'минус 10 кг к Новому году',startWeight:96.4,stepsGoal:10000,sleepGoal:7.5,vip:false,tariff:'ведение'};
+/* ритм отчёта: ведение раз в две недели (решение 28.10), VIP каждую неделю; в демо тариф переключается в Отчёте */
+try{const v=localStorage.getItem('app:demo:vip');if(v!=null)C.vip=JSON.parse(v)}catch(e){}
+C.tariff=C.vip?'VIP':'ведение';const EVERY=C.vip?7:14,PLAN_TR=3*EVERY/7;
 const PH=window.PHASES;
 const PHASE_LIST=['Пост-утомление','Интенсификация 4 + 1','Фаза 3','ЕВП','Пирамида 12-10-8-8','Интенсивность 6-8','Ноги + спина, аккомодация 8-10','3 раза в неделю','Аккомодация, повторы с паузой','Интенсивность 4 × 6, темп 5010','Аккумуляция 12-10-8-8','Интенсификация, контроль эксцентрика'];
 
@@ -87,18 +90,21 @@ const sundays=['2026-08-23','2026-08-30','2026-09-06','2026-09-13','2026-09-20',
 const measAt=(k)=>({waist:+(102-6*k).toFixed(1),neck:+(41-0.5*k).toFixed(1),chest:+(108-2*k).toFixed(1),thighR:+(62-2*k).toFixed(1),thighL:+(61.5-2*k).toFixed(1),bicepsR:+(37+0.5*k).toFixed(1),bicepsL:+(36.5+0.5*k).toFixed(1)});
 const START_MEAS=Object.assign({date:C.start},measAt(0));
 const COMMENTS=['Старт хороший, вес пошёл. Норму не трогаем, шаги держи от 8 000','Темп в норме. На тренировках добавляй по плану, не торопись','Вес встал первую неделю, это вода и соль, ждём ещё неделю','Две недели без сдвига: режу калории на 200, углеводы вечером убираем','Пошло. Сон коротковат, 6 с половиной мало для восстановления','Отличная неделя. Фаза 12 тяжёлая, следи за техникой в тягах'];
-sundays.forEach((s,k)=>{const idx=DAYS.findIndex(x=>x.date===s);const wk=DAYS.slice(Math.max(0,idx-6),idx+1);const prev=DAYS.slice(Math.max(0,idx-13),Math.max(0,idx-6));
+const COMMENTS2={1:'Старт хороший, вес пошёл. На тренировках добавляй по плану, не торопись',3:'Вторая неделя почти без сдвига: режу калории на 200, углеводы вечером убираем',5:'После правки нормы пошло. Фаза 12 тяжёлая, следи за техникой в тягах'};
+/* ведение: отчёт через воскресенье (30 авг, 13 сен, 27 сен), VIP каждое. Вес сравнивается средним за 7 дней с прошлым отчётом */
+sundays.forEach((s,k)=>{if(EVERY===14&&k%2===0)return;const idx=DAYS.findIndex(x=>x.date===s);const per=DAYS.slice(Math.max(0,idx-EVERY+1),idx+1);const wk=DAYS.slice(Math.max(0,idx-6),idx+1);const prev=idx-EVERY>=0?DAYS.slice(Math.max(0,idx-EVERY-6),idx-EVERY+1):[];
   const avg=a=>a.reduce((x,y)=>x+y,0)/a.length;
-  const trs=WORKOUTS.filter(w=>w.done&&w.date>=wk[0].date&&w.date<=s);
-  REPORTS.push({date:s,n:k+1,weightWas:+avg(prev.length?prev.map(x=>x.weight):[C.startWeight]).toFixed(1),weightNow:+avg(wk.map(x=>x.weight)).toFixed(1),sleep:+avg(wk.map(x=>x.sleep)).toFixed(1),energy:+avg(wk.filter(x=>x.energy).map(x=>x.energy)).toFixed(1),stress:+avg(wk.filter(x=>x.stress).map(x=>x.stress)).toFixed(1),training:trs.length?Math.round(avg(trs.map(t=>t.rating))):0,trainings:trs.length,appetite:['обычное','обычное','повышенное','обычное','повышенное','слабое'][k],adherence:[92,88,85,78,90,95][k],steps:Math.round(avg(wk.map(x=>x.steps))),food:{kcal:Math.round(avg(wk.map(x=>x.food.kcal))),p:Math.round(avg(wk.map(x=>x.food.p))),f:Math.round(avg(wk.map(x=>x.food.f))),c:Math.round(avg(wk.map(x=>x.food.c)))},meas:Object.assign({date:s},measAt((k+1)/6)),videos:trs.length*2,comment:COMMENTS[k],hard:['Тянет на сладкое после ужина','Мало сплю из-за работы','Пропустил одну тренировку, командировка','Срыв в субботу на дне рождения','Всё по плану','Устаю к концу недели'][k]})});
+  const trs=WORKOUTS.filter(w=>w.done&&w.date>=per[0].date&&w.date<=s);
+  REPORTS.push({date:s,n:REPORTS.length+1,days:EVERY,plan:PLAN_TR,weightWas:+avg(prev.length?prev.map(x=>x.weight):[C.startWeight]).toFixed(1),weightNow:+avg(wk.map(x=>x.weight)).toFixed(1),sleep:+avg(per.map(x=>x.sleep)).toFixed(1),energy:+avg(per.filter(x=>x.energy).map(x=>x.energy)).toFixed(1),stress:+avg(per.filter(x=>x.stress).map(x=>x.stress)).toFixed(1),training:trs.length?Math.round(avg(trs.map(t=>t.rating))):0,trainings:trs.length,appetite:['обычное','обычное','повышенное','обычное','повышенное','слабое'][k],adherence:[92,88,85,78,90,95][k],steps:Math.round(avg(per.map(x=>x.steps))),food:{kcal:Math.round(avg(per.map(x=>x.food.kcal))),p:Math.round(avg(per.map(x=>x.food.p))),f:Math.round(avg(per.map(x=>x.food.f))),c:Math.round(avg(per.map(x=>x.food.c)))},meas:Object.assign({date:s},measAt((k+1)/6)),videos:trs.length*2,comment:EVERY===14?COMMENTS2[k]:COMMENTS[k],hard:['Тянет на сладкое после ужина','Мало сплю из-за работы','Пропустил одну тренировку, командировка','Срыв в субботу на дне рождения','Всё по плану','Устаю к концу недели'][k]})});
 const MEASURES=[START_MEAS].concat(REPORTS.map(r=>r.meas));
-/* разбор недели по пунктам (демо-тексты) */
-REPORTS.forEach((r,k)=>{const d=+(r.weightNow-r.weightWas).toFixed(1);const n=normAt(r.date);const trs=WORKOUTS.filter(w=>w.done&&w.date>r.date.slice(0,8)+'00'&&w.date<=r.date).slice(-3);
-  r.review=[['Вес и замеры',`${r.weightWas} → ${r.weightNow} кг, ${d>0?'+':''}${d} за неделю. Талия ${r.meas.waist} см. ${d<=-0.5?'Темп по плану':d<=-0.2?'Темп медленнее плана, смотрим питание':'Вес стоит, смотрим соблюдение и соль'}`],
+const LAST_REP=REPORTS[REPORTS.length-1];const NEXT_REPORT=iso(addDays(d(LAST_REP.date),EVERY));const PERIOD_WORD=EVERY===14?'2 недели':'неделю';
+/* разбор по пунктам (демо-тексты) */
+REPORTS.forEach((r,k)=>{const d=+(r.weightNow-r.weightWas).toFixed(1);const n=normAt(r.date);const k2=EVERY/7;
+  r.review=[['Вес и замеры',`${r.weightWas} → ${r.weightNow} кг, ${d>0?'+':''}${d} за ${PERIOD_WORD}. Талия ${r.meas.waist} см. ${d<=-0.5*k2?'Темп по плану':d<=-0.2*k2?'Темп медленнее плана, смотрим питание':'Вес стоит, смотрим соблюдение и соль'}`],
   ['Питание и голод',`Среднее ${r.food.kcal.toLocaleString('ru')} ккал при норме ${n.kcal.toLocaleString('ru')}, белок ${r.food.p} г. Соблюдение ${r.adherence} %. Голод ${r.appetite}`],
   ['Сон и стресс',`Сон ${r.sleep} ч, стресс ${r.stress} из 5, энергия ${r.energy} из 5${r.sleep<7?'. Сна мало, это тормозит и вес, и силу':''}`],
-  ['Тренировки',`${r.trainings} из 3, силовые ${r.training}/10, шаги ${r.steps.toLocaleString('ru')} в день`],
-  ['Решение на неделю',COMMENTS[k]]]});
+  ['Тренировки',`${r.trainings} из ${r.plan}, силовые ${r.training}/10, шаги ${r.steps.toLocaleString('ru')} в день`],
+  ['Решение на '+PERIOD_WORD,r.comment]]});
 
 /* библиотека знаний */
 const LESSONS=[
@@ -125,5 +131,12 @@ function strength(){return EX_ALL.map(x=>{const h=exHistory(x.name);if(h.length<
 const store={get(k,f){try{const v=localStorage.getItem('app:'+k);return v==null?f:JSON.parse(v)}catch(e){return f}},set(k,v){try{localStorage.setItem('app:'+k,JSON.stringify(v))}catch(e){}},del(k){try{localStorage.removeItem('app:'+k)}catch(e){}}};
 
 function strengthWeeks(){const S=strength();const out=[];let m=d(C.start);while(iso(m)<=TODAY){const a=iso(m),b=iso(addDays(m,6));const vals=S.map(s=>{if(weekOf(s.hist[0].date)>=a)return null;const h=s.hist.filter(x=>x.date>=a&&x.date<=b);return h.length?Math.max(...h.map(x=>x.e1))/s.first:null}).filter(Boolean);out.push(vals.length?(sum(vals)/vals.length-1)*100:null);m=addDays(m,7)}let last=0;return out.map(v=>{if(v==null)return last;last=v;return v})}
-window.DATA={MEAS_FIELDS:[['Талия','waist'],['Грудь','chest'],['Бедро П','thighR'],['Бедро Л','thighL'],['Бицепс П','bicepsR'],['Бицепс Л','bicepsL']],normKey,C,TODAY,PH,PHASE_LIST,SCHED,WORKOUTS,DAYS,NORMS,normAt,SUPPS,REPORTS,MEASURES,LESSONS,EX_ALL,ALTS,strength,strengthWeeks,exHistory,tonnage,weekOf,sum,e1rm,pl,navyFat,fmtD,fmtDD,iso,d,addDays,round,store,RU_D};
+/* темп по правилу Владимира 28.10: минус 0,5-1,5 % веса тела в неделю, среднее за 7 дней против среднего неделей раньше. Без даты и срока */
+const PACE={lo:0.5,hi:1.5};
+function avg7At(i){const s=DAYS.slice(Math.max(0,i-6),i+1);return sum(s.map(x=>x.weight))/s.length}
+function pace(){const i=DAYS.length-1;const now=avg7At(i),was=avg7At(i-7);const pct=Math.round((was-now)/was*1000)/10;return {now,was,kg:+(now-was).toFixed(1),pct,ok:pct>=PACE.lo&&pct<=PACE.hi,slow:pct<PACE.lo,fast:pct>PACE.hi}}
+function paceBand(a0,n){return {hi:Array.from({length:n},(_,i)=>a0*Math.pow(1-PACE.lo/100,i/7)),lo:Array.from({length:n},(_,i)=>a0*Math.pow(1-PACE.hi/100,i/7))}}
+/* сколько дней до отчёта; в демо можно показать сам день отчёта */
+function reportState(){const demo=store.get('demo:repday',false);const left=demo?0:Math.round((d(NEXT_REPORT)-d(TODAY))/86400000);return {next:demo?TODAY:NEXT_REPORT,left,demo,passed:EVERY-left,every:EVERY,when:left===0?'сегодня':left===1?'завтра':'через '+pl(left,'день','дня','дней')}}
+window.DATA={EVERY,PLAN_TR,NEXT_REPORT,LAST_REP,PERIOD_WORD,reportState,PACE,pace,paceBand,MEAS_FIELDS:[['Талия','waist'],['Грудь','chest'],['Бедро П','thighR'],['Бедро Л','thighL'],['Бицепс П','bicepsR'],['Бицепс Л','bicepsL']],normKey,C,TODAY,PH,PHASE_LIST,SCHED,WORKOUTS,DAYS,NORMS,normAt,SUPPS,REPORTS,MEASURES,LESSONS,EX_ALL,ALTS,strength,strengthWeeks,exHistory,tonnage,weekOf,sum,e1rm,pl,navyFat,fmtD,fmtDD,iso,d,addDays,round,store,RU_D};
 })();

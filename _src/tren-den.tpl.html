@@ -3,7 +3,7 @@
 .timer{display:flex;align-items:center;gap:8px;font-weight:800;font-size:20px;font-variant-numeric:tabular-nums}.timer svg{color:var(--acc);width:20px;height:20px}
 .dayt{font-size:12px;color:var(--acc2);font-weight:700}.dayh{font-size:21px;font-weight:800;margin:2px 0 4px}
 .hint{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:12px;margin:8px 0 14px}.hint svg{width:14px;height:14px}
-.ex{background:var(--card);border-radius:20px;padding:14px;margin-bottom:12px;border:1px solid rgba(255,255,255,.03)}.ex.open{border-color:rgba(242,101,42,.35)}.ex.alldone{border-color:rgba(47,191,113,.35)}
+.ex{background:var(--card);border-radius:20px;padding:14px;margin-bottom:12px;border:1px solid var(--edge)}.ex.open{border-color:color-mix(in srgb,var(--acc) 35%,transparent)}.ex.alldone{border-color:color-mix(in srgb,var(--ok) 35%,transparent)}
 .exh{display:flex;gap:12px;align-items:flex-start;cursor:pointer}
 .exh .t{flex:1;min-width:0}.exh .t b{display:block;font-size:15px;font-weight:700;line-height:1.2}.exh .t .sub{font-size:12px;color:var(--muted);margin-top:4px}
 .acts{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}.acts .chip{padding:6px 10px;font-size:12px}
@@ -14,19 +14,21 @@
 .set{display:grid;grid-template-columns:22px minmax(0,1fr) 62px 62px 36px;gap:6px;align-items:center;background:var(--chip2);border-radius:14px;padding:6px 4px 6px 8px;transition:background .2s,border-color .2s;border:1.5px solid transparent;min-height:50px}
 .set .n{font-weight:800;color:var(--muted)}.set .goal b{display:block;font-size:14px;font-weight:800;font-variant-numeric:tabular-nums}.set .goal span{font-size:10.5px;color:var(--muted);display:block;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
 .set input{width:100%;height:38px;border-radius:10px;border:1.5px solid transparent;background:var(--card);color:var(--text);font:inherit;font-weight:800;font-size:16px;text-align:center;font-variant-numeric:tabular-nums;padding:0}
-.set input::placeholder{color:#4A4B58;font-weight:600}.set input:focus{outline:none;border-color:var(--acc)}
+.set input::placeholder{color:var(--faint);font-weight:600}.set input:focus{outline:none;border-color:var(--acc)}
 .set .ok{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--acc);background:transparent;color:var(--acc2);display:grid;place-items:center;cursor:pointer;padding:0;transition:all .2s}.set .ok svg{width:16px;height:16px}
-.set.fill{background:rgba(47,191,113,.08);border-color:rgba(47,191,113,.45)}.set.fill .ok{background:#2FBF71;border-color:#2FBF71;color:#06120B;box-shadow:0 0 0 4px rgba(47,191,113,.18)}.set.fill input{background:transparent;color:#5BE49B}
+.set.fill{background:color-mix(in srgb,var(--ok) 8%,transparent);border-color:color-mix(in srgb,var(--ok) 45%,transparent)}.set.fill .ok{background:var(--ok);border-color:var(--ok);color:var(--okInk);box-shadow:0 0 0 4px color-mix(in srgb,var(--ok) 18%,transparent)}.set.fill input{background:transparent;color:var(--ok2)}
 .set.pb .goal b{color:var(--acc2)}.set .goal b svg{width:12px;height:12px;color:var(--acc2);vertical-align:-1px;margin-left:2px}
-.vid{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--acc2);font-weight:700;margin-top:8px;cursor:pointer}.vid svg{width:16px;height:16px}.vid.ok{color:#5BE49B}
+.vid{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--acc2);font-weight:700;margin-top:8px;cursor:pointer}.vid svg{width:16px;height:16px}.vid.ok{color:var(--ok2)}
 .vol{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:10px}
-.rest{display:flex;align-items:center;gap:10px;background:var(--card);border-radius:16px;padding:12px 14px;margin:-4px 0 12px;border:1px solid rgba(242,101,42,.35)}.rest .lbl{font-weight:700;font-size:13px}.rest .cnt{margin-left:auto;font-weight:800;font-variant-numeric:tabular-nums;font-size:20px;color:var(--acc2)}.rest .skip{background:none;border:0;color:var(--muted);padding:4px;cursor:pointer}.rest .skip svg{width:18px;height:18px}
+.rest{display:flex;align-items:center;gap:10px;background:var(--card);border-radius:16px;padding:12px 14px;margin:-4px 0 12px;border:1px solid color-mix(in srgb,var(--acc) 35%,transparent)}.rest .lbl{font-weight:700;font-size:13px}.rest .cnt{margin-left:auto;font-weight:800;font-variant-numeric:tabular-nums;font-size:20px;color:var(--acc2)}.rest .skip{background:none;border:0;color:var(--muted);padding:4px;cursor:pointer}.rest .skip svg{width:18px;height:18px}
 .restbar{height:3px;background:var(--chip2);border-radius:9px;margin:-8px 0 12px;overflow:hidden}.restbar i{display:block;height:100%;background:var(--grad)}
-.super{border:1px dashed rgba(246,179,67,.5)}.super .sup{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--acc2);font-weight:700;margin-bottom:10px}.super .sup span{color:var(--muted);font-weight:500}.super .ex{background:var(--chip);margin:0;border:0;padding:12px}.super .ex+.ex{margin-top:8px}
+.super{border:1px dashed color-mix(in srgb,var(--acc2) 50%,transparent)}.super .sup{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--acc2);font-weight:700;margin-bottom:10px}.super .sup span{color:var(--muted);font-weight:500}.super .ex{background:var(--chip);margin:0;border:0;padding:12px}.super .ex+.ex{margin-top:8px}
 .link{display:flex;align-items:center;gap:8px;justify-content:center;color:var(--muted);font-size:11px;margin:4px 0}.link i{display:block;width:2px;height:14px;background:var(--acc2);border-radius:2px}
 .finish{display:block;text-align:center;margin:6px 0 0;width:100%}
-.banner{display:flex;align-items:center;gap:10px;background:rgba(47,191,113,.1);border:1px solid rgba(47,191,113,.4);border-radius:14px;padding:10px 12px;font-size:13px;margin-bottom:12px}.banner svg{width:18px;height:18px;color:#5BE49B}
-.banner.plan{background:rgba(246,179,67,.08);border-color:rgba(246,179,67,.4)}.banner.plan svg{color:var(--acc2)}
+.banner{display:flex;align-items:center;gap:10px;background:color-mix(in srgb,var(--ok) 10%,transparent);border:1px solid color-mix(in srgb,var(--ok) 40%,transparent);border-radius:14px;padding:10px 12px;font-size:13px;margin-bottom:12px}.banner svg{width:18px;height:18px;color:var(--ok2)}
+.banner.plan{background:color-mix(in srgb,var(--acc2) 8%,transparent);border-color:color-mix(in srgb,var(--acc2) 40%,transparent)}.banner.plan svg{color:var(--acc2)}
+.sugg{display:flex;align-items:center;gap:10px;margin-top:10px;background:color-mix(in srgb,var(--acc2) 7%,transparent);border:1px solid color-mix(in srgb,var(--acc2) 30%,transparent);border-radius:12px;padding:8px 10px;font-size:11.5px;color:var(--muted);line-height:1.3}.sugg span{flex:1;min-width:0}.sugg b{display:block;color:var(--acc2);font-size:13px;font-variant-numeric:tabular-nums;margin-bottom:2px}.sugg .chip{flex:none;padding:6px 10px;font-size:12px}
+.set input.sug::placeholder{color:var(--acc2);opacity:.55;font-weight:700}
 </style>
 <div class="phone"><div class="scroll" id="root"></div>{{nav:tren}}</div>
 <script>
@@ -39,6 +41,24 @@ const parseReps=(r,i)=>{r=String(r);if(r.includes(','))return r.split(',')[i]||r
 const EX=W.ex.map((e,idx)=>{const hist=D.exHistory(e.name).filter(h=>h.date<W.date);const prev=hist.length?hist[hist.length-1]:null;const best=hist.length?Math.max(...hist.map(h=>h.best)):0;const byReps={};hist.forEach(h=>h.sets.forEach(x=>{byReps[x.reps]=Math.max(byReps[x.reps]||0,x.kg)}));const sup=/^[A-Z]\d$/.test(e.code)?e.code[0]:null;
   return {id:e.code,idx,name:e.name,sets:e.target.sets,reps:e.target.reps,tempo:e.target.tempo,rir:e.target.rir,prev,best,byReps,sup,rest:[e.target.rest,e.target.rest+30],muscle:D.EX_ALL.find(x=>D.normKey(x.name)===D.normKey(e.name)).muscle,logged:e.sets}});
 EX.forEach(e=>{if(e.sup&&EX.filter(x=>x.sup===e.sup).length<2)e.sup=null});
+/* подсказка веса по лесенке (решение 16.10: первый раз вес выбирает человек, дальше приложение подсказывает, выбор за ним).
+   Фиксированные повторы: тот же день прошлой недели добран, каждый подход на шаг 5 % выше; не добран, веса повторить (умолчание спеки, ждёт его слова).
+   Диапазон: вес на все 4 недели тот же, цель верх диапазона. Новая фаза, неделя 1, фиксированные повторы: M + 0,05·M·((s − n) − 2), не ниже 0,8·M */
+const repT=r=>{r=String(r);if(r.includes(','))return r.split(',').map(Number);if(r.includes('-')){const [a,b]=r.split('-').map(Number);return {lo:a,hi:b}}const n=parseInt(r);return isNaN(n)?null:n};
+const needOf=(rp,i)=>Array.isArray(rp)?(rp[i]!=null?rp[i]:rp[rp.length-1]):typeof rp==='number'?rp:rp.lo;
+const kgS=v=>String(v).replace('.',',');
+function ladder(e){if(MODE==='view')return null;const rp=repT(e.reps);if(rp==null)return null;const range=!Array.isArray(rp)&&typeof rp==='object';const n=e.sets;
+  const pw=D.WORKOUTS.find(w=>w.phase===W.phase&&w.week===W.week-1&&w.day===W.day&&w.done);const pe=pw&&pw.ex.find(x=>D.normKey(x.name)===D.normKey(e.name)&&x.sets.length);
+  if(pe){const ps=pe.sets,top=ps[ps.length-1].kg,st=top>=20?2.5:1,at=i=>ps[Math.min(i,ps.length-1)].kg;const rpl=repT(pe.target.reps)||rp;const done=ps.every((s,i)=>s.reps>=needOf(rpl,i));
+    if(range)return {kg:Array.from({length:n},(_,i)=>at(i)),why:`вес тот же, что ${D.fmtDD(pw.date)}: цель ${rp.hi} повторений`};
+    /* M восстанавливается из верхнего подхода прошлой недели: верх недели w = M · (1 + 0,05 · (w − 3)) */
+    const wp=W.week-1,M=top/(1+0.05*(wp-3)),lad=w=>Array.from({length:n},(_,i)=>D.round(Math.max(0.8*M,M+0.05*M*((i+1-n)+(w-3))),st));
+    if(done)return {kg:lad(W.week),why:`${D.fmtDD(pw.date)} все повторы сделаны: лесенка недели ${W.week}, шаг 5 %`};
+    return {kg:lad(wp),why:`${D.fmtDD(pw.date)} не все повторы: лесенка прошлой недели`}}
+  if(!e.prev)return {first:true};
+  if(W.week===1&&e.prev.phase!==W.phase&&!range){const ps=e.prev.sets,M=ps[ps.length-1].kg,st=M>=20?2.5:1;return {kg:Array.from({length:n},(_,i)=>D.round(Math.max(0.8*M,M+0.05*M*((i+1-n)-2)),st)),why:'новая фаза: лесенка от последнего подхода прошлой фазы'}}
+  return null}
+EX.forEach(e=>{e.lad=ladder(e)});
 const KEY='wo:'+W.date;
 let S=D.store.get(KEY,{});S.sets=S.sets||{};S.swap=S.swap||{};S.notes=S.notes||{};S.video=S.video||{};S.open=S.open||EX[0].id;S.restSel=S.restSel||{};if(S.start&&Date.now()-S.start>3*3600000){S.start=null;S.rest=null}
 const tick=()=>{if(!S.start){S.start=Date.now();save()}};const elapsed=()=>S.start?(Date.now()-S.start)/1000:0;
@@ -49,14 +69,18 @@ const fmt=s=>{s=Math.max(0,Math.floor(s));return String(Math.floor(s/60)).padSta
 const tempoHtml=t=>'<span class="tempo">'+String(t).split('').map(c=>'<i>'+c+'</i>').join('')+'</span>';
 const RO=MODE==='view';
 function isPb(e,s){if(!s.done||!(+s.kg>0)||!(+s.reps>0))return false;const prevBest=e.byReps[+s.reps];return prevBest!=null&&+s.kg>prevBest}
-function exHtml(e){const open=S.open===e.id,sets=setsOf(e),all=sets.every(s=>s.done),n=sets.filter(s=>s.done).length;
+function sugHtml(e){if(RO||S.swap[e.id])return '';const L=e.lad;if(!L)return '';
+  if(L.first)return `<div class="sugg"><span><b>Первый раз</b>Вес подбираешь сам. Со следующей недели приложение подскажет вес по лесенке</span></div>`;
+  const left=setsOf(e).some(s=>!s.done&&!String(s.kg).trim());
+  return `<div class="sugg"><span><b>Предложено: ${L.kg.map(kgS).join(' · ')} кг</b>${L.why}. Вес выбираешь ты</span>${left?`<button class="chip" data-fill="${e.id}">Подставить</button>`:''}</div>`}
+function exHtml(e){const L=S.swap[e.id]?null:e.lad;const open=S.open===e.id,sets=setsOf(e),all=sets.every(s=>s.done),n=sets.filter(s=>s.done).length;
   let h=`<div class="ex ${open?'open':''} ${all?'alldone':''}" id="ex-${e.id}"><div class="exh" data-open="${e.id}"><div class="thumb" data-video="${e.id}">${I.play}</div><div class="t"><b>${e.id} · ${nameOf(e)}${S.swap[e.id]?'<span class="badge">замена</span>':''}</b><div class="sub">${e.sets} × ${e.reps}${e.rir?' · RIR '+e.rir:''}${open?'':' · '+n+' из '+e.sets+' сделано'}</div></div>${all?'<div class="done">'+I.check+'</div>':'<div class="todo"></div>'}</div>`;
   if(open){h+=`<div class="acts">${RO?'':`<button class="chip" data-swap="${e.id}">${I.swap} Замена</button>`}<button class="chip" data-tech="${e.id}">${I.notes} Техника</button><a class="chip" href="prog-upr.html?ex=${encodeURIComponent(e.name)}">${I.trophy} История</a></div>
-   <div class="meta"><span>Темп ${tempoHtml(e.tempo)}</span><span>${e.rir?'RIR <b>'+e.rir+'</b> · ':''}отдых <b>${e.rest[0]} с</b></span></div>
+   <div class="meta"><span>Темп ${tempoHtml(e.tempo)}</span><span>${e.rir?'RIR <b>'+e.rir+'</b> · ':''}отдых <b>${e.rest[0]} с</b></span></div>${sugHtml(e)}
    <div class="sets"><div class="sh"><span>№</span><span>Цель</span><span>кг</span><span>повт</span><span></span></div>`;
-   sets.forEach((s,i)=>{const pb=isPb(e,s);h+=`<div class="set ${s.done?'fill':''} ${pb?'pb':''}" id="set-${e.id}-${i}"><span class="n">${i+1}</span><span class="goal"><b>${parseReps(e.reps,i)}${pb?' '+I.trophy:''}</b><span>${e.prev&&e.prev.sets[i]?'было '+String(e.prev.sets[i].kg).replace('.',',')+' кг × '+e.prev.sets[i].reps+' повт':e.prev?'было: подхода не было':'первый раз'}</span></span><input inputmode="decimal" placeholder="кг" value="${s.kg}" data-kg="${e.id}:${i}" ${RO?'readonly':''}><input inputmode="numeric" placeholder="повт" value="${s.reps}" data-reps="${e.id}:${i}" ${RO?'readonly':''}><button class="ok" data-ok="${e.id}:${i}" aria-label="Подход">${I.check}</button></div>`});
+   sets.forEach((s,i)=>{const pb=isPb(e,s);h+=`<div class="set ${s.done?'fill':''} ${pb?'pb':''}" id="set-${e.id}-${i}"><span class="n">${i+1}</span><span class="goal"><b>${parseReps(e.reps,i)}${pb?' '+I.trophy:''}</b><span>${e.prev&&e.prev.sets[i]?'было '+String(e.prev.sets[i].kg).replace('.',',')+' кг × '+e.prev.sets[i].reps+' повт':e.prev?'было: подхода не было':'первый раз'}</span></span><input inputmode="decimal" placeholder="${L&&L.kg?kgS(L.kg[i]):'кг'}" class="${L&&L.kg?'sug':''}" value="${s.kg}" data-kg="${e.id}:${i}" ${RO?'readonly':''}><input inputmode="numeric" placeholder="повт" value="${s.reps}" data-reps="${e.id}:${i}" ${RO?'readonly':''}><button class="ok" data-ok="${e.id}:${i}" aria-label="Подход">${I.check}</button></div>`});
    const vol=sets.reduce((a,s)=>a+(+s.kg||0)*(+s.reps||0),0);
-   h+=`</div><div class="vol"><span>Объём <b style="color:#fff" id="vol-${e.id}">${vol.toLocaleString('ru')} кг</b></span><span>${e.prev?'прошлый раз '+e.prev.vol.toLocaleString('ru')+' кг':''}</span></div>`;
+   h+=`</div><div class="vol"><span>Объём <b style="color:var(--text)" id="vol-${e.id}">${vol.toLocaleString('ru')} кг</b></span><span>${e.prev?'прошлый раз '+e.prev.vol.toLocaleString('ru')+' кг':''}</span></div>`;
    }
   return h+'</div>'}
 function render(){const r=document.getElementById('root');let list='';let i=0;
@@ -75,7 +99,8 @@ function render(){const r=document.getElementById('root');let list='';let i=0;
 function startRest(e){const sel=S.restSel[e.id]||e.rest[0];S.rest={ex:e.id,end:Date.now()+sel*1000,total:sel};save();render()}
 function volUpdate(e){const sets=setsOf(e);const v=sets.reduce((a,s)=>a+(+s.kg||0)*(+s.reps||0),0);const el=document.getElementById('vol-'+e.id);if(el)el.textContent=v.toLocaleString('ru')+' кг'}
 const root=document.getElementById('root');
-root.addEventListener('click',ev=>{const t=ev.target.closest('[data-open],[data-swap],[data-tech],[data-ok],[data-rest],[data-skiprest],[data-video]');if(!t)return;
+root.addEventListener('click',ev=>{const t=ev.target.closest('[data-open],[data-swap],[data-tech],[data-ok],[data-rest],[data-skiprest],[data-video],[data-fill]');if(!t)return;
+  if(t.dataset.fill){const e=EX.find(x=>x.id===t.dataset.fill);const L=e.lad;let k=0;setsOf(e).forEach((s,i)=>{if(!s.done&&!String(s.kg).trim()){s.kg=String(L.kg[i]);k++}});save();render();U.toast(k?'Подставлено, поменяй, если нужно':'Все подходы уже заполнены');return}
   if(t.dataset.video){ev.stopPropagation();U.openSheet(`<h3>Видео техники</h3><p>Здесь играет твоё видео упражнения</p><div class="video">${I.play}</div><div class="row2"><button class="ghost" data-close>Закрыть</button></div>`);return}
   if(t.dataset.open){S.open=S.open===t.dataset.open?null:t.dataset.open;save();render();return}
   if(t.dataset.swap){sheetSwap(EX.find(x=>x.id===t.dataset.swap));return}

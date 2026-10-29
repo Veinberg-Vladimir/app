@@ -1,8 +1,8 @@
 <title>Тренировки</title>
 <style>
 .weeks{display:flex;gap:6px;margin-top:12px}.weeks i{flex:1;height:6px;border-radius:99px;background:var(--chip2)}.weeks i.ok{background:var(--grad)}.weeks i.now{background:var(--grad);opacity:.55}
-.day{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:18px;padding:14px;margin-bottom:10px;text-decoration:none;color:var(--text);border:1px solid rgba(255,255,255,.03)}
-.day.today{background:radial-gradient(120% 120% at 100% 0%,rgba(242,101,42,.2),transparent 60%),var(--card);border-color:rgba(242,101,42,.35)}
+.day{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:18px;padding:14px;margin-bottom:10px;text-decoration:none;color:var(--text);border:1px solid var(--edge)}
+.day.today{background:radial-gradient(120% 120% at 100% 0%,color-mix(in srgb,var(--acc) 20%,transparent),transparent 60%),var(--card);border-color:color-mix(in srgb,var(--acc) 35%,transparent)}
 .day .n{width:44px;height:44px;border-radius:14px;background:var(--chip2);display:grid;place-items:center;font-weight:800;color:var(--acc2);flex:none}
 .day .t{flex:1;min-width:0}.day .t b{display:block;font-size:15px;font-weight:700}.day .t span{font-size:12px;color:var(--muted)}
 .more{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:16px;padding:14px;margin-bottom:10px;text-decoration:none;color:var(--text);cursor:pointer}
@@ -10,7 +10,7 @@
 .hero h3{margin:0;font-size:21px;font-weight:800}.hero p{margin:6px 0 0;color:var(--muted);font-size:13px}
 .hist{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:16px;padding:12px 14px;margin-bottom:8px;color:var(--text);text-decoration:none}
 .hist .n{width:40px;height:40px;border-radius:12px;background:var(--chip2);display:grid;place-items:center;font-weight:800;color:var(--acc2);flex:none}
-.hist.today{background:radial-gradient(120% 120% at 100% 0%,rgba(242,101,42,.2),transparent 60%),var(--card);box-shadow:inset 0 0 0 1px rgba(242,101,42,.35)}
+.hist.today{background:radial-gradient(120% 120% at 100% 0%,color-mix(in srgb,var(--acc) 20%,transparent),transparent 60%),var(--card);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--acc) 35%,transparent)}
 .hist.plan{opacity:.5}
 .hist .t{flex:1;min-width:0}.hist .t b{display:block;font-size:14px}.hist .t span{font-size:12px;color:var(--muted)}
 .hist .v{text-align:right;font-variant-numeric:tabular-nums}.hist .v b{display:block;font-size:14px}.hist .v span{font-size:11px;color:var(--muted)}
