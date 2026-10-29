@@ -1,4 +1,4 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0E0F1A"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="app.css?v=1793256281"><script src="phases.js?v=1793256281"></script><script src="data.js?v=1793256281"></script><script src="ui.js?v=1793256281"></script><title>Клиенты</title></head><body>
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0E0F1A"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="app.css?v=1793260465"><script src="phases.js?v=1793260465"></script><script src="data.js?v=1793260465"></script><script src="ui.js?v=1793260465"></script><title>Клиенты</title></head><body>
 <style>
 .cl{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:18px;padding:12px 14px;margin-bottom:8px;color:var(--text);text-decoration:none;border:1px solid rgba(255,255,255,.03)}
 .cl .t{flex:1;min-width:0}
@@ -32,13 +32,14 @@ function andrey(){const last=D.DAYS[D.DAYS.length-1];const sc=weekScore('2026-09
   const flags=[{t:'Фаза 12 кончается 11 окт, Фаза 13 не назначена',red:true}];
   if(sleep<7)flags.push({t:`Сон ${f1(sleep)} ч в среднем за 7 дней при цели ${f1(D.C.sleepGoal)}`});
   if(over>=2)flags.push({t:`${over} дня из 7 выше нормы калорий`});
+  const prevR=D.REPORTS.length>1?D.REPORTS[D.REPORTS.length-2].date:'0000';const miss=D.WORKOUTS.filter(w=>w.done&&w.date>prevR&&w.date<=D.LAST_REP.date).flatMap(D.missesOf);if(miss.length)flags.push({t:`Не добрал повторы: ${[...new Set(miss.map(m=>m.name))].join(', ')}`,red:true});
   const P=D.pace();if(!P.ok)flags.push({t:`Темп ${P.pct>0?'−':'+'}${f1(Math.abs(P.pct))} % за неделю: ${P.slow?'медленнее':'быстрее'} коридора 0,5-1,5 %`});
   return {name:'Андрей',t:D.C.vip?'VIP':'Ведение',week:7,phase:'Фаза 12, нед. 3',kg:last.weight,dk:+(last.weight-D.C.startWeight).toFixed(1),score:sc?sc.avg:null,flags,demo:true}}
 /* остальные клиенты придуманы для вида списка */
 const OTHERS=[
  {name:'Сергей',t:'Разбор недели',week:2,phase:'Фаза 1, нед. 2',kg:104.8,dk:-1.6,score:.62,flags:[{t:'Отчёт пришёл, разбор не отправлен',red:true},{t:'Вес не внесён 3 дня'}]},
  {name:'Дмитрий',t:'Ведение',week:5,phase:'Фаза 2, нед. 1',kg:88.1,dk:-3.2,score:.81,flags:[{t:'Норма пересчитана после -3 кг: 2 120 ккал, ждёт утверждения',red:true}]},
- {name:'Артём',t:'Разбор недели',week:4,phase:'Фаза 1, нед. 4',kg:101.3,dk:-2.7,score:.84,flags:[{t:'Жим лёжа не добран две недели: предложено снизить вес на шаг, подтвердить',red:true}]},
+ {name:'Артём',t:'Разбор недели',week:4,phase:'Фаза 1, нед. 4',kg:101.3,dk:-2.7,score:.84,flags:[{t:'Не добрал повторы 2 тренировки подряд: жим лёжа. Сон 6,1 ч, запас повторов не держит',red:true}]},
  {name:'Олег',t:'Ведение',week:11,phase:'Фаза 3, нед. 3',kg:97.5,dk:-6.8,score:.74,flags:[{t:'Пропущена тренировка в четверг'},{t:'Калории выше нормы 3 дня подряд'}]},
  {name:'Роман',t:'Разбор недели',week:6,phase:'Фаза 2, нед. 2',kg:85.4,dk:-3.9,score:.67,flags:[{t:'Сон 5,9 ч за неделю при цели 7,5'}]},
  {name:'Максим',t:'Ведение',week:1,phase:'Фаза 1, нед. 1',kg:112.0,dk:0,score:null,flags:[{t:'Первая неделя: вес не внесён ни разу'}]},

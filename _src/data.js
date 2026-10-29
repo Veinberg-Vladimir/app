@@ -87,7 +87,7 @@ if(DAYS.length){const t=DAYS[DAYS.length-1];t.sleep=7.5;t.steps=6240;t.supps=[tr
 /* отчёты по воскресеньям */
 const REPORTS=[];
 const sundays=['2026-08-23','2026-08-30','2026-09-06','2026-09-13','2026-09-20','2026-09-27'];
-const measAt=(k)=>({waist:+(102-6*k).toFixed(1),neck:+(41-0.5*k).toFixed(1),chest:+(108-2*k).toFixed(1),thighR:+(62-2*k).toFixed(1),thighL:+(61.5-2*k).toFixed(1),bicepsR:+(37+0.5*k).toFixed(1),bicepsL:+(36.5+0.5*k).toFixed(1)});
+const measAt=(k)=>({waist:+(102-6*k).toFixed(1),hips:+(106-4*k).toFixed(1),neck:+(41-0.5*k).toFixed(1),chest:+(108-2*k).toFixed(1),thighR:+(62-2*k).toFixed(1),thighL:+(61.5-2*k).toFixed(1),bicepsR:+(37+0.5*k).toFixed(1),bicepsL:+(36.5+0.5*k).toFixed(1)});
 const START_MEAS=Object.assign({date:C.start},measAt(0));
 const COMMENTS=['Старт хороший, вес пошёл. Норму не трогаем, шаги держи от 8 000','Темп в норме. На тренировках добавляй по плану, не торопись','Вес встал первую неделю, это вода и соль, ждём ещё неделю','Две недели без сдвига: режу калории на 200, углеводы вечером убираем','Пошло. Сон коротковат, 6 с половиной мало для восстановления','Отличная неделя. Фаза 12 тяжёлая, следи за техникой в тягах'];
 const COMMENTS2={1:'Старт хороший, вес пошёл. На тренировках добавляй по плану, не торопись',3:'Вторая неделя почти без сдвига: режу калории на 200, углеводы вечером убираем',5:'После правки нормы пошло. Фаза 12 тяжёлая, следи за техникой в тягах'};
@@ -133,6 +133,15 @@ const store={get(k,f){try{const v=localStorage.getItem('app:'+k);return v==null?
 function strengthWeeks(){const S=strength();const out=[];let m=d(C.start);while(iso(m)<=TODAY){const a=iso(m),b=iso(addDays(m,6));const vals=S.map(s=>{if(weekOf(s.hist[0].date)>=a)return null;const h=s.hist.filter(x=>x.date>=a&&x.date<=b);return h.length?Math.max(...h.map(x=>x.e1))/s.first:null}).filter(Boolean);out.push(vals.length?(sum(vals)/vals.length-1)*100:null);m=addDays(m,7)}let last=0;return out.map(v=>{if(v==null)return last;last=v;return v})}
 /* лесенка Владимира (правило 1 спеки): вес(неделя w, подход s из n) = M + 0,05·M·((s − n) + (w − 3)), не ниже 0,8·M; одна формула для клиента и для панели тренера */
 function ladderKg(M,n,w){const st=M>=20?2.5:1,floor=Math.ceil(0.8*M/st)*st;return Array.from({length:n},(_,i)=>Math.max(floor,round(M+0.05*M*((i+1-n)+(w-3)),st)))}
+/* подсказка веса после сданного отчёта (его слово 29.10): веса на период до следующего отчёта считаются из той же тренировки,
+   сделанной до последнего отчёта. Все повторы сделаны: лесенка; нет: веса те же, а тренер видит недобор в отчёте */
+const repT=r=>{r=String(r);if(r.includes(','))return r.split(',').map(Number);if(r.includes('-')){const [a,b]=r.split('-').map(Number);return {lo:a,hi:b}}const n=parseInt(r);return isNaN(n)?null:n};
+const needOf=(rp,i)=>Array.isArray(rp)?(rp[i]!=null?rp[i]:rp[rp.length-1]):typeof rp==='number'?rp:rp.lo;
+function missesOf(w){const out=[];w.ex.forEach(e=>{const rp=repT(e.target.reps);if(rp==null||!e.sets.length)return;e.sets.forEach((s,i)=>{const need=needOf(rp,i);if(s.reps<need)out.push({date:w.date,name:e.name,set:i+1,got:s.reps,need})})});return out}
+function suggest(phase,day,week,name,n,reps){const key=normKey(name);const base=WORKOUTS.filter(w=>w.done&&w.phase===phase&&w.day===day&&w.week<week&&w.date<=LAST_REP.date).pop();const be=base&&base.ex.find(x=>normKey(x.name)===key&&x.sets.length);if(!be)return null;
+  const rp=repT(reps);if(rp==null)return null;const rpb=repT(be.target.reps)||rp,range=!Array.isArray(rp)&&typeof rp==='object';const ps=be.sets,top=ps[ps.length-1].kg,st=top>=20?2.5:1,at=i=>ps[Math.min(i,ps.length-1)].kg;const done=ps.every((s,i)=>s.reps>=needOf(rpb,i));const same=Array.from({length:n},(_,i)=>at(i));
+  if(range)return {kg:same,done,base,why:done?`вес тот же, цель ${rp.hi} повторений`:'не все повторы: веса те же'};
+  const M=top/(1+0.05*(base.week-3));return done?{kg:ladderKg(M,n,week),done,base,why:`лесенка недели ${week}, шаг 5 %`}:{kg:same,done,base,why:'не все повторы: веса те же'}}
 /* темп по правилу Владимира 28.10: минус 0,5-1,5 % веса тела в неделю, среднее за 7 дней против среднего неделей раньше. Без даты и срока */
 const PACE={lo:0.5,hi:1.5};
 function avg7At(i){const s=DAYS.slice(Math.max(0,i-6),i+1);return sum(s.map(x=>x.weight))/s.length}
@@ -140,5 +149,5 @@ function pace(){const i=DAYS.length-1;const now=avg7At(i),was=avg7At(i-7);const 
 function paceBand(a0,n){return {hi:Array.from({length:n},(_,i)=>a0*Math.pow(1-PACE.lo/100,i/7)),lo:Array.from({length:n},(_,i)=>a0*Math.pow(1-PACE.hi/100,i/7))}}
 /* сколько дней до отчёта; в демо можно показать сам день отчёта */
 function reportState(){const demo=store.get('demo:repday',false);const left=demo?0:Math.round((d(NEXT_REPORT)-d(TODAY))/86400000);return {next:demo?TODAY:NEXT_REPORT,left,demo,passed:EVERY-left,every:EVERY,when:left===0?'сегодня':left===1?'завтра':'через '+pl(left,'день','дня','дней')}}
-window.DATA={ladderKg,EVERY,PLAN_TR,NEXT_REPORT,LAST_REP,PERIOD_WORD,reportState,PACE,pace,paceBand,MEAS_FIELDS:[['Талия','waist'],['Грудь','chest'],['Бедро П','thighR'],['Бедро Л','thighL'],['Бицепс П','bicepsR'],['Бицепс Л','bicepsL']],normKey,C,TODAY,PH,PHASE_LIST,SCHED,WORKOUTS,DAYS,NORMS,normAt,SUPPS,REPORTS,MEASURES,LESSONS,EX_ALL,ALTS,strength,strengthWeeks,exHistory,tonnage,weekOf,sum,e1rm,pl,navyFat,fmtD,fmtDD,iso,d,addDays,round,store,RU_D};
+window.DATA={ladderKg,suggest,missesOf,EVERY,PLAN_TR,NEXT_REPORT,LAST_REP,PERIOD_WORD,reportState,PACE,pace,paceBand,MEAS_FIELDS:[['Талия','waist'],['Ягодицы','hips'],['Бедро П','thighR'],['Бедро Л','thighL']],normKey,C,TODAY,PH,PHASE_LIST,SCHED,WORKOUTS,DAYS,NORMS,normAt,SUPPS,REPORTS,MEASURES,LESSONS,EX_ALL,ALTS,strength,strengthWeeks,exHistory,tonnage,weekOf,sum,e1rm,pl,navyFat,fmtD,fmtDD,iso,d,addDays,round,store,RU_D};
 })();

@@ -16,7 +16,9 @@ function line(series,labels,opts){opts=opts||{};const W=320,H=opts.h||150,L=34,R
     if(s.area)g+=`<path d="${dd} L${pts[pts.length-1][0].toFixed(1)} ${(H-B).toFixed(1)} L${pts[0][0].toFixed(1)} ${(H-B).toFixed(1)} Z" fill="url(#ag)"/>`;
     g+=`<path d="${dd}" fill="none" stroke="${s.color||'url(#lg)'}" stroke-width="${s.width||2.5}" stroke-linecap="round" stroke-linejoin="round" ${s.dash?'stroke-dasharray="4 4"':''}/>`;
     if(s.dots)pts.forEach(p=>g+=`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="3" fill="var(--card)" stroke="${s.color||'var(--g2)'}" stroke-width="2"/>`);
-    if(s.end!==false){const p=pts[pts.length-1];g+=`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="4.5" fill="var(--g2)" stroke="var(--card)" stroke-width="2"/>`}});
+    if(s.end!==false){const p=pts[pts.length-1];g+=`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="4.5" fill="var(--g2)" stroke="var(--card)" stroke-width="2"/>`}
+    /* подпись линии прямо на графике (П, Л): цвет темы не важен */
+    if(s.lab){const p=pts[0];g+=`<text x="${(p[0]+8).toFixed(1)}" y="${(p[1]+(s.labDy||-8)).toFixed(1)}" fill="${s.color||'var(--g2)'}" font-size="11" font-weight="800" font-family="Manrope,Arial">${s.lab}</text>`}});
   return `<svg class="gfx" viewBox="0 0 ${W} ${H}" width="100%" style="display:block;overflow:visible">${G}${g}</svg>`}
 /* столбцы: vals=[{v,t,hi}] */
 function bars(vals,opts){opts=opts||{};const W=320,H=opts.h||140,L=30,T=12,B=22;const mx=Math.max(...vals.map(x=>x.v),1);const n=vals.length;const bw=Math.min(28,(W-L-8)/n*0.62);const yf=opts.yfmt||(v=>Math.round(v));let g='';

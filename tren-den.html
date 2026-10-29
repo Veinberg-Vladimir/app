@@ -1,4 +1,4 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0E0F1A"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="app.css?v=1793256281"><script src="phases.js?v=1793256281"></script><script src="data.js?v=1793256281"></script><script src="ui.js?v=1793256281"></script><script>(function(){var h=document.documentElement;function set(){var t="auto";try{t=JSON.parse(localStorage.getItem("app:theme"))||"auto"}catch(e){}var d=t==="auto"?(matchMedia("(prefers-color-scheme: light)").matches?"light":"neon"):t;h.dataset.theme=d;var m=document.querySelector("meta[name=theme-color]");if(m)m.content=d==="light"?"#F3F5F9":"#07070C"}set();window.setTheme=function(t){try{localStorage.setItem("app:theme",JSON.stringify(t))}catch(e){}set()};try{matchMedia("(prefers-color-scheme: light)").addEventListener("change",set)}catch(e){}})()</script><title>Тренировка</title></head><body>
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0E0F1A"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="app.css?v=1793260465"><script src="phases.js?v=1793260465"></script><script src="data.js?v=1793260465"></script><script src="ui.js?v=1793260465"></script><script>(function(){var h=document.documentElement;function set(){var t="auto";try{t=JSON.parse(localStorage.getItem("app:theme"))||"auto"}catch(e){}var d=t==="auto"?(matchMedia("(prefers-color-scheme: light)").matches?"light":"neon"):t;h.dataset.theme=d;var m=document.querySelector("meta[name=theme-color]");if(m)m.content=d==="light"?"#F3F5F9":"#07070C"}set();window.setTheme=function(t){try{localStorage.setItem("app:theme",JSON.stringify(t))}catch(e){}set()};try{matchMedia("(prefers-color-scheme: light)").addEventListener("change",set)}catch(e){}})()</script><title>Тренировка</title></head><body>
 <style>
 .timer{display:flex;align-items:center;gap:8px;font-weight:800;font-size:20px;font-variant-numeric:tabular-nums}.timer svg{color:var(--acc);width:20px;height:20px}
 .dayt{font-size:12px;color:var(--acc2);font-weight:700}.dayh{font-size:21px;font-weight:800;margin:2px 0 4px}
@@ -42,22 +42,15 @@ const EX=W.ex.map((e,idx)=>{const hist=D.exHistory(e.name).filter(h=>h.date<W.da
   return {id:e.code,idx,name:e.name,sets:e.target.sets,reps:e.target.reps,tempo:e.target.tempo,rir:e.target.rir,prev,best,byReps,sup,rest:[e.target.rest,e.target.rest+30],muscle:D.EX_ALL.find(x=>D.normKey(x.name)===D.normKey(e.name)).muscle,logged:e.sets}});
 EX.forEach(e=>{if(e.sup&&EX.filter(x=>x.sup===e.sup).length<2)e.sup=null});
 /* подсказка веса по лесенке (решение 16.10: первый раз вес выбирает человек, дальше приложение подсказывает, выбор за ним).
-   Фиксированные повторы: тот же день прошлой недели добран, каждый подход на шаг 5 % выше; не добран, веса повторить (умолчание спеки, ждёт его слова).
-   Диапазон: вес на все 4 недели тот же, цель верх диапазона. Новая фаза, неделя 1, фиксированные повторы: M + 0,05·M·((s − n) − 2), не ниже 0,8·M */
+   С 29.10 подсказка считается только по сданному отчёту (D.suggest в data.js, та же у тренера в панели) */
 const repT=r=>{r=String(r);if(r.includes(','))return r.split(',').map(Number);if(r.includes('-')){const [a,b]=r.split('-').map(Number);return {lo:a,hi:b}}const n=parseInt(r);return isNaN(n)?null:n};
 const needOf=(rp,i)=>Array.isArray(rp)?(rp[i]!=null?rp[i]:rp[rp.length-1]):typeof rp==='number'?rp:rp.lo;
 const kgS=v=>String(v).replace('.',',');
 function ladder(e){if(MODE==='view')return null;const rp=repT(e.reps);if(rp==null)return null;const range=!Array.isArray(rp)&&typeof rp==='object';const n=e.sets;
-  const pw=D.WORKOUTS.find(w=>w.phase===W.phase&&w.week===W.week-1&&w.day===W.day&&w.done);const pe=pw&&pw.ex.find(x=>D.normKey(x.name)===D.normKey(e.name)&&x.sets.length);
-  if(pe){const ps=pe.sets,top=ps[ps.length-1].kg,st=top>=20?2.5:1,at=i=>ps[Math.min(i,ps.length-1)].kg;const rpl=repT(pe.target.reps)||rp;const done=ps.every((s,i)=>s.reps>=needOf(rpl,i));
-    if(range)return done?{kg:Array.from({length:n},(_,i)=>at(i)),why:`вес тот же, что ${D.fmtDD(pw.date)}: цель ${rp.hi} повторений`}:{kg:Array.from({length:n},(_,i)=>D.round(at(i)*0.95,st)),why:`${D.fmtDD(pw.date)} не все повторы: вес на шаг легче`};
-    /* M восстанавливается из верхнего подхода прошлой недели: верх недели w = M · (1 + 0,05 · (w − 3)) */
-    const wp=W.week-1,M=top/(1+0.05*(wp-3));
-    if(done)return {kg:D.ladderKg(M,n,W.week),why:`${D.fmtDD(pw.date)} все повторы сделаны: лесенка недели ${W.week}, шаг 5 %`};
-    return {kg:Array.from({length:n},(_,i)=>at(i)),why:`${D.fmtDD(pw.date)} не все повторы: веса прошлой недели`}}
+  const sg=D.suggest(W.phase,W.day,W.week,e.name,n,e.reps);if(sg)return Object.assign(sg,{why:`по отчёту ${D.fmtD(D.LAST_REP.date)}: ${sg.why}`});
   if(!e.prev)return {first:true};
-  if(W.week===1&&e.prev.phase!==W.phase&&!range){const ps=e.prev.sets,M=ps[ps.length-1].kg;return {kg:D.ladderKg(M,n,1),why:'новая фаза: лесенка от последнего подхода прошлой фазы'}}
-  return null}
+  if(W.week===1&&e.prev.phase!==W.phase&&e.prev.date<=D.LAST_REP.date&&!range){const ps=e.prev.sets,M=ps[ps.length-1].kg;return {kg:D.ladderKg(M,n,1),why:'новая фаза: лесенка от последнего подхода прошлой фазы'}}
+  return {wait:true}}
 EX.forEach(e=>{e.lad=ladder(e)});
 const KEY='wo:'+W.date;
 let S=D.store.get(KEY,{});S.sets=S.sets||{};S.swap=S.swap||{};S.notes=S.notes||{};S.video=S.video||{};S.open=S.open||EX[0].id;S.restSel=S.restSel||{};if(S.start&&Date.now()-S.start>3*3600000){S.start=null;S.rest=null}
@@ -70,7 +63,8 @@ const tempoHtml=t=>'<span class="tempo">'+String(t).split('').map(c=>'<i>'+c+'</
 const RO=MODE==='view';
 function isPb(e,s){if(!s.done||!(+s.kg>0)||!(+s.reps>0))return false;const prevBest=e.byReps[+s.reps];return prevBest!=null&&+s.kg>prevBest}
 function sugHtml(e){if(RO||S.swap[e.id])return '';const L=e.lad;if(!L)return '';
-  if(L.first)return `<div class="sugg"><span><b>Первый раз</b>Вес подбираешь сам. Со следующей недели приложение подскажет вес по лесенке</span></div>`;
+  if(L.first)return `<div class="sugg"><span><b>Первый раз</b>Вес подбираешь сам. После отчёта приложение подскажет вес по лесенке</span></div>`;
+  if(L.wait)return `<div class="sugg"><span><b>Подсказка после отчёта</b>Веса посчитаются по отчёту ${D.fmtD(D.NEXT_REPORT)}. Пока ориентир «было»</span></div>`;
   const left=setsOf(e).some(s=>!s.done&&!String(s.kg).trim());
   return `<div class="sugg"><span><b>Предложено: ${L.kg.map(kgS).join(' · ')} кг</b>${L.why}. Вес выбираешь ты</span>${left?`<button class="chip" data-fill="${e.id}">Подставить</button>`:''}</div>`}
 function exHtml(e){const L=S.swap[e.id]?null:e.lad;const open=S.open===e.id,sets=setsOf(e),all=sets.every(s=>s.done),n=sets.filter(s=>s.done).length;
