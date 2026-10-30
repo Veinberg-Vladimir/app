@@ -1,0 +1,62 @@
+<title>Кардио и шаги</title>
+<style>
+.wnav{display:flex;align-items:center;justify-content:space-between;margin:0 0 10px}
+.wnav b{font-size:14px}.wnav b span{color:var(--muted);font-weight:600}
+.wnav button{width:34px;height:34px;border-radius:10px;border:0;background:var(--chip);color:var(--text);display:grid;place-items:center;cursor:pointer}
+.wnav button:disabled{opacity:.35;cursor:default}
+.wnav button svg{width:18px;height:18px}
+.week div{cursor:pointer}.week small{display:block;font-size:12px;font-weight:800;color:var(--text);margin-top:1px}
+.nocard{font-size:13px;color:var(--muted);background:var(--card);border:1px dashed var(--line);border-radius:16px;padding:12px 14px;margin-bottom:10px}
+.hist2{display:grid;grid-template-columns:70px 1fr auto;gap:8px;font-size:13px;padding:8px 0;border-top:1px solid var(--line);align-items:baseline;font-variant-numeric:tabular-nums}
+.hist2:first-child{border-top:0;padding-top:0}.hist2 span{color:var(--muted)}.hist2 em{font-style:normal;font-size:12px;color:var(--muted)}
+.hist2 b.miss{color:var(--bad);font-weight:600}
+</style>
+<div class="phone"><div class="scroll" id="root"></div>{{nav:tren}}</div>
+<script>
+/* Кардио и шаги (30.10, по образцу VRTO: полоса недели, «обзор дня» карточками с цветной полосой, план и история).
+   План задаёт тренер в карточке клиента, отметка кардио одной шторкой U.cardioSheet, как на Доме */
+const D=window.DATA,U=window.UI;
+const I={back:`{{arrow-left}}`,check:`{{check}}`,run:`{{run}}`,walk:`{{walk}}`,barbell:`{{barbell}}`,chev:`{{chevron-right}}`,left:`{{chevron-left}}`,help:`{{help}}`,heart:`{{heart-rate-monitor}}`};
+const KI={treadmill:`{{treadmill}}`,walk:`{{walk}}`,bike:`{{bike}}`,ellipse:`{{activity}}`,stairs:`{{stairs-up}}`,run:`{{run}}`,swim:`{{swimming}}`};
+const today=D.DAYS[D.DAYS.length-1];
+const num=v=>Math.round(v).toLocaleString('ru');
+const st={day:D.TODAY,mon:D.weekOf(D.TODAY)};
+const MIN_MON=D.weekOf(D.C.start),MAX_MON=D.iso(D.addDays(D.d(D.weekOf(D.TODAY)),7));
+function dayS(){return D.store.get('day:'+D.TODAY,{weight:today.weight,sleep:today.sleep,steps:today.steps,energy:null,stress:null})}
+function stepsOf(s){if(s>D.TODAY)return null;if(s===D.TODAY)return +dayS().steps||0;const x=D.DAYS.find(y=>y.date===s);return x?x.steps:null}
+const doneToday=D.store.get('done:'+D.TODAY,null);
+function weekStrip(){let h='<div class="week">';for(let i=0;i<7;i++){const dt=D.iso(D.addDays(D.d(st.mon),i));const items=D.cardioOn(dt);let cls,ic;
+  if(items.length){const all=items.every(it=>D.cardioLog(dt,it));if(all){cls='ok';ic=I.check}else if(dt===D.TODAY){cls='now';ic=I.run}else if(dt<D.TODAY){cls='miss';ic=''}else{cls='plan';ic=I.run}}
+  else{cls='rest';ic=I.walk}
+  h+=`<div data-day="${dt}" class="${dt===st.day?'sel':''}">${D.DOW[i]}<small>${D.d(dt).getDate()}</small><i class="${cls}">${ic}</i></div>`}return h+'</div>'}
+const cardioCard=(it,dt)=>U.cardioCard(it,dt,KI[it.kind],I.check);
+function stepsCard(dt){const g=D.C.stepsGoal,sv=stepsOf(dt);const ok=sv!=null&&sv>=g;
+  return `<div class="task" ${dt===D.TODAY?'data-steps style="cursor:pointer"':''}><div class="band steps">${I.walk} Шаги за день</div><div class="body"><div class="t"><b>${num(g)} шагов</b></div>${ok?`<div class="done">${I.check}</div>`:dt===D.TODAY?`<span class="muted">${I.chev}</span>`:''}</div><div class="stp"><div class="minibar"><i style="width:${sv==null?0:Math.min(100,sv/g*100)}%"></i></div><p>${sv==null?'по плану':`<b>${num(sv)}</b> / ${num(g)}`}</p></div></div>`}
+function trainCard(dt){const W=D.WORKOUTS.find(w=>w.date===dt);if(!W)return '';const done=W.done||(dt===D.TODAY&&doneToday);
+  return `<a class="task" href="tren-den.html?${W.done?'date='+W.date:'d='+W.day}"><div class="band">${I.barbell} Силовая</div><div class="body"><div class="t"><b>${W.title}</b><span>${W.done?W.mins+' мин · '+num(W.ton)+' кг':done?'выполнена сегодня':dt===D.TODAY?'сегодня':'по плану'}</span></div>${done?`<div class="done">${I.check}</div>`:`<span class="muted">${I.chev}</span>`}</div></a>`}
+function render(){const r=document.getElementById('root');const dt=st.day;const P=D.cardioPlanAt(dt);const items=D.cardioOn(dt);
+  const a=st.mon,b=D.iso(D.addDays(D.d(a),6));const cw=D.cardioWeek(a,b);const ss=[];for(let i=0;i<7;i++){const s=D.iso(D.addDays(D.d(a),i));const v=stepsOf(s);if(v!=null)ss.push(v)}const avgS=ss.length?D.sum(ss)/ss.length:null;
+  const weeks=[];let m=D.d(MIN_MON),k=1;while(D.iso(m)<=D.TODAY){const w=D.cardioWeek(D.iso(m),D.iso(D.addDays(m,6)));weeks.push({v:w.mins,t:'н'+k,hi:D.iso(m)===D.weekOf(D.TODAY),top:w.mins?String(w.mins):''});m=D.addDays(m,7);k++}
+  const past=[];let x=D.d(D.TODAY);while(past.length<6&&D.iso(x)>=D.C.start){const s=D.iso(x);D.cardioOn(s).forEach(it=>{if(past.length<6)past.push({s,it,L:D.cardioLog(s,it)})});x=D.addDays(x,-1)}
+  const wp=D.cardioWeekPlan(D.CARDIO);
+  r.innerHTML=`<div class="hdr"><a href="tren.html" aria-label="Назад">${I.back}</a><b style="font-size:17px">Кардио и шаги</b><button data-help aria-label="Как держать пульс">${I.help}</button></div>
+  <div class="wnav"><button data-w="-1" ${a<=MIN_MON?'disabled':''} aria-label="Прошлая неделя">${I.left}</button><b>${D.fmtD(a)} - ${D.fmtD(b)} <span>· неделя ${Math.round((D.d(a)-D.d(MIN_MON))/604800000)+1}</span></b><button data-w="1" ${a>=MAX_MON?'disabled':''} aria-label="Следующая неделя">${I.chev}</button></div>
+  ${weekStrip()}
+  <div class="dayh"><b>Обзор дня</b><span>${D.fmtD(dt,true).toLowerCase()}</span></div>
+  ${trainCard(dt)}
+  ${items.map(it=>cardioCard(it,dt)).join('')||(dt>=D.C.start?`<div class="nocard">Кардио в этот день нет · по плану ${P.items.map(it=>D.daysText(it.days)).join('; ')||'не назначено'}</div>`:'')}
+  ${stepsCard(dt)}
+  <h2>Неделя</h2><div class="stats"><div class="stat"><b>${cw.done} <small>из ${cw.plan}</small></b><span>кардио</span></div><div class="stat"><b>${cw.mins} <small>/ ${cw.planMins}</small></b><span>минут</span></div><div class="stat"><b>${avgS==null?'-':num(avgS)}</b><span>шагов в день</span></div></div>
+  <h2>План с ${D.fmtD(D.CARDIO.from)}</h2><div class="card list">${D.CARDIO.items.map(it=>`<div class="opt" style="cursor:default;margin:0"><div class="ico">${KI[it.kind]}</div><div class="t"><b>${D.cardioTitle(it)}</b><span>${D.daysText(it.days)} · ${D.intText(it)}</span></div></div>`).join('')}<div class="opt" style="cursor:default;margin:0"><div class="ico">${I.walk}</div><div class="t"><b>Шаги · ${num(D.C.stepsGoal)} в день</b><span>каждый день</span></div></div><div class="note" style="margin-top:0">${D.pl(wp.n,'занятие','занятия','занятий')} · ${wp.mins} мин кардио в неделю</div></div>
+  <h2>Минут кардио по неделям</h2><div class="chart">${U.bars(weeks,{h:130})}<div class="note">план ${wp.mins} мин в неделю · текущая неделя выделена</div></div>
+  <h2>Последние занятия</h2><div class="card">${past.map(p=>`<div class="hist2"><span>${D.fmtDD(p.s)}</span><div>${D.kindOf(p.it.kind).t}${p.L&&p.L.hr?` <em>· пульс ${p.L.hr}</em>`:''}</div>${p.L?`<b>${p.it.mode==='time'?p.L.min+' мин':String(p.L.km).replace('.',',')+' км'}</b>`:p.s===D.TODAY?'<em>сегодня</em>':'<b class="miss">пропуск</b>'}</div>`).join('')}</div>
+  <div class="note">Демо-клиент, 7 недель. Отметка кардио хранится в этом телефоне</div>`;
+  r.querySelectorAll('[data-day]').forEach(el=>el.onclick=()=>{st.day=el.dataset.day;render()});
+  r.querySelectorAll('[data-w]').forEach(el=>el.onclick=()=>{st.mon=D.iso(D.addDays(D.d(st.mon),7*(+el.dataset.w)));st.day=st.mon<=D.TODAY&&D.iso(D.addDays(D.d(st.mon),6))>=D.TODAY?D.TODAY:st.mon;render()});
+  r.querySelectorAll('[data-mark]').forEach(el=>el.onclick=()=>{const it=D.cardioOn(D.TODAY).find(y=>y.id===+el.dataset.mark);U.cardioSheet(it,D.TODAY,render)});
+  const sc=r.querySelector('[data-steps]');if(sc)sc.onclick=stepsSheet;
+  r.querySelector('[data-help]').onclick=helpSheet}
+function stepsSheet(){const ds=dayS();U.openSheet(`<h3>Шаги сегодня</h3><p>план ${num(D.C.stepsGoal)}</p><input class="in" id="stIn" inputmode="numeric" value="${ds.steps}" style="font-size:22px;font-weight:800;text-align:center"><div class="row2"><button class="btn" id="stOk">${I.check} Записать</button><a class="ghost" href="komanda.html">Считать автоматически</a></div>`,sh=>{sh.querySelector('#stOk').onclick=()=>{const v=parseInt(String(sh.querySelector('#stIn').value).replace(/\D/g,''))||0;const s=dayS();s.steps=v;D.store.set('day:'+D.TODAY,s);U.closeSheet();U.toast('Шаги записаны');render()}})}
+function helpSheet(){U.openSheet(`<h3>Как держать пульс</h3><p>Твой максимум ≈ ${D.HRMAX} ударов в минуту</p><ul class="pts"><li><b>${I.heart}</b><span>Пульс видно на часах или браслете. Без них: 15 секунд считаешь удары на запястье и умножаешь на 4</span></li><li><b>2</b><span>Зона 2: можешь говорить, но петь уже трудно. Это спокойное кардио</span></li><li><b>↑</b><span>Ушёл выше: сбавь скорость или наклон дорожки</span></li><li><b>${I.walk}</b><span>Ровные шаги каждый день лучше, чем 20 000 в субботу и 2 000 в понедельник</span></li></ul><div class="row2"><button class="btn" data-close>Понятно</button></div>`)}
+render();
+</script>

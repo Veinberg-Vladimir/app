@@ -15,7 +15,7 @@ def nav(active):
     out.append('</nav>'); return ''.join(out)
 HEAD='<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0E0F1A"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="app.css?v='+V+'"><script src="phases.js?v='+V+'"></script><script src="data.js?v='+V+'"></script><script src="ui.js?v='+V+'"></script>'
 # экраны клиента берут тему 2 (тёмная неон) или 3 (светлая), по умолчанию как в телефоне; панель тренера и служебные остаются тёмными золотыми
-CLIENT={'dom','tren','tren-den','pit','prog','prog-upr','otchet','baza','bluda','anketa','komanda'}
+CLIENT={'dom','tren','tren-den','kardio','pit','prog','prog-upr','otchet','baza','bluda','anketa','komanda'}
 THEME='<script>(function(){var h=document.documentElement;function set(){var t="auto";try{t=JSON.parse(localStorage.getItem("app:theme"))||"auto"}catch(e){}var d=t==="auto"?(matchMedia("(prefers-color-scheme: light)").matches?"light":"neon"):t;h.dataset.theme=d;var m=document.querySelector("meta[name=theme-color]");if(m)m.content=d==="light"?"#F3F5F9":"#07070C"}set();window.setTheme=function(t){try{localStorage.setItem("app:theme",JSON.stringify(t))}catch(e){}set()};try{matchMedia("(prefers-color-scheme: light)").addEventListener("change",set)}catch(e){}})()</script>'
 for f in ['data.js','ui.js','phases.js']: shutil.copy(f'{HERE}/{f}',f'{ROOT}/{f}')
 for tpl in sorted(glob.glob(f'{HERE}/*.tpl.html')):

@@ -21,6 +21,9 @@
 <script>
 const D=window.DATA,U=window.UI;const I={bolt:`{{bolt}}`,wave:`{{activity}}`,bell:`{{bell}}`,play:`{{player-play-filled}}`,plus:`{{plus}}`,check:`{{check}}`,moon:`{{moon}}`,walk:`{{walk}}`,clip:`{{clipboard-check}}`,chev:`{{chevron-right}}`,book:`{{book}}`,scale:`{{scale}}`,set:`{{settings}}`};
 const today=D.DAYS[D.DAYS.length-1],W=D.WORKOUTS.find(w=>w.today),norm=D.normAt(D.TODAY);
+const KI={treadmill:`{{treadmill}}`,walk:`{{walk}}`,bike:`{{bike}}`,ellipse:`{{activity}}`,stairs:`{{stairs-up}}`,run:`{{run}}`,swim:`{{swimming}}`};
+/* кардио сегодня (30.10): в дни кардио карточка под тренировкой, отметка одним нажатием */
+function cardioToday(){const its=D.cardioOn(D.TODAY);return its.length?`<h2>Кардио сегодня</h2>${its.map(it=>U.cardioCard(it,D.TODAY,KI[it.kind],I.check)).join('')}`:''}
 const dayS=D.store.get('day:'+D.TODAY,{weight:today.weight,sleep:today.sleep,steps:today.steps,energy:null,stress:null});
 let health=D.store.get('health:'+D.TODAY,null);
 (function(){const h=location.hash.slice(1);if(!h||!/steps=|weight=/.test(h))return;const kv={};h.split('&').forEach(x=>{const [k,v]=x.split('=');kv[k]=decodeURIComponent(v||'')});const st=Math.round(parseFloat(String(kv.steps||'').replace(/[^\d.,]/g,'').replace(',','.')));const wt=parseFloat(String(kv.weight||'').replace(/[^\d.,]/g,'').replace(',','.'));
@@ -56,6 +59,7 @@ ${RS.left===0?repCard():''}
 <h2>Тренировка дня</h2>
 <div class="card hero"><div class="eyebrow">Фаза 12 · Интенсификация</div><h3>${W.title}</h3><p>${D.pl(W.ex.length,'упражнение','упражнения','упражнений')}</p>
 ${doneToday?`<div class="pb">${I.check} Выполнена · ${doneToday.mins} мин · ${doneToday.ton} кг · оценка ${doneToday.rating}/10</div>`:`<a class="btn" href="tren-den.html?d=${W.day}">${I.play} Начать тренировку</a>`}</div>
+${cardioToday()}
 <h2>Питание сегодня</h2>
 <div class="card"><div class="row"><div class="big">${eaten.kcal.toLocaleString('ru')} <small>/ ${norm.kcal.toLocaleString('ru')} ккал</small></div><a class="ghost" href="pit.html#add">${I.plus} Еда</a></div>
 <div class="bar"><i style="width:${pct*100}%"></i></div>
@@ -72,7 +76,7 @@ ${RS.left===0?'':repCard()}
 <a class="kb" href="baza.html"><div class="ico">${I.book}</div><div class="t"><b>База знаний</b><span>${lessonsN} уроков · просмотрено ${seen.length}${newest?' · новое: «'+newest.t+'»':''}</span></div><span class="muted">${I.chev}</span></a>
 <div class="note">Энергия и стресс одним нажатием: в отчёте вопросы 3 и 4 посчитаются сами как среднее с прошлого отчёта. Демо-клиент, 7 недель</div>`;
 r.querySelector('#wIn').onchange=e=>{dayS.weight=e.target.value;save('Вес записан')};r.querySelector('#sIn').onchange=e=>{dayS.sleep=e.target.value;save('Сон записан')};r.querySelector('#stIn').onchange=e=>{dayS.steps=+e.target.value||0;save('Шаги записаны');render()};
-r.querySelectorAll('[data-day]').forEach(el=>el.onclick=()=>daySheet(el.dataset.day));r.querySelector('[data-prof]').onclick=profSheet;r.querySelector('.avatar').onclick=profSheet;r.querySelectorAll('[data-en]').forEach(b=>b.onclick=()=>{dayS.energy=+b.dataset.en;save('Энергия '+dayS.energy+' из 5');render()});r.querySelectorAll('[data-st]').forEach(b=>b.onclick=()=>{dayS.stress=+b.dataset.st;save('Стресс '+dayS.stress+' из 5');render()})}
+r.querySelectorAll('[data-day]').forEach(el=>el.onclick=()=>daySheet(el.dataset.day));r.querySelectorAll('[data-mark]').forEach(el=>el.onclick=()=>U.cardioSheet(D.cardioOn(D.TODAY).find(y=>y.id===+el.dataset.mark),D.TODAY,render));r.querySelector('[data-prof]').onclick=profSheet;r.querySelector('.avatar').onclick=profSheet;r.querySelectorAll('[data-en]').forEach(b=>b.onclick=()=>{dayS.energy=+b.dataset.en;save('Энергия '+dayS.energy+' из 5');render()});r.querySelectorAll('[data-st]').forEach(b=>b.onclick=()=>{dayS.stress=+b.dataset.st;save('Стресс '+dayS.stress+' из 5');render()})}
 function save(t){D.store.set('day:'+D.TODAY,dayS);U.toast(t)}
 /* настройки: тема 2 + 3 на выбор (137), по умолчанию как в телефоне. Анкета заполняется один раз, правки в ней нет */
 function profSheet(){const cur=D.store.get('theme','auto');const draw=()=>{const s=U.openSheet(`<h3>Настройки</h3><p>${D.C.name} · тариф «${D.C.tariff}»</p><h4 style="margin:4px 0 0;font-size:13px">Оформление</h4>${U.seg([{k:'auto',t:'Как в телефоне'},{k:'neon',t:'Тёмное'},{k:'light',t:'Светлое'}],D.store.get('theme','auto'),'th')}<div class="row2"><button class="btn" data-close>Готово</button></div>`);s.querySelectorAll('[data-th]').forEach(b=>b.onclick=()=>{window.setTheme(b.dataset.th);D.store.set('theme',b.dataset.th);draw()})};draw()}

@@ -36,4 +36,16 @@ function wheel(vals,labels,size){size=size||220;const cx=size/2,cy=size/2,r=size
 /* отсчёт до отчёта: клетка на каждый день периода, последняя - день отчёта */
 function countdown(rs,from,fmt){let h=`<div class="cd" style="grid-template-columns:repeat(${rs.every},1fr)">`;for(let i=1;i<=rs.every;i++)h+=`<i class="${i<=rs.passed?'on':i===rs.every?'last':''}"></i>`;return h+`</div><div class="cdl"><span>с ${fmt(from)}</span><span>отчёт ${fmt(rs.next)}</span></div>`}
 function seg(items,active,attr){return `<div class="seg">${items.map(x=>`<button class="${x.k===active?'on':''}" data-${attr||'seg'}="${x.k}">${x.t}</button>`).join('')}</div>`}
-return {toast,openSheet,closeSheet,line,bars,ring,wheel,seg,countdown}})();
+/* отметка кардио: одна шторка для Дома и раздела «Кардио и шаги». Минуты уже вписаны, клиенту одно нажатие «Сделал», пульс по желанию */
+function cardioSheet(it,s,onSave){const D=window.DATA;const key='cardio:'+s+'|'+it.id;const L=D.store.get(key,null);const r=D.hrRange(it);const isT=it.mode==='time';
+  openSheet(`<h3>${D.cardioTitle(it)}</h3><p>${D.intText(it)} · ${D.intWords(it)}</p><div class="grid2"><label class="lab">${isT?'Минут':'Километров'}<input class="in" id="cAmt" inputmode="decimal" value="${L?(isT?L.min:L.km):(isT?it.min:it.km)}"></label><label class="lab">Средний пульс<input class="in" id="cHr" inputmode="numeric" placeholder="${r?r[0]+'-'+r[1]:'по желанию'}" value="${L&&L.hr?L.hr:''}"></label></div><div class="row2"><button class="btn" id="cOk">Сделал</button>${L?'<button class="ghost" id="cDel">Не делал</button>':'<button class="ghost" data-close>Отмена</button>'}</div>`,sh=>{
+  sh.querySelector('#cOk').onclick=()=>{const a=parseFloat(String(sh.querySelector('#cAmt').value).replace(',','.'))||(isT?it.min:it.km);const hr=parseInt(sh.querySelector('#cHr').value)||null;D.store.set(key,{min:isT?Math.round(a):Math.round(a*(D.kindOf(it.kind).pace||0))||null,km:isT?null:a,hr});closeSheet();toast('Кардио записано');if(onSave)onSave()};
+  const del=sh.querySelector('#cDel');if(del)del.onclick=()=>{D.store.del(key);closeSheet();toast('Отметка снята');if(onSave)onSave()}})}
+/* карточка кардио дня с цветной полосой (как в VRTO): одна для Дома и раздела «Кардио и шаги». ic = иконка вида, ok = галочка */
+function cardioCard(it,dt,ic,ok){const D=window.DATA;const L=D.cardioLog(dt,it);const r=D.hrRange(it);let right,sub='';
+  if(L){right=`<div class="done">${ok}</div>`;sub=`сделано · ${it.mode==='time'?L.min+' мин':String(L.km).replace('.',',')+' км'}${L.hr?' · пульс '+L.hr:''}`}
+  else if(dt===D.TODAY)right=`<span class="btn" style="padding:9px 14px;font-size:14px">Отметить</span>`;
+  else if(dt<D.TODAY)right=`<span class="st miss">не сделано</span>`;
+  else right=`<span class="st">по плану</span>`;
+  return `<div class="task" ${dt===D.TODAY?`data-mark="${it.id}" style="cursor:pointer"`:''}><div class="band cardio">${ic} Кардио <em>· ${it.mode==='time'?'время':'дистанция'}</em></div><div class="body"><div class="t"><b>${D.cardioTitle(it)}</b>${sub?`<span>${sub}</span>`:''}</div>${right}</div><div class="tags">${r?`<span class="tag">пульс ${r[0]}-${r[1]}</span>`:''}<span class="tag soft">${it.int==='zone'?'зона '+it.zone+' · ':it.int==='rpe'?it.rpe+' из 10 · ':''}${D.intWords(it)}</span></div></div>`}
+return {toast,openSheet,closeSheet,line,bars,ring,wheel,seg,countdown,cardioSheet,cardioCard}})();

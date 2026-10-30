@@ -18,6 +18,13 @@
 <div class="phone"><div class="scroll" id="root"></div>{{nav:tren}}</div>
 <script>
 const D=window.DATA,U=window.UI;const I={check:`{{check}}`,play:`{{player-play-filled}}`,chev:`{{chevron-right}}`,cal:`{{calendar-check}}`,help:`{{help}}`,back:`{{arrow-left}}`};
+I.walk=`{{walk}}`;
+const KI={treadmill:`{{treadmill}}`,walk:`{{walk}}`,bike:`{{bike}}`,ellipse:`{{activity}}`,stairs:`{{stairs-up}}`,run:`{{run}}`,swim:`{{swimming}}`};
+/* кардио и шаги на этой неделе (30.10, как в VRTO): карточки с цветной полосой, тап открывает раздел */
+function cardioWeekBlock(){const a=D.weekOf(D.TODAY);const wk=Array.from({length:7},(_,i)=>D.iso(D.addDays(D.d(a),i)));const ds=D.store.get('day:'+D.TODAY,null);const sv=ds?+ds.steps||0:D.DAYS[D.DAYS.length-1].steps;const g=D.C.stepsGoal;const n=v=>Math.round(v).toLocaleString('ru');
+  const cards=D.CARDIO.items.map(it=>{const r=D.hrRange(it);const dn=wk.filter(s=>D.cardioOn(s).some(x=>x.id===it.id)&&D.cardioLog(s,it)).length;const pl=it.days.length;
+    return `<a class="task" href="kardio.html"><div class="band cardio">${KI[it.kind]} Кардио <em>· ${D.daysText(it.days)}</em></div><div class="body"><div class="t"><b>${D.cardioTitle(it)}</b><span>${dn} из ${pl} на этой неделе</span></div>${dn>=pl?`<div class="done">${I.check}</div>`:`<span class="muted">${I.chev}</span>`}</div><div class="tags">${r?`<span class="tag">пульс ${r[0]}-${r[1]}</span>`:''}<span class="tag soft">${D.intWords(it)}</span></div></a>`}).join('');
+  return `<h2>Кардио и шаги</h2>${cards}<a class="task" href="kardio.html"><div class="band steps">${I.walk} Шаги за день</div><div class="body"><div class="t"><b>${n(g)} шагов</b></div>${sv>=g?`<div class="done">${I.check}</div>`:`<span class="muted">${I.chev}</span>`}</div><div class="stp"><div class="minibar"><i style="width:${Math.min(100,sv/g*100)}%"></i></div><p><b>${n(sv)}</b> / ${n(g)}</p></div></a>`}
 const PHQ=new URLSearchParams(location.search).get('phase');const cur=D.SCHED.filter(s=>s.phase==='12'&&s.week===3);
 const stat=dt=>D.store.get('done:'+dt,null);
 function renderPhase(){const r=document.getElementById('root');const k=+PHQ;const sch=D.SCHED.filter(s=>s.phase===PHQ);const full=D.PH[PHQ]?D.PH[PHQ].name:D.PHASE_LIST[k-1];const name=full.split(' (')[0];const sub=full.includes('(')?full.split('(')[1].replace(')',''):'';
@@ -45,6 +52,7 @@ r.innerHTML=`<h1 class="title">Тренировки</h1>
 <div class="card hero"><div class="eyebrow">Фаза 12 из 12 · Интенсификация</div><h3>Контроль эксцентрика</h3><p>Фокус на эксцентрической фазе: замедленное опускание</p>
 <div class="weeks"><i class="ok"></i><i class="ok"></i><i class="now"></i><i></i></div><div class="row" style="margin-top:8px"><span class="muted" style="font-size:12px">Неделя 3 из 4</span><button class="chip" data-help style="padding:4px 10px;font-size:11px">${I.help} как читать программу</button></div></div>
 <h2>Эта неделя</h2>${days}
+${cardioWeekBlock()}
 <h2>Ещё</h2>
 <div class="more" data-phases><div class="ico">${I.cal}</div><b>Все фазы: 12</b><span class="chev">${I.chev}</span></div>
 <div class="note">Тоннаж = сумма кг × повторения за тренировку</div>`;

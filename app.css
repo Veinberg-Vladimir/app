@@ -150,3 +150,31 @@ input[type=range]{width:100%;accent-color:var(--acc)}
 /* темы 2 и 3: сделанное зелёным, белки розовым, жиры зелёным, углеводы голубым, как на листе вариантов 28.10 */
 .week i.ok,.done{background:var(--done,var(--grad))}
 .macros .m:nth-child(1) .minibar i:not(.red),.mac>div:nth-child(1) .minibar i:not(.red){background:var(--p,var(--grad))}.macros .m:nth-child(2) .minibar i:not(.red),.mac>div:nth-child(2) .minibar i:not(.red){background:var(--f,var(--grad))}.macros .m:nth-child(3) .minibar i:not(.red),.mac>div:nth-child(3) .minibar i:not(.red){background:var(--c,var(--grad))}
+
+/* кардио и шаги (30.10, по образцу VRTO): карточки задания дня с цветной полосой, полоса недели с днями кардио */
+.lab{display:block;font-size:12px;color:var(--muted)}.lab .in{margin-top:4px}
+.task{display:block;background:var(--card);border-radius:18px;overflow:hidden;margin-bottom:10px;border:1px solid var(--edge);color:var(--text);text-decoration:none;box-shadow:var(--shadow)}
+.task .band{display:flex;align-items:center;gap:8px;padding:8px 12px;font-size:12px;font-weight:700;color:#fff;background:linear-gradient(90deg,#16161F 0%,#16161F 30%,var(--g1))}
+.task .band svg{width:16px;height:16px}.task .band em{font-style:normal;font-weight:500;opacity:.75}
+.task .band.cardio{background:linear-gradient(90deg,#16161F 0%,#16161F 30%,var(--g2))}
+.task .band.steps{background:linear-gradient(90deg,#16161F 0%,#16161F 30%,var(--ok))}
+.task .body{display:flex;align-items:center;gap:10px;padding:12px 14px}
+.task .body .t{flex:1;min-width:0}.task .body .t b{display:block;font-size:18px;font-weight:800;line-height:1.2}.task .body .t span{display:block;font-size:12px;color:var(--muted);margin-top:3px}
+.task .tags{display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 12px}
+.tag{display:inline-flex;align-items:center;border-radius:8px;padding:4px 8px;font-size:11px;font-weight:700;background:var(--text);color:var(--bg)}
+.tag.soft{background:var(--chip2);color:var(--text)}
+.task .stp{padding:0 14px 12px}.task .stp .minibar{height:7px;margin-top:0}.task .stp .minibar i{background:var(--ok)}
+.task .stp p{margin:6px 0 0;text-align:center;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}.task .stp p b{color:var(--ok2)}
+.task .st{font-size:12px;font-weight:700;color:var(--muted);white-space:nowrap}.task .st.miss{color:var(--bad)}
+.week i.plan{background:transparent;border:1.5px solid var(--line);color:var(--muted)}
+.week i.rest{background:transparent;color:var(--faint)}
+.week div.sel{color:var(--text);font-weight:800}.week div.sel i{box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--acc)}
+.dayh{display:flex;align-items:baseline;gap:6px;margin:4px 0 10px;font-size:15px}.dayh b{font-weight:800}.dayh span{color:var(--muted)}
+.cdays{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.cdays button{border:0;border-radius:999px;height:38px;font:inherit;font-weight:700;font-size:13px;background:var(--chip2);color:var(--text);cursor:pointer;position:relative}.cdays button.on{background:var(--text);color:var(--bg)}
+.cdays button.tr:after{content:"";position:absolute;left:50%;bottom:-7px;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:var(--g2)}
+.rng{width:100%;accent-color:var(--g2);margin:6px 0 0}
+.rngl{display:flex;justify-content:space-between;font-size:11px;color:var(--muted)}
+.cap-pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 10px;font-size:12px;font-weight:700;border:1.5px solid color-mix(in srgb,var(--ok) 50%,transparent);color:var(--ok2);background:color-mix(in srgb,var(--ok) 10%,transparent)}
+.cap-pill.over{border-color:color-mix(in srgb,var(--bad) 50%,transparent);color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,transparent)}
+.cnt{position:relative;height:8px;border-radius:99px;background:var(--track);margin:14px 0 6px}.cnt i{position:absolute;left:0;top:0;bottom:0;border-radius:99px;background:var(--grad)}.cnt b{position:absolute;top:50%;transform:translate(-100%,-50%);background:var(--grad);color:var(--ink);font-size:11px;border-radius:999px;padding:3px 9px;white-space:nowrap}
+.big-amt{display:flex;align-items:center;justify-content:center;gap:14px;margin:8px 0 0}.big-amt b{min-width:110px;text-align:center;font-size:28px;font-weight:800;background:var(--card);border-radius:14px;padding:6px 10px;font-variant-numeric:tabular-nums;border:1px solid var(--line)}.big-amt button{width:40px;height:40px;border-radius:50%;border:0;background:var(--chip2);color:var(--text);font:inherit;font-size:22px;font-weight:800;cursor:pointer}

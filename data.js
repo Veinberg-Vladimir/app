@@ -147,7 +147,40 @@ const PACE={lo:0.5,hi:1.5};
 function avg7At(i){const s=DAYS.slice(Math.max(0,i-6),i+1);return sum(s.map(x=>x.weight))/s.length}
 function pace(){const i=DAYS.length-1;const now=avg7At(i),was=avg7At(i-7);const pct=Math.round((was-now)/was*1000)/10;return {now,was,kg:+(now-was).toFixed(1),pct,ok:pct>=PACE.lo&&pct<=PACE.hi,slow:pct<PACE.lo,fast:pct>PACE.hi}}
 function paceBand(a0,n){return {hi:Array.from({length:n},(_,i)=>a0*Math.pow(1-PACE.lo/100,i/7)),lo:Array.from({length:n},(_,i)=>a0*Math.pow(1-PACE.hi/100,i/7))}}
+/* кардио и шаги (30.10, по образцу VRTO): план задаёт тренер в карточке клиента, клиент видит в Тренировках и на Доме.
+   Пульс: максимум ≈ 220 − возраст, зоны по доле от максимума. Потолок по правилу Владимира 16.10: 150 минут спокойного кардио в неделю и 12 000 шагов в день.
+   Прошлое демо считается по стартовому плану, новый план тренера действует с того дня, когда он его сохранил */
+const R3=mulberry32(30);const rnd3=(a,b)=>a+(b-a)*R3();
+const HRMAX=220-C.age;
+const ZONES=[[50,60,'очень легко'],[60,70,'спокойно, можешь говорить'],[70,80,'бодро, говорить трудно'],[80,90,'тяжело'],[90,100,'на пределе']];
+const CARDIO_KINDS=[{k:'treadmill',t:'Ходьба в горку',pace:12},{k:'walk',t:'Ходьба на улице',pace:11},{k:'bike',t:'Велотренажёр',pace:3},{k:'ellipse',t:'Эллипс',pace:7},{k:'stairs',t:'Степпер',pace:null},{k:'run',t:'Бег',pace:6},{k:'swim',t:'Плавание',pace:30}];
+const CARDIO_CAP=150,STEPS_CAP=12000,STEPS_MIN=5000;
+const CARDIO_DEF={from:C.start,steps:10000,items:[{id:1,kind:'treadmill',mode:'time',min:30,km:3,int:'zone',zone:2,pct:[60,70],rpe:5,days:[1,5]}]};
+let CARDIO=CARDIO_DEF;try{const v=localStorage.getItem('app:plan:cardio');if(v)CARDIO=JSON.parse(v)}catch(e){}
+C.stepsGoal=CARDIO.steps;
+const kindOf=k=>CARDIO_KINDS.find(x=>x.k===k)||CARDIO_KINDS[0];
+const dowM=s=>(d(s).getDay()+6)%7;/* 0 = пн */
+const DOW=['пн','вт','ср','чт','пт','сб','вс'];
+function hrRange(it){if(it.int==='zone'){const z=ZONES[it.zone-1];return [Math.round(HRMAX*z[0]/100),Math.round(HRMAX*z[1]/100)]}if(it.int==='pct')return it.pct.map(p=>Math.round(HRMAX*p/100));return null}
+function rpeWords(n){return n<=3?'очень легко':n<=4?'легко, можешь петь':n<=6?'можешь говорить, но не петь':n<=8?'говорить трудно':'на пределе'}
+function intWords(it){if(it.int==='zone')return ZONES[it.zone-1][2];if(it.int==='pct'){const m=(it.pct[0]+it.pct[1])/2;return ZONES[Math.max(0,Math.min(4,Math.floor((m-50)/10)))][2]}return rpeWords(it.rpe)}
+function intText(it){const r=hrRange(it);if(it.int==='zone')return `зона ${it.zone} · пульс ${r[0]}-${r[1]}`;if(it.int==='pct')return `${it.pct[0]}-${it.pct[1]} % от макс. · пульс ${r[0]}-${r[1]}`;return `по ощущениям ${it.rpe} из 10`}
+function cardioMins(it){if(it.mode==='time')return it.min;const p=kindOf(it.kind).pace;return p?Math.round(it.km*p):0}
+function cardioAmount(it){return it.mode==='time'?it.min+' мин':String(it.km).replace('.',',')+' км'}
+function cardioTitle(it){return kindOf(it.kind).t+' · '+cardioAmount(it)}
+function daysText(days){return days.length===7?'каждый день':days.slice().sort((a,b)=>a-b).map(i=>DOW[i]).join(', ')}
+function cardioPlanAt(s){return s<CARDIO.from?CARDIO_DEF:CARDIO}
+function cardioOn(s){if(s<C.start)return [];return cardioPlanAt(s).items.filter(it=>it.days.includes(dowM(s)))}
+function cardioWeekPlan(p){p=p||CARDIO;return {n:sum(p.items.map(it=>it.days.length)),mins:sum(p.items.map(it=>it.days.length*cardioMins(it)))}}
+const CLOG={};
+(function(){let x=d(CARDIO_DEF.from);while(iso(x)<TODAY){const s=iso(x);CARDIO_DEF.items.forEach(it=>{if(!it.days.includes(dowM(s)))return;const r=hrRange(it)||[110,130];if(R3()<0.8)CLOG[s+'|'+it.id]={min:it.mode==='time'?Math.round(rnd3(it.min-2,it.min+6)):cardioMins(it),km:it.mode==='km'?it.km:null,hr:Math.round(rnd3(r[0]+2,r[1]-1))}});x=addDays(x,1)}})();
+function cardioLog(s,it){if(s>=TODAY)return store.get('cardio:'+s+'|'+it.id,null);return CLOG[s+'|'+it.id]||null}
+function cardioWeek(a,b){let plan=0,done=0,mins=0,planMins=0;let x=d(a);while(iso(x)<=b){const s=iso(x);cardioOn(s).forEach(it=>{plan++;planMins+=cardioMins(it);const L=cardioLog(s,it);if(L){done++;mins+=L.min||cardioMins(it)}});x=addDays(x,1)}return {plan,done,mins,planMins}}
+/* успеваемость недели: одна функция для Прогресса клиента и карточки у тренера. Пять заданий: тренировки, питание, шаги, сон, кардио */
+function weekScore(a,b){const days=DAYS.filter(x=>x.date>=a&&x.date<=b);if(!days.length)return null;const tr=Math.min(1,doneW.filter(w=>w.date>=a&&w.date<=b).length/3);const n=normAt(b);const food=sum(days.map(x=>{const dev=Math.abs(x.food.kcal-n.kcal)/n.kcal;return dev<0.1?1:dev<0.2?0.6:0.2}))/days.length;const steps=Math.min(1,sum(days.map(x=>x.steps))/days.length/C.stepsGoal);const sleep=Math.min(1,sum(days.map(x=>x.sleep))/days.length/C.sleepGoal);const cw=cardioWeek(a,b);const cardio=cw.plan?Math.min(1,cw.done/cw.plan):1;return {tr,food,steps,sleep,cardio,cw,avg:(tr+food+steps+sleep+cardio)/5}}
+/* кардио за период каждого отчёта: в строку «Тренировки» разбора */
+REPORTS.forEach(r=>{r.cardio=cardioWeek(iso(addDays(d(r.date),-(r.days-1))),r.date);r.review[3][1]+=`, кардио ${r.cardio.done} из ${r.cardio.plan} (${r.cardio.mins} мин)`});
 /* сколько дней до отчёта; в демо можно показать сам день отчёта */
 function reportState(){const demo=store.get('demo:repday',false);const left=demo?0:Math.round((d(NEXT_REPORT)-d(TODAY))/86400000);return {next:demo?TODAY:NEXT_REPORT,left,demo,passed:EVERY-left,every:EVERY,when:left===0?'сегодня':left===1?'завтра':'через '+pl(left,'день','дня','дней')}}
-window.DATA={ladderKg,suggest,missesOf,EVERY,PLAN_TR,NEXT_REPORT,LAST_REP,PERIOD_WORD,reportState,PACE,pace,paceBand,MEAS_FIELDS:[['Талия','waist'],['Ягодицы','hips'],['Бедро П','thighR'],['Бедро Л','thighL']],normKey,C,TODAY,PH,PHASE_LIST,SCHED,WORKOUTS,DAYS,NORMS,normAt,SUPPS,REPORTS,MEASURES,LESSONS,EX_ALL,ALTS,strength,strengthWeeks,exHistory,tonnage,weekOf,sum,e1rm,pl,navyFat,fmtD,fmtDD,iso,d,addDays,round,store,RU_D};
+window.DATA={HRMAX,ZONES,CARDIO_KINDS,CARDIO_CAP,STEPS_CAP,STEPS_MIN,CARDIO,CARDIO_DEF,DOW,kindOf,dowM,hrRange,rpeWords,intWords,intText,cardioMins,cardioAmount,cardioTitle,daysText,cardioPlanAt,cardioOn,cardioWeekPlan,cardioLog,cardioWeek,weekScore,ladderKg,suggest,missesOf,EVERY,PLAN_TR,NEXT_REPORT,LAST_REP,PERIOD_WORD,reportState,PACE,pace,paceBand,MEAS_FIELDS:[['Талия','waist'],['Ягодицы','hips'],['Бедро П','thighR'],['Бедро Л','thighL']],normKey,C,TODAY,PH,PHASE_LIST,SCHED,WORKOUTS,DAYS,NORMS,normAt,SUPPS,REPORTS,MEASURES,LESSONS,EX_ALL,ALTS,strength,strengthWeeks,exHistory,tonnage,weekOf,sum,e1rm,pl,navyFat,fmtD,fmtDD,iso,d,addDays,round,store,RU_D};
 })();
