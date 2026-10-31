@@ -1,0 +1,77 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Шкала калорий: три варианта</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap">
+<script src="phases.js"></script><script src="data.js"></script>
+<style>
+/* лист выбора 31.10: шкала калорий в Питании. Светлая тема приложения, цифры демо-клиента Андрея на 3 октября */
+:root{--bg:#F3F5F9;--card:#FFFFFF;--chip:#EDF0F5;--chip2:#E4E8EF;--line:#E3E7EE;--text:#0E1320;--muted:#6B7280;--g1:#1FA2F2;--g2:#FF4FA3;--ok:#22C55E;--bad:#DC3B2A;--ring:#E8ECF2;--p:#FF4FA3;--f:#22C55E;--c:#1FA2F2}
+*{box-sizing:border-box}body{margin:0;background:#E7EBF1;color:var(--text);font-family:Manrope,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1240px;margin:0 auto;padding:20px 14px 40px}
+h1{font-size:22px;margin:0 0 4px}.lead{color:var(--muted);font-size:14px;margin:0 0 18px}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:16px;align-items:start}
+.col{background:var(--bg);border-radius:28px;padding:16px;border:1px solid var(--line)}
+.num{display:flex;align-items:center;gap:10px;margin-bottom:12px}.num b{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:18px;background:linear-gradient(90deg,var(--g1),var(--g2));flex:none}
+.num div{font-weight:800;font-size:16px;line-height:1.2}.num span{display:block;font-weight:500;font-size:12px;color:var(--muted)}
+.card{background:var(--card);border-radius:20px;padding:16px;margin-bottom:12px;box-shadow:0 6px 20px rgba(16,24,40,.07)}
+.shot{width:100%;border-radius:18px;display:block;box-shadow:0 6px 20px rgba(16,24,40,.07)}
+.gauge{position:relative}.gauge svg{display:block;width:100%;height:auto}
+.gc{position:absolute;left:0;right:0;top:44%;text-align:center}
+.gc .k{font-size:13px;color:var(--muted);font-weight:600}.gc .v{font-size:40px;font-weight:800;line-height:1.05;font-variant-numeric:tabular-nums}.gc .s{font-size:13px;color:var(--muted);margin-top:2px}
+.gc .v.bad{color:var(--bad)}
+.ends{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:-6px}
+.pair{display:flex;justify-content:center;gap:34px;margin-top:4px;text-align:center}.pair span{display:block;font-size:12px;color:var(--muted)}.pair b{font-size:18px;font-weight:800}
+.rings{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}
+.rings svg{width:86px;height:86px;display:block;margin:0 auto}.rings span{font-size:12px;color:var(--muted);font-weight:600}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center;margin-bottom:4px}
+.week div{font-size:11px;color:var(--muted);font-weight:700;border-radius:14px;padding:6px 0}
+.week div b{display:block;font-size:15px;color:var(--text);margin-top:2px}
+.week div.sel{background:var(--text);color:#fff}.week div.sel b{color:#fff}
+.week svg{width:30px;height:30px;display:block;margin:0 auto 4px}
+.h{font-size:15px;font-weight:800;margin:0 0 6px}.h span{color:var(--muted);font-weight:500}
+.why{font-size:13px;line-height:1.45;color:var(--text);margin:4px 2px 0}.why li{margin-bottom:4px}
+.mini{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+.num span.tag{display:inline-block;font-size:11px;font-weight:800;border-radius:999px;padding:3px 10px;background:linear-gradient(90deg,var(--g1),var(--g2));color:#fff;margin-left:6px;vertical-align:2px}
+.foot{margin-top:18px;font-size:12px;color:var(--muted)}
+</style></head><body><div class="wrap">
+<h1>Шкала калорий в Питании: три варианта</h1>
+<p class="lead">Цифры демо-клиента Андрея за субботу 3 октября: съел 1 420 из нормы 2 350 ккал. Это картинка для выбора, само приложение пока не менял</p>
+<div class="cols">
+ <div class="col"><div class="num"><b>1</b><div>Сейчас у нас<span>кольцо, «осталось», плитки Б/Ж/У</span></div></div>
+  <img class="shot" src="img/vybor/v1-seychas.png" alt="Питание сейчас">
+  <ul class="why"><li>Главная цифра «осталось 930» есть</li><li>Недели нет: прошлые дни видно только столбцами ниже</li><li>Б/Ж/У цифрами, полоски мелкие</li></ul></div>
+ <div class="col"><div class="num"><b>2</b><div>Как у VRTO<span>дуга из делений, «съедено / по меню / цель», кольца</span></div></div>
+  <div class="card"><div class="gauge" id="g2"></div><div class="pair"><div><b>2 350</b><span>по меню</span></div><div><b>2 350</b><span>норма</span></div></div></div>
+  <div class="card"><div class="h">Б/Ж/У</div><div class="rings" id="r2"></div></div>
+  <ul class="why"><li>Красиво и сразу видно, сколько закрыто</li><li>В центре «съедено», а сколько ещё можно, считать в уме</li><li>«По меню» у нас равно норме: меню собирает нутрициолог под норму, цифра дублируется</li></ul></div>
+ <div class="col"><div class="num"><b>3</b><div>Предлагаю<span class="tag">берём</span><span>дуга VRTO + «осталось» в центре + неделя кольцами</span></div></div>
+  <div class="card"><div class="week" id="w3"></div><div class="mini">кольцо дня: зелёное в норме, красное перебор больше 10 %</div></div>
+  <div class="card"><div class="gauge" id="g3"></div><div class="mini">съедено 1 420 из 2 350</div></div>
+  <div class="card"><div class="h">Б/Ж/У</div><div class="rings" id="r3"></div></div>
+  <div class="card"><div class="h">Если съел больше нормы <span>· пример 2 530</span></div><div class="gauge" id="g4"></div></div>
+  <ul class="why"><li>От VRTO: дуга из делений, кольца Б/Ж/У, неделя с кольцом у каждого дня</li><li>От нас: в центре то, что нужно решить сейчас, «осталось 930»</li><li>Перебор не прячется: лишние деления красные, в центре «перебор»</li></ul></div>
+</div>
+<p class="foot">Лист выбора от 30-31 октября. Ответ номером: 1, 2 или 3</p>
+</div>
+<script>
+const D=window.DATA;const NS='http://www.w3.org/2000/svg';
+const mix=(a,b,t)=>{const p=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));const A=p(a),B=p(b);return 'rgb('+A.map((x,i)=>Math.round(x+(B[i]-x)*t)).join(',')+')'};
+/* дуга из делений как у VRTO: 27 делений на 220 градусов, закрашено по доле нормы, сверх нормы красным */
+function gauge(eaten,norm,center){const N=27,W=320,H=210,cx=160,cy=150,R=118,a0=200,a1=-20;let g='';const share=eaten/norm,fill=Math.min(1,share)*N,over=share>1?Math.min(N,Math.round((share-1)*N)):0;
+ for(let i=0;i<N;i++){const t=i/(N-1),a=(a0+(a1-a0)*t)*Math.PI/180,x=cx+R*Math.cos(a),y=cy-R*Math.sin(a),rot=90-(a0+(a1-a0)*t);let col='#E4E8EF';if(i<fill)col=mix('#1FA2F2','#FF4FA3',t);if(over&&i>=N-over)col='#DC3B2A';
+  g+=`<rect x="${(x-7).toFixed(1)}" y="${(y-15).toFixed(1)}" width="14" height="30" rx="7" fill="${col}" transform="rotate(${rot.toFixed(1)} ${x.toFixed(1)} ${y.toFixed(1)})"/>`}
+ const r2=R-34;const ap=(a)=>[cx+r2*Math.cos(a*Math.PI/180),cy-r2*Math.sin(a*Math.PI/180)];const [sx,sy]=ap(a0),[ex,ey]=ap(a1);
+ g+=`<path d="M${sx.toFixed(1)} ${sy.toFixed(1)} A${r2} ${r2} 0 1 1 ${ex.toFixed(1)} ${ey.toFixed(1)}" fill="none" stroke="#1FA2F2" stroke-opacity=".35" stroke-width="2"/>`;
+ return `<svg viewBox="0 0 ${W} ${H}">${g}</svg><div class="gc">${center}</div><div class="ends"><span>0</span><span>${norm.toLocaleString('ru')} ккал</span></div>`}
+function ring(v,t,col,lab){const r=34,c=2*Math.PI*r,p=Math.min(1,v/t);return `<div><svg viewBox="0 0 86 86"><circle cx="43" cy="43" r="${r}" fill="none" stroke="#E8ECF2" stroke-width="9"/><circle cx="43" cy="43" r="${r}" fill="none" stroke="${col}" stroke-width="9" stroke-linecap="round" stroke-dasharray="${(c*p).toFixed(1)} ${c.toFixed(1)}" transform="rotate(-90 43 43)"/><text x="43" y="42" text-anchor="middle" font-size="17" font-weight="800" font-family="Manrope,Arial" fill="#0E1320">${v}</text><text x="43" y="58" text-anchor="middle" font-size="11" font-family="Manrope,Arial" fill="#6B7280">/ ${t} г</text></svg><span>${lab}</span></div>`}
+const today=D.DAYS[D.DAYS.length-1],n=D.normAt(D.TODAY),e=today.food;
+document.getElementById('g2').innerHTML=gauge(e.kcal,n.kcal,`<div class="k">Съедено</div><div class="v">${e.kcal.toLocaleString('ru')}</div>`);
+document.getElementById('r2').innerHTML=ring(e.c,n.c,'#1FA2F2','Углеводы')+ring(e.p,n.p,'#FF4FA3','Белки')+ring(e.f,n.f,'#E8613A','Жиры');
+document.getElementById('g3').innerHTML=gauge(e.kcal,n.kcal,`<div class="k">Осталось</div><div class="v">${(n.kcal-e.kcal).toLocaleString('ru')}</div><div class="s">ккал</div>`);
+document.getElementById('r3').innerHTML=ring(e.p,n.p,'#FF4FA3','Белки')+ring(e.f,n.f,'#22C55E','Жиры')+ring(e.c,n.c,'#1FA2F2','Углеводы');
+const ov=2530;document.getElementById('g4').innerHTML=gauge(ov,n.kcal,`<div class="k">Перебор</div><div class="v bad">${(ov-n.kcal).toLocaleString('ru')}</div><div class="s">ккал</div>`);
+/* неделя: кольцо дня по доле нормы, как у VRTO; цвет по правилу «в норме ±10 %» */
+const mon=D.d(D.weekOf(D.TODAY));let w='';for(let i=0;i<7;i++){const s=D.iso(D.addDays(mon,i));const dd=D.DAYS.find(x=>x.date===s);const nn=D.normAt(s).kcal;let col='#E4E8EF',p=0;
+ if(dd){const k=dd.food.kcal;p=Math.min(1,k/nn);col=s===D.TODAY?'#1FA2F2':k>nn*1.1?'#DC3B2A':Math.abs(k-nn)/nn<=0.1?'#22C55E':'#F6B343'}
+ const r=12,c=2*Math.PI*r;w+=`<div class="${s===D.TODAY?'sel':''}">${D.DOW[i]}<svg viewBox="0 0 30 30"><circle cx="15" cy="15" r="${r}" fill="none" stroke="${s===D.TODAY?'rgba(255,255,255,.25)':'#E4E8EF'}" stroke-width="4"/>${p?`<circle cx="15" cy="15" r="${r}" fill="none" stroke="${col}" stroke-width="4" stroke-linecap="round" stroke-dasharray="${(c*p).toFixed(1)} ${c.toFixed(1)}" transform="rotate(-90 15 15)"/>`:''}</svg><b>${D.d(s).getDate()}</b></div>`}
+document.getElementById('w3').innerHTML=w;
+</script></body></html>
